@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SharkNinja × Meltwater MCP — Use Case Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f0f0ee;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  .doc {
+    background: #fff;
+    width: 100%;
+    max-width: 1240px;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+  }
+
+  .top-bar { height: 5px; background: #1BBFB3; }
+
+  /* ── Header ── */
+  .header {
+    padding: 28px 40px 22px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 1px solid #ebebeb;
+  }
+  .logo { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .logo-text { font-size: 17px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.3px; }
+  .slide-title { font-size: 25px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.5px; margin-bottom: 5px; }
+  .slide-sub { font-size: 13px; color: #888; font-style: italic; font-weight: 400; max-width: 720px; line-height: 1.5; }
+  .header-meta { text-align: right; flex-shrink: 0; margin-left: 20px; padding-top: 4px; }
+  .header-meta .label { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.6px; color: #aaa; margin-bottom: 3px; }
+  .header-meta .client { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
+  .header-meta .date { font-size: 11px; color: #999; }
+
+  /* ── Intro band ── */
+  .intro {
+    padding: 20px 40px;
+    background: #f6fcfb;
+    border-bottom: 1px solid #ebebeb;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 28px;
+    align-items: center;
+  }
+  .intro-text { font-size: 13px; color: #444; line-height: 1.6; }
+  .intro-text strong { color: #14506E; font-weight: 700; }
+  .stat-row { display: flex; gap: 22px; justify-content: flex-end; }
+  .stat { text-align: right; }
+  .stat .n { font-size: 26px; font-weight: 700; color: #1BBFB3; letter-spacing: -0.5px; line-height: 1; }
+  .stat .l { font-size: 9.5px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 5px; }
+
+  /* ── Table ── */
+  .table-wrap { padding: 26px 40px 30px; }
+
+  .col-headers {
+    display: grid;
+    grid-template-columns: 168px 1.15fr 1.25fr 1.1fr;
+    background: #1a2e3b;
+  }
+  .col-head {
+    padding: 11px 15px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .col-head:last-child { border-right: none; }
+  .col-head svg { flex-shrink: 0; opacity: 0.75; }
+  .col-head.teal { background: #1BBFB3; }
+
+  .grid-body { border: 1px solid #e2e2e2; border-top: none; border-radius: 0 0 3px 3px; overflow: hidden; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 168px 1.15fr 1.25fr 1.1fr;
+    border-bottom: 1px solid #ebebeb;
+  }
+  .row:last-child { border-bottom: none; }
+  .row:nth-child(even) .cell { background: #fafafa; }
+  .row:nth-child(even) .cell-a { background: #f7f7f7; }
+
+  .cell { padding: 15px 15px; border-right: 1px solid #ebebeb; vertical-align: top; }
+  .cell:last-child { border-right: none; }
+
+  /* ── Team cell ── */
+  .uc-badge {
+    display: inline-block;
+    background: #1BBFB3; color: #fff;
+    font-size: 9px; font-weight: 700;
+    padding: 2px 7px; border-radius: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .uc-title { font-size: 13px; font-weight: 700; color: #1a1a1a; line-height: 1.35; margin-bottom: 5px; }
+  .uc-team { font-size: 10.5px; color: #E87722; font-weight: 600; line-height: 1.4; }
+  .uc-comp { font-size: 9.5px; color: #999; margin-top: 7px; line-height: 1.4; }
+  .uc-comp b { color: #777; font-weight: 600; }
+
+  /* ── Use-case cell ── */
+  .uc-list, .data-list, .impact-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .uc-item { display: flex; align-items: flex-start; gap: 7px; }
+  .uc-item .dot { width: 5px; height: 5px; border-radius: 50%; background: #14506E; flex-shrink: 0; margin-top: 5px; }
+  .uc-item .t { font-size: 11.5px; color: #444; line-height: 1.5; }
+  .uc-item .t strong { color: #1a1a1a; font-weight: 600; }
+
+  /* ── Data cell (chips) ── */
+  .data-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
+  .chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; color: #14506E;
+    background: #EDF6FA; border: 1px solid #d4ebf3;
+    padding: 3px 7px; border-radius: 2px;
+    line-height: 1.2;
+  }
+  .data-note { font-size: 11px; color: #555; line-height: 1.55; }
+  .data-note strong { color: #1BBFB3; font-weight: 700; }
+  .proof {
+    font-size: 9.5px; color: #888; font-style: italic;
+    margin-top: 8px; padding-left: 9px; border-left: 2px solid #1BBFB3; line-height: 1.45;
+  }
+
+  /* ── Impact cell ── */
+  .impact-item { display: flex; align-items: flex-start; gap: 7px; }
+  .impact-item .ic {
+    width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px;
+    color: #E87722;
+  }
+  .impact-text { font-size: 11.5px; color: #444; line-height: 1.5; }
+  .impact-text strong { color: #1a1a1a; font-weight: 700; }
+
+  /* ── Footnote / methodology ── */
+  .method {
+    padding: 18px 40px;
+    background: #fafafa;
+    border-top: 1px solid #ebebeb;
+    font-size: 10.5px; color: #888; line-height: 1.6;
+  }
+  .method strong { color: #555; }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 12px 40px; border-top: 1px solid #ebebeb;
+    display: flex; align-items: center; justify-content: space-between; background: #fff;
+  }
+  .footer-left { font-size: 9.5px; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+  .footer-right { font-size: 9.5px; color: #bbb; }
+</style>
+</head>
+<body>
+
+<div class="doc">
+  <div class="top-bar"></div>
+
+  <div class="header">
+    <div>
+      <div class="logo">
+        <svg width="22" height="16" viewBox="0 0 40 28" fill="none">
+          <circle cx="20" cy="14" r="13" stroke="#1BBFB3" stroke-width="2.5"/>
+          <circle cx="20" cy="14" r="5.5" fill="#1BBFB3"/>
+          <path d="M4 14h5M31 14h5" stroke="#1BBFB3" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span class="logo-text">Meltwater</span>
+      </div>
+      <p class="slide-title">MCP Use Case Deep Dive</p>
+      <p class="slide-sub">How each SharkNinja team turns always-on access to Meltwater's data — through Claude — into faster decisions, fewer manual reports, and reduced agency spend. Each row pairs the team with its use case, the data behind it, and the resulting business impact.</p>
+    </div>
+    <div class="header-meta">
+      <p class="label">Prepared for</p>
+      <p class="client">SharkNinja</p>
+      <p class="date">Advanced Analytics + Cross-Functional &middot; June 2026</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+
+    <div class="col-headers">
+      <div class="col-head teal">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Team &amp; Owner
+      </div>
+      <div class="col-head">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Use Case
+      </div>
+      <div class="col-head">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        Meltwater Data That Powers It
+      </div>
+      <div class="col-head">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        Business Impact for SharkNinja
+      </div>
+    </div>
+
+    <div class="grid-body">
+
+      <!-- ROW 1: Advanced Analytics -->
+      <div class="row">
+        <div class="cell cell-a">
+          <div class="uc-badge">01</div>
+          <p class="uc-title">Advanced Analytics</p>
+          <p class="uc-team">Ameera + team · Insights CoE</p>
+        </div>
+        <div class="cell">
+          <ul class="uc-list">
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>End the "multiple people running the same report" tax</strong> — a small set of users builds the data layer; everyone else self-serves via Claude</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Accelerate time-to-insight</strong> for any team that asks — answers in the moment instead of a request queue</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Free team bandwidth and enable wider distribution</strong> — act as the center of excellence for advanced reporting and GenAI Lens</span></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="data-chips"><span class="chip">News</span><span class="chip">All social</span><span class="chip">GenAI Lens</span><span class="chip">Benchmarking</span><span class="chip">First-party</span></div>
+          <p class="data-note">Full omni-channel firehose surfaced through one MCP connector — the <strong>distribution layer</strong> for every other team's use case below.</p>
+          <p class="proof">In practice: Ameera's team (Arthur Wade, Connor Williams) built the social reporting workflows directly on the MCP.</p>
+        </div>
+        <div class="cell">
+          <ul class="impact-list">
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="impact-text"><strong>Set up once, consumed everywhere.</strong> A small set of users builds the reports; everyone else simply accesses, so insight scales without scaling effort.</span></li>
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="impact-text">Removes the duplicated-reporting tax — fewer hands building the same pulls, more capacity for high-value analysis.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 2: PR -->
+      <div class="row">
+        <div class="cell cell-a">
+          <div class="uc-badge">02</div>
+          <p class="uc-title">PR</p>
+          <p class="uc-team">Jill T. + global PR · Golin, Seen, BCW agencies</p>
+        </div>
+        <div class="cell">
+          <ul class="uc-list">
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Replace / augment agency reporting</strong> — bring the deliverable in-house, keep agencies on pitching & relationships</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Share of Voice</strong> & competitive PR benchmarking</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Faster <strong>executive media reporting</strong> with GenAI-enhanced summaries</span></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="data-chips"><span class="chip">Online News</span><span class="chip">Print</span><span class="chip">Broadcast</span><span class="chip">Dow Jones</span><span class="chip">NYT</span></div>
+          <p class="data-note">Media coverage + premium licensed content for true <strong>SOV benchmarking</strong> vs. Dyson and iRobot, turned into a PPT or daily brief on demand.</p>
+          <p class="proof">Example: "Pull a SOV report for Shark vs. Dyson across news and broadcast, last quarter — output a PPT for the exec readout."</p>
+        </div>
+        <div class="cell">
+          <ul class="impact-list">
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span class="impact-text"><strong>Highest-leverage cost play.</strong> A share of global agency reporting spend funds the MCP outright — agency relationships stay, the manual report goes.</span></li>
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="impact-text">Hours-to-minutes on exec readouts — the lowest-hanging fruit in the reporting workflow.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 3: Social -->
+      <div class="row">
+        <div class="cell cell-a">
+          <div class="uc-badge">03</div>
+          <p class="uc-title">Social</p>
+          <p class="uc-team">Stacy Carpenter, Stephen Peteritas, Katie Campbell + global social</p>
+        </div>
+        <div class="cell">
+          <ul class="uc-list">
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Validate virality & spillover</strong> — back anecdotal claims with data before scaling spend</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Competitive benchmarking and regional consumer-conversation tracking</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Real-time adjustment to live campaigns ("see it on TikTok, react same-day")</span></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="data-chips"><span class="chip">TikTok</span><span class="chip">Instagram</span><span class="chip">X</span><span class="chip">YouTube</span><span class="chip">Reddit</span><span class="chip">APAC social</span></div>
+          <p class="data-note">Full Western + APAC social graph with engagement, reach and share metrics for <strong>virality validation</strong>.</p>
+          <p class="proof">Delivered example: <em>Ninja Luxe Café — Spain viral playbook</em> (13,430 mentions, 447.6K eng., 90 days across X/IG/TikTok).</p>
+        </div>
+        <div class="cell">
+          <ul class="impact-list">
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="impact-text"><strong>Same-day reaction</strong> to viral moments instead of waiting on a report — directly serves the "Obsessed with Winning" cadence.</span></li>
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="impact-text">De-risks paid activation by validating organic momentum before spend goes behind it.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 4: Corp Comms -->
+      <div class="row">
+        <div class="cell cell-a">
+          <div class="uc-badge">04</div>
+          <p class="uc-title">Corp Comms</p>
+          <p class="uc-team">Executive visibility &amp; corporate narrative</p>
+        </div>
+        <div class="cell">
+          <ul class="uc-list">
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Track executive visibility & brand narrative</strong> — monitor Mark across news + social</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Rapid-response</strong> reputation monitoring and corporate brand tracking</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Corporate narrative tracking for the "tech company, not appliance brand" positioning</span></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="data-chips"><span class="chip">News</span><span class="chip">X</span><span class="chip">LinkedIn</span><span class="chip">Blogs</span><span class="chip">Forums</span><span class="chip">GenAI Lens</span></div>
+          <p class="data-note">Real-time news + social monitoring on named executives, with an <strong>Issues &amp; Crisis</strong> capability ready for reactive readouts in minutes.</p>
+          <p class="proof">Example: "What's being said about our CEO across news and social this week — flag anything negative and summarize the narrative."</p>
+        </div>
+        <div class="cell">
+          <ul class="impact-list">
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="impact-text"><strong>Crisis readouts in minutes, not days</strong> — keeping pace with leadership's real-time expectations.</span></li>
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="impact-text">Protects the corporate narrative as SharkNinja repositions as a technology company.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 5: CI / CX -->
+      <div class="row">
+        <div class="cell cell-a">
+          <div class="uc-badge">05</div>
+          <p class="uc-title">CI / CX</p>
+          <p class="uc-team">Consumer Insights / Customer Experience · Graeme Smith, Mylene</p>
+        </div>
+        <div class="cell">
+          <ul class="uc-list">
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Surface sentiment drivers & complaint themes</strong> across the consumer conversation</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Viral topic tracking</strong> & social conversation validation</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Integrate Meltwater data into external tools (e.g. Replit experimentation)</span></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="data-chips"><span class="chip">Reviews</span><span class="chip">Forums</span><span class="chip">Reddit</span><span class="chip">Amazon</span><span class="chip">NPS / Surveys</span><span class="chip">Sentiment</span></div>
+          <p class="data-note">Ratings &amp; reviews + first-party feedback joined to social — sentiment and <strong>complaint-theme</strong> clustering across owned and earned signals.</p>
+          <p class="proof">Example: "What are the top complaint themes for cordless vacuums across reviews and Reddit, last 90 days — and how do we compare to Dyson?"</p>
+        </div>
+        <div class="cell">
+          <ul class="impact-list">
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="impact-text"><strong>Self-serve insight</strong> replaces ad-hoc analyst requests — sentiment answers in seconds.</span></li>
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="impact-text">Earlier detection of complaint themes protects ratings and reduces CX escalations.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 6: EMEA Marketing -->
+      <div class="row">
+        <div class="cell cell-a">
+          <div class="uc-badge">06</div>
+          <p class="uc-title">EMEA Marketing</p>
+          <p class="uc-team">Lana, Pierre + EMEA · TechRadar build team</p>
+        </div>
+        <div class="cell">
+          <ul class="uc-list">
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Time campaigns to regional conversation spikes</strong> using calendar/trend visualizations</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Market-insight discovery & audience segmentation across EMEA</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Feed robust Meltwater ingestion into the <strong>TechRadar</strong> platform they're building</span></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="data-chips"><span class="chip">News</span><span class="chip">Instagram</span><span class="chip">TikTok</span><span class="chip">X</span><span class="chip">YouTube</span></div>
+          <p class="data-note">Market-by-market conversation data with spike timing — and a <strong>data-ingestion feed</strong> into TechRadar, the EMEA team's priority build.</p>
+          <p class="proof">Example: "Show me the rising kitchen-appliance conversations in France, Germany and Spain this month, with the dates each spiked."</p>
+        </div>
+        <div class="cell">
+          <ul class="impact-list">
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span class="impact-text"><strong>Better campaign ROI</strong> by activating into rising conversation instead of guessing on timing.</span></li>
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="impact-text">MCP replaces brittle API ingestion (latency / truncation) for TechRadar.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 7: Product Dev -->
+      <div class="row">
+        <div class="cell cell-a">
+          <div class="uc-badge">07</div>
+          <p class="uc-title">Product Dev</p>
+          <p class="uc-team">Category &amp; innovation teams</p>
+        </div>
+        <div class="cell">
+          <ul class="uc-list">
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Spot emerging needs before launch</strong> — delighters, detractors, frustrations by category</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Feature prioritization</strong> & consumer-language analysis</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Market-gap discovery from broad category conversation</span></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="data-chips"><span class="chip">Social</span><span class="chip">Reviews</span><span class="chip">Forums</span><span class="chip">News</span><span class="chip">Reddit</span></div>
+          <p class="data-note">Category-level conversation mining for <strong>moments of use, delighters &amp; detractors</strong> across the full social and review landscape.</p>
+          <p class="proof">Example: "Tell me about air purifiers — moments of use, delighters, detractors, and any spikes in conversation over the last year."</p>
+        </div>
+        <div class="cell">
+          <ul class="impact-list">
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="impact-text"><strong>Compress voice-of-customer research</strong> from weeks of agency work to a same-session pull.</span></li>
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="impact-text">De-risks launches by validating unmet needs and feature demand before committing to development.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 8: Employer Brand -->
+      <div class="row">
+        <div class="cell cell-a">
+          <div class="uc-badge">08</div>
+          <p class="uc-title">Employer Brand / HR</p>
+          <p class="uc-team">Talent &amp; internal comms</p>
+        </div>
+        <div class="cell">
+          <ul class="uc-list">
+            <li class="uc-item"><span class="dot"></span><span class="t"><strong>Monitor talent perception vs. competitive peers</strong> across platforms</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Track employer reputation (Glassdoor) and recruiting brand health</span></li>
+            <li class="uc-item"><span class="dot"></span><span class="t">Integrate GenAI Lens into broader employer-brand reporting</span></li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="data-chips"><span class="chip">Glassdoor</span><span class="chip">Indeed</span><span class="chip">LinkedIn</span><span class="chip">News</span><span class="chip">GenAI Lens</span></div>
+          <p class="data-note">Employer-branding sources + LLM-visibility to catch how Claude/ChatGPT <strong>describe working at SharkNinja</strong> vs. competitors.</p>
+          <p class="proof">Example: "How is SharkNinja described as an employer across Glassdoor and LinkedIn vs. Dyson and our CPG peers — and what does Claude say when asked if it's a good place to work?"</p>
+        </div>
+        <div class="cell">
+          <ul class="impact-list">
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="impact-text"><strong>New value with zero new tooling</strong> — extends the same data into recruiting &amp; internal comms.</span></li>
+            <li class="impact-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="impact-text">Flags outdated AI-generated talent narratives before they shape candidate perception.</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-left">Meltwater &nbsp;|&nbsp; Confidential</span>
+    <span class="footer-right">SharkNinja &nbsp;|&nbsp; MCP Use Case Deep Dive</span>
+  </div>
+</div>
+
+</body>
+</html>

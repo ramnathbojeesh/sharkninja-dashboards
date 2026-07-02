@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SharkNinja · Intelligence Hub</title>
+<style>
+  :root{
+    --sn-black:#141414;
+    --sn-dark:#1d1d1f;
+    --sn-red:#B04949;
+    --sn-red-bright:#d9534f;
+    --sn-white:#ffffff;
+    --sn-grey:#8a8a8e;
+    --sn-line:rgba(255,255,255,.09);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--sn-black);display:flex;overflow:hidden}
+
+  /* ── Sidebar ── */
+  aside{width:264px;min-width:264px;height:100vh;background:var(--sn-black);border-right:1px solid var(--sn-line);display:flex;flex-direction:column;color:var(--sn-white)}
+  .logo{padding:26px 22px 20px;border-bottom:1px solid var(--sn-line)}
+  .wordmark{font-size:23px;font-weight:800;font-style:italic;letter-spacing:-.5px;color:#fff;white-space:nowrap}
+  .wordmark span{color:var(--sn-red-bright)}
+  .logo small{display:block;margin-top:6px;color:var(--sn-grey);font-size:11px;letter-spacing:1.6px;text-transform:uppercase}
+  nav{flex:1;padding:14px 12px;overflow-y:auto}
+  .nav-label{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sn-grey);padding:10px 10px 6px}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:9px;color:#d6d6d8;font-size:13.5px;font-weight:500;cursor:pointer;border-left:3px solid transparent;transition:background .15s,color .15s}
+  .nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+  .nav-item.active{background:rgba(217,83,79,.14);color:#fff;border-left:3px solid var(--sn-red-bright)}
+  .nav-item .ico{width:20px;text-align:center;font-size:15px}
+  .bestseller{margin:10px 14px 16px;padding:14px;border-radius:12px;background:linear-gradient(145deg,#2a1414,#1d1d1f);border:1px solid rgba(217,83,79,.35)}
+  .bestseller .tag{font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--sn-red-bright);font-weight:700}
+  .bestseller h3{font-size:15px;margin:5px 0 3px;color:#fff}
+  .bestseller p{font-size:11px;color:var(--sn-grey);line-height:1.5}
+  .foot{padding:14px 22px;border-top:1px solid var(--sn-line);font-size:10.5px;color:var(--sn-grey);line-height:1.6}
+
+  /* ── Main ── */
+  main{flex:1;height:100vh;display:flex;flex-direction:column;background:#f5f5f7}
+  .topbar{height:52px;min-height:52px;background:var(--sn-white);border-bottom:1px solid #e3e3e6;display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+  .topbar .crumb{font-size:13.5px;font-weight:600;color:var(--sn-black)}
+  .topbar .meta{font-size:11.5px;color:#86868b}
+  .view{flex:1;position:relative}
+  iframe{width:100%;height:100%;border:0;background:#fff;display:none}
+  iframe.active{display:block}
+
+  /* ── Home panel ── */
+  #home{display:none;height:100%;overflow-y:auto;padding:34px 40px;background:#f5f5f7}
+  #home.active{display:block}
+  .hero{background:var(--sn-black);border-radius:18px;padding:38px 40px;color:#fff;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-80px;top:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(217,83,79,.35),transparent 70%)}
+  .hero h1{font-size:30px;font-weight:800;font-style:italic;letter-spacing:-.6px}
+  .hero h1 span{color:var(--sn-red-bright)}
+  .hero p{margin-top:10px;max-width:640px;color:#c9c9ce;font-size:14px;line-height:1.65}
+  .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;margin-top:20px}
+  .card{background:#fff;border-radius:16px;padding:26px;border:1px solid #e6e6ea}
+  .card .tag{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sn-red);font-weight:700}
+  .bs-card{background:linear-gradient(135deg,#141414 0%,#33191b 100%);color:#fff;border:none;display:flex;gap:24px;align-items:center}
+  .bs-emoji{font-size:74px;filter:drop-shadow(0 6px 16px rgba(217,83,79,.45))}
+  .bs-card h2{font-size:24px;font-weight:800;margin:6px 0 8px}
+  .bs-card p{font-size:13px;color:#c9c9ce;line-height:1.6}
+  .stats{display:flex;gap:26px;margin-top:16px}
+  .stat b{display:block;font-size:20px;color:var(--sn-red-bright)}
+  .stat small{font-size:10.5px;color:#9a9aa0;letter-spacing:.4px;text-transform:uppercase}
+  .card h2{font-size:17px;margin:6px 0 12px;color:var(--sn-black)}
+  .dash-list{list-style:none}
+  .dash-list li{padding:12px 4px;border-bottom:1px solid #ededf0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:13.5px;color:#333;transition:color .15s}
+  .dash-list li:last-child{border-bottom:none}
+  .dash-list li:hover{color:var(--sn-red)}
+  .dash-list li .arrow{color:var(--sn-red);font-weight:700}
+  .disclaimer{margin-top:20px;font-size:11px;color:#86868b;line-height:1.6}
+  @media(max-width:900px){aside{width:220px;min-width:220px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<aside>
+  <div class="logo">
+    <div class="wordmark">Shark<span>Ninja</span></div>
+    <small>Intelligence Hub · APAC</small>
+  </div>
+  <nav>
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" data-view="home"><span class="ico">⌂</span> Home</div>
+    <div class="nav-label">Dashboards</div>
+    <div class="nav-item" data-view="coe"><span class="ico">◎</span> APAC Marketing COE</div>
+    <div class="nav-item" data-view="chillpill"><span class="ico">❄</span> Shark ChillPill</div>
+    <div class="nav-item" data-view="silkipro"><span class="ico">✦</span> Shark SilkiPro</div>
+    <div class="nav-item" data-view="espresso"><span class="ico">☕</span> Spain Espresso Brief</div>
+    <div class="nav-item" data-view="mcp"><span class="ico">⚙</span> MCP Use Case Deep Dive</div>
+  </nav>
+  <div class="bestseller">
+    <div class="tag">★ Best Seller</div>
+    <h3>Ninja CREAMi</h3>
+    <p>1.2B social impressions · $14.8M top campaign revenue · 7.9× ROAS</p>
+  </div>
+  <div class="foot">Powered by Claude + Meltwater<br>Author: ramnathbojeesh</div>
+</aside>
+
+<main>
+  <div class="topbar">
+    <div class="crumb" id="crumb">Home</div>
+    <div class="meta">SharkNinja · Client Dashboards · Q2 FY26</div>
+  </div>
+  <div class="view">
+
+    <div id="home" class="active">
+      <div class="hero">
+        <h1>Shark<span>Ninja</span> Intelligence Hub</h1>
+        <p>One place for every SharkNinja media-intelligence deliverable — marketing performance, conversation intelligence, product launches and MCP use cases across APAC and EMEA. Select a dashboard from the sidebar to open it in this view.</p>
+      </div>
+      <div class="grid">
+        <div class="card bs-card">
+          <div class="bs-emoji">🍨</div>
+          <div>
+            <div class="tag" style="color:var(--sn-red-bright)">★ Best-Selling Product</div>
+            <h2>Ninja CREAMi</h2>
+            <p>SharkNinja's viral flagship — turns frozen bases into ice cream, gelato and smoothie bowls. A social-commerce phenomenon: 99.5% of its global social content is organic consumer advocacy.</p>
+            <div class="stats">
+              <div class="stat"><b>1.2B</b><small>Social impressions</small></div>
+              <div class="stat"><b>$14.8M</b><small>Top campaign rev.</small></div>
+              <div class="stat"><b>7.9×</b><small>ROAS · ANZ</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tag">Dashboards</div>
+          <h2>Jump straight in</h2>
+          <ul class="dash-list">
+            <li data-view="coe">APAC Marketing Centre of Excellence <span class="arrow">→</span></li>
+            <li data-view="chillpill">Shark ChillPill — Conversation Intelligence <span class="arrow">→</span></li>
+            <li data-view="silkipro">Shark SilkiPro — Hair Type Conversations <span class="arrow">→</span></li>
+            <li data-view="espresso">Espresso · Spain 90-Day Viral Brief <span class="arrow">→</span></li>
+            <li data-view="mcp">SharkNinja × Meltwater MCP Deep Dive <span class="arrow">→</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="disclaimer">Vision demonstration — dashboards contain illustrative / modelled data. All AI-generated insight must be reviewed and verified by a human before any decision. SharkNinja and Ninja CREAMi are trademarks of SharkNinja Operating LLC.</p>
+    </div>
+
+    <iframe id="coe" data-src="apac-coe-dashboard.html" title="APAC Marketing COE"></iframe>
+    <iframe id="chillpill" data-src="chillpill-dashboard.html" title="Shark ChillPill"></iframe>
+    <iframe id="silkipro" data-src="silkipro-dashboard.html" title="Shark SilkiPro"></iframe>
+    <iframe id="espresso" data-src="spain-espresso-brief.html" title="Spain Espresso Brief"></iframe>
+    <iframe id="mcp" data-src="mcp-use-case-deepdive.html" title="MCP Use Case Deep Dive"></iframe>
+  </div>
+</main>
+
+<script>
+  const names={home:"Home",coe:"APAC Marketing COE",chillpill:"Shark ChillPill — Conversation Intelligence",silkipro:"Shark SilkiPro — Hair Type Conversations",espresso:"SharkNinja Espresso · Spain 90-Day Viral Brief",mcp:"SharkNinja × Meltwater MCP — Use Case Deep Dive"};
+  function show(view){
+    document.querySelectorAll(".nav-item").forEach(n=>n.classList.toggle("active",n.dataset.view===view));
+    document.querySelectorAll("#home, iframe").forEach(el=>el.classList.remove("active"));
+    const target=document.getElementById(view);
+    if(target.tagName==="IFRAME" && !target.src) target.src=target.dataset.src; // lazy-load
+    target.classList.add("active");
+    document.getElementById("crumb").textContent=names[view];
+  }
+  document.querySelectorAll("[data-view]").forEach(el=>el.addEventListener("click",()=>show(el.dataset.view)));
+</script>
+</body>
+</html>

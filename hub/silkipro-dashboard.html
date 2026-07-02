@@ -1,0 +1,1610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Shark SilkiPro — Hair Type Conversations | Meltwater</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg-2: #0f1524;
+    --panel: #131a2c;
+    --panel-2: #1a2238;
+    --line: rgba(255,255,255,0.06);
+    --line-strong: rgba(255,255,255,0.12);
+    --ink: #f4f6fb;
+    --ink-2: #c1c8d8;
+    --ink-3: #7a8499;
+    --ink-4: #525c73;
+    --pos: #5eead4;
+    --pos-soft: rgba(94,234,212,0.15);
+    --neu: #fbbf24;
+    --neu-soft: rgba(251,191,36,0.15);
+    --neg: #f87171;
+    --neg-soft: rgba(248,113,113,0.15);
+    --primary: #60a5fa;
+    --primary-soft: rgba(96,165,250,0.18);
+    --accent: #c084fc;
+    --tiktok: #fe2c55;
+    --reddit: #ff4500;
+    --shadow-lg: 0 20px 50px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(ellipse 100% 60% at 30% -10%, rgba(96,165,250,0.10), transparent 50%),
+                radial-gradient(ellipse 80% 50% at 90% 0%, rgba(192,132,252,0.06), transparent 50%),
+                var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display {
+    font-family: 'Bricolage Grotesque', serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ===== Layout ===== */
+  .shell {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 32px 80px;
+  }
+  header.top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: grid;
+    place-items: center;
+    color: #0b0f1c;
+    font-family: 'Bricolage Grotesque';
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .brand-text { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; }
+  h1.title {
+    font-family: 'Bricolage Grotesque';
+    font-weight: 600;
+    font-size: 38px;
+    letter-spacing: -0.025em;
+    margin: 4px 0 6px;
+    line-height: 1.05;
+  }
+  h1.title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--primary);
+    font-family: 'Bricolage Grotesque';
+  }
+  .subtitle { color: var(--ink-3); font-size: 13px; }
+  .subtitle b { color: var(--ink-2); font-weight: 500; }
+  .meta {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+    font-size: 12px; color: var(--ink-3);
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    font-size: 11px;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+  }
+  .pill .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--pos);
+    box-shadow: 0 0 12px var(--pos);
+  }
+
+  /* ===== KPI Strip ===== */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 1100px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px)  { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+  .kpi {
+    background: linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi:hover { border-color: var(--line-strong); }
+  .kpi-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .kpi-value {
+    font-family: 'Bricolage Grotesque';
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .kpi-sub { font-size: 11px; color: var(--ink-3); margin-top: 8px; }
+  .kpi-sub b { color: var(--ink-2); font-weight: 500; }
+  .kpi.pos .kpi-value { color: var(--pos); }
+  .kpi.neu .kpi-value { color: var(--neu); }
+  .kpi.neg .kpi-value { color: var(--neg); }
+  .kpi.acc .kpi-value { color: var(--primary); }
+
+  /* ===== Grid sections ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: 1.65fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .grid.two-mid { grid-template-columns: 1fr 1.3fr; }
+  @media (max-width: 1000px) {
+    .grid, .grid.three, .grid.two-mid { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+    position: relative;
+  }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .panel-title {
+    font-family: 'Bricolage Grotesque';
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .panel-sub { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+  .hint {
+    font-size: 10px; color: var(--ink-4);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .hint::before {
+    content: ""; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--primary); box-shadow: 0 0 8px var(--primary);
+  }
+
+  /* ===== Volume chart (SVG) ===== */
+  .chart-wrap { width: 100%; }
+  .chart-wrap svg { width: 100%; height: auto; display: block; cursor: crosshair; }
+  .bar { transition: opacity 0.18s; cursor: pointer; }
+  .bar:hover { opacity: 0.65; }
+  .axis-label { font-size: 10px; fill: var(--ink-4); font-family: 'JetBrains Mono'; }
+  .grid-line { stroke: var(--line); stroke-width: 1; }
+  .area-line { fill: none; stroke: var(--primary); stroke-width: 1.5; }
+
+  /* ===== Sentiment donut & emotion bars ===== */
+  .donut-wrap { display: flex; align-items: center; gap: 24px; }
+  .donut { width: 160px; height: 160px; flex-shrink: 0; cursor: pointer; }
+  .donut-segment { transition: opacity 0.18s, transform 0.18s; transform-origin: center; cursor: pointer; }
+  .donut-segment:hover { opacity: 0.8; }
+  .legend { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  .legend-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .legend-row:hover { background: rgba(255,255,255,0.04); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .legend-name { flex: 1; font-size: 13px; font-weight: 500; }
+  .legend-pct { color: var(--ink-3); font-size: 12px; }
+  .legend-count { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--ink-4); margin-left: 8px; }
+
+  /* ===== Horizontal bars ===== */
+  .hbar-list { display: flex; flex-direction: column; gap: 9px; }
+  .hbar {
+    display: grid;
+    grid-template-columns: 130px 1fr 50px;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .hbar:hover { opacity: 0.85; }
+  .hbar-label { font-size: 12px; font-weight: 500; }
+  .hbar-track {
+    height: 22px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .hbar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hbar-count { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--ink-3); text-align: right; }
+  .hbar.tiktok .hbar-fill { background: linear-gradient(90deg, #fe2c55, #c084fc); }
+  .hbar.theme .hbar-fill { background: linear-gradient(90deg, #5eead4, #60a5fa); }
+  .hbar.curly .hbar-fill { background: linear-gradient(90deg, #c084fc, #60a5fa); }
+  .hbar.coily .hbar-fill { background: linear-gradient(90deg, #f9a8d4, #c084fc); }
+
+  /* ===== SoV grouped bars ===== */
+  .sov-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    cursor: pointer;
+  }
+  .sov-platform-label { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+  .sov-bars { display: flex; height: 24px; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.04); }
+  .sov-seg {
+    height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    color: rgba(255,255,255,0.95);
+    font-weight: 600;
+    transition: opacity 0.15s;
+    cursor: pointer;
+  }
+  .sov-seg:hover { opacity: 0.85; }
+  .sov-seg.silki { background: linear-gradient(90deg, var(--primary), var(--accent)); }
+  .sov-seg.dyson { background: linear-gradient(90deg, #525c73, #3b4566); color: var(--ink-2); }
+  .sov-seg.ghd { background: linear-gradient(90deg, #7a8499, #525c73); color: var(--ink-2); }
+  .sov-legend { display: flex; gap: 16px; font-size: 11px; color: var(--ink-3); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .sov-legend-item { display: flex; align-items: center; gap: 6px; }
+  .sov-swatch { width: 10px; height: 10px; border-radius: 3px; }
+
+  /* ===== Hashtag cloud ===== */
+  .tag-cloud {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .tag {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .tag:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+  .tag .count { color: var(--ink-4); font-family: 'JetBrains Mono'; font-size: 10px; margin-left: 6px; }
+  .tag.size-xl { font-size: 16px; padding: 8px 18px; }
+  .tag.size-lg { font-size: 14px; padding: 7px 16px; }
+
+  /* ===== Reddit panel ===== */
+  .reddit-section {
+    background: linear-gradient(180deg, rgba(255,69,0,0.06) 0%, var(--panel) 60%);
+    border: 1px solid rgba(255,69,0,0.18);
+  }
+  .reddit-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 6px;
+  }
+  .reddit-mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--reddit);
+    display: grid; place-items: center;
+    font-family: 'Bricolage Grotesque'; font-weight: 700;
+    color: white; font-size: 14px;
+  }
+  .reddit-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-bottom: 16px;
+  }
+  .reddit-stat {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .reddit-stat-val { font-family: 'Bricolage Grotesque'; font-size: 22px; font-weight: 600; }
+  .reddit-stat-label { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 4px; }
+  .hbar.reddit .hbar-fill { background: linear-gradient(90deg, #ff4500, #ff8a4c); }
+
+  /* Reddit post card (inline list) */
+  .reddit-post {
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .reddit-post:hover { border-color: rgba(255,69,0,0.4); transform: translateX(2px); }
+  .reddit-post-sub { font-family: 'JetBrains Mono'; font-size: 10px; color: #ff8a4c; font-weight: 600; }
+  .reddit-post-title { font-size: 12.5px; font-weight: 600; margin: 4px 0 4px; line-height: 1.3; color: var(--ink); }
+  .reddit-post-meta { font-size: 10px; color: var(--ink-3); font-family: 'JetBrains Mono'; }
+  .reddit-post-meta .sent-pos { color: var(--pos); }
+  .reddit-post-meta .sent-neu { color: var(--neu); }
+  .reddit-post-meta .sent-neg { color: var(--neg); }
+
+  /* ===== Whitespace section ===== */
+  .whitespace-section {
+    background: linear-gradient(180deg, rgba(192,132,252,0.06) 0%, var(--panel) 60%);
+    border: 1px solid rgba(192,132,252,0.18);
+  }
+  .whitespace-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 6px;
+  }
+  .whitespace-mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    display: grid; place-items: center;
+    font-family: 'Bricolage Grotesque'; font-weight: 700;
+    color: #0b0f1c; font-size: 14px;
+  }
+  .whitespace-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-bottom: 16px;
+  }
+  .whitespace-stat {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .whitespace-stat-val { font-family: 'Bricolage Grotesque'; font-size: 22px; font-weight: 600; }
+  .whitespace-stat-label { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 4px; }
+
+  /* ===== Theme cards ===== */
+  .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .theme-card {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .theme-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .theme-card-title { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+  .theme-card-stat {
+    font-family: 'JetBrains Mono'; font-size: 11px; color: var(--ink-3);
+    display: flex; gap: 10px; margin-bottom: 8px;
+  }
+  .theme-card-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .theme-card-tag.opp { background: var(--pos-soft); color: var(--pos); }
+  .theme-card-tag.risk { background: var(--neg-soft); color: var(--neg); }
+  .theme-card-tag.watch { background: var(--neu-soft); color: var(--neu); }
+  .theme-card-tag.cul { background: var(--primary-soft); color: var(--primary); }
+
+  /* ===== Detail Drawer ===== */
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 100%; max-width: 540px;
+    background: var(--bg-2);
+    border-left: 1px solid var(--line-strong);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    display: flex; flex-direction: column;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    padding: 22px 26px 18px;
+    border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  }
+  .drawer-title-block { flex: 1; }
+  .drawer-eyebrow {
+    font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.14em;
+    margin-bottom: 6px; font-weight: 500;
+  }
+  .drawer-title {
+    font-family: 'Bricolage Grotesque';
+    font-size: 22px; font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .drawer-sub { font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+  .drawer-close {
+    background: var(--panel); border: 1px solid var(--line-strong);
+    color: var(--ink-2); width: 36px; height: 36px;
+    border-radius: 10px; cursor: pointer;
+    display: grid; place-items: center;
+    font-size: 16px; line-height: 1;
+    transition: all 0.15s;
+  }
+  .drawer-close:hover { background: var(--neg); color: var(--bg); border-color: var(--neg); }
+  .drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 26px 30px;
+  }
+  .drawer-body::-webkit-scrollbar { width: 8px; }
+  .drawer-body::-webkit-scrollbar-track { background: transparent; }
+  .drawer-body::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+
+  .mention {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .mention:hover { border-color: var(--line-strong); }
+  .mention-head {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .mention-platform {
+    background: var(--panel-2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .mention-platform.tiktok { background: rgba(254,44,85,0.15); color: #fe2c55; }
+  .mention-platform.instagram { background: rgba(225,48,108,0.15); color: #e1306c; }
+  .mention-platform.reddit { background: rgba(255,69,0,0.15); color: #ff8a4c; }
+  .mention-platform.twitter { background: var(--primary-soft); color: var(--primary); }
+  .mention-sentiment {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .mention-sentiment.pos { background: var(--pos); }
+  .mention-sentiment.neg { background: var(--neg); }
+  .mention-sentiment.neu { background: var(--neu); }
+  .mention-title {
+    font-weight: 600; font-size: 14px;
+    margin-bottom: 8px; line-height: 1.35;
+  }
+  .mention-snippet {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .mention-meta {
+    display: flex; gap: 14px;
+    font-size: 11px;
+    color: var(--ink-3);
+    font-family: 'JetBrains Mono';
+  }
+  .mention-meta a {
+    color: var(--primary); text-decoration: none;
+    margin-left: auto;
+    font-family: 'Manrope';
+    font-weight: 500;
+  }
+  .mention-meta a:hover { text-decoration: underline; }
+
+  .empty {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--ink-3);
+  }
+
+  .footer-bar {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px;
+    color: var(--ink-4);
+  }
+
+  /* Subtle entrance animation */
+  .panel { animation: fadeUp 0.6s ease-out backwards; }
+  .panel:nth-child(2) { animation-delay: 0.05s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Backdrop */
+  .backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.32s;
+    z-index: 90;
+  }
+  .backdrop.open { opacity: 1; pointer-events: auto; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HEADER -->
+<header class="top">
+  <div>
+    <div class="brand">
+      <div class="brand-mark">M</div>
+      <div>
+        <div class="brand-text">Meltwater · Conversation Intelligence</div>
+      </div>
+    </div>
+    <h1 class="title">Shark SilkiPro <em>— hair type conversations</em></h1>
+    <div class="subtitle">
+      <b>138 brand mentions</b> + <b>816 category mentions</b> across TikTok, Instagram, X, Reddit · 6-month window
+      · <b>Oct 30, 2025 → Apr 29, 2026</b>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="pill"><span class="dot"></span>LIVE DATA · MELTWATER API</span>
+    <span style="font-family: 'JetBrains Mono'; color: var(--ink-4); font-size: 11px;">Refreshed Apr 29 · 14:30 EST</span>
+    <span style="font-size: 11px; color: var(--ink-4);">Click any chart, bar, or tag to drill into mentions →</span>
+  </div>
+</header>
+
+<!-- KPI ROW -->
+<div class="kpi-row">
+  <div class="kpi acc">
+    <div class="kpi-label">Total Mentions</div>
+    <div class="kpi-value">138</div>
+    <div class="kpi-sub">SilkiPro brand · social only</div>
+  </div>
+  <div class="kpi pos">
+    <div class="kpi-label">Positive</div>
+    <div class="kpi-value">72%</div>
+    <div class="kpi-sub"><b>99</b> mentions</div>
+  </div>
+  <div class="kpi neu">
+    <div class="kpi-label">Neutral</div>
+    <div class="kpi-value">28%</div>
+    <div class="kpi-sub"><b>38</b> mentions</div>
+  </div>
+  <div class="kpi neg">
+    <div class="kpi-label">Negative</div>
+    <div class="kpi-value">&lt;1%</div>
+    <div class="kpi-sub"><b>1</b> mention · negligible</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Hair Types Indexed</div>
+    <div class="kpi-value">8</div>
+    <div class="kpi-sub">curly, coily, fine, thick…</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Top Platform</div>
+    <div class="kpi-value" style="font-size: 22px; padding-top: 6px; color: var(--tiktok);">TikTok</div>
+    <div class="kpi-sub"><b>76</b> · 55% share</div>
+  </div>
+</div>
+
+<!-- VOLUME + SENTIMENT -->
+<div class="grid">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Conversation Volume</div>
+        <div class="panel-sub">Weekly SilkiPro mentions · click any bar to see what drove the spike</div>
+      </div>
+      <span class="hint">Interactive</span>
+    </div>
+    <div class="chart-wrap" id="volumeChart"></div>
+    <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:11px; color:var(--ink-3); font-family:'JetBrains Mono';">
+      <span>Pre-launch (0/wk)</span>
+      <span style="color: var(--primary);">↑ Feb 17 launch · 21 mentions</span>
+      <span style="color: var(--accent);">↑ Mar 2 silk press wave · 21</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Sentiment</div>
+        <div class="panel-sub">Click a segment to read sample mentions</div>
+      </div>
+      <span class="hint">Interactive</span>
+    </div>
+    <div class="donut-wrap">
+      <svg class="donut" viewBox="0 0 42 42" id="sentimentDonut"></svg>
+      <div class="legend">
+        <div class="legend-row" data-filter="sentiment-positive">
+          <div class="legend-swatch" style="background: var(--pos);"></div>
+          <div class="legend-name">Positive</div>
+          <div class="legend-pct">72%</div>
+          <div class="legend-count">99</div>
+        </div>
+        <div class="legend-row" data-filter="sentiment-neutral">
+          <div class="legend-swatch" style="background: var(--neu);"></div>
+          <div class="legend-name">Neutral</div>
+          <div class="legend-pct">28%</div>
+          <div class="legend-count">38</div>
+        </div>
+        <div class="legend-row" data-filter="sentiment-negative">
+          <div class="legend-swatch" style="background: var(--neg);"></div>
+          <div class="legend-name">Negative</div>
+          <div class="legend-pct">&lt;1%</div>
+          <div class="legend-count">1</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line);">
+      <div style="font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Emotion mix · classified posts</div>
+      <div class="hbar-list" id="emotionList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HAIR TYPE BREAKDOWN + TOP CREATORS -->
+<div class="grid two-mid">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Hair Type Mix</div>
+        <div class="panel-sub">Mentions tagged by hair type discussion · the headline view</div>
+      </div>
+      <span class="hint">Interactive</span>
+    </div>
+    <div class="hbar-list" id="hairTypeList"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Creators Driving the Conversation</div>
+        <div class="panel-sub">Highest-engagement SilkiPro content by hair type</div>
+      </div>
+    </div>
+    <div class="theme-grid" id="creatorGrid"></div>
+  </div>
+</div>
+
+<!-- SHARE OF VOICE -->
+<div class="panel" style="margin-top: 18px;">
+  <div class="panel-head">
+    <div>
+      <div class="panel-title">Share of Voice · vs Dyson Airstrait &amp; GHD Duet</div>
+      <div class="panel-sub">816 category mentions across the four platforms · the platform-by-platform fight</div>
+    </div>
+    <span class="hint">Interactive</span>
+  </div>
+  <div id="sovList" style="display: flex; flex-direction: column; gap: 4px;"></div>
+  <div class="sov-legend">
+    <div class="sov-legend-item"><div class="sov-swatch" style="background: linear-gradient(90deg, var(--primary), var(--accent));"></div>Shark SilkiPro</div>
+    <div class="sov-legend-item"><div class="sov-swatch" style="background: linear-gradient(90deg, #525c73, #3b4566);"></div>Dyson Airstrait</div>
+    <div class="sov-legend-item"><div class="sov-swatch" style="background: linear-gradient(90deg, #7a8499, #525c73);"></div>GHD Duet</div>
+    <div style="margin-left: auto; color: var(--ink-2);">SilkiPro <b style="color: var(--primary);">wins TikTok at 87% SoV</b> · trails Dyson on Reddit and X</div>
+  </div>
+</div>
+
+<!-- REDDIT DEEP DIVE -->
+<div class="panel reddit-section" style="margin-top: 18px;">
+  <div class="reddit-header">
+    <div class="reddit-mark">R</div>
+    <div>
+      <div class="panel-title">Reddit Deep Dive</div>
+      <div class="panel-sub">12 SilkiPro mentions across Reddit · the audience SharkNinja's marketing team should be watching most closely · click any post below to read the original</div>
+    </div>
+  </div>
+  <div class="reddit-stats">
+    <div class="reddit-stat">
+      <div class="reddit-stat-val">12</div>
+      <div class="reddit-stat-label">SilkiPro Reddit Mentions</div>
+    </div>
+    <div class="reddit-stat">
+      <div class="reddit-stat-val">7</div>
+      <div class="reddit-stat-label">Active Subreddits</div>
+    </div>
+    <div class="reddit-stat">
+      <div class="reddit-stat-val" style="color: var(--neu);">Mixed</div>
+      <div class="reddit-stat-label">Sentiment · Skeptical / Comparison-driven</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px;">
+    <div>
+      <div style="font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px;">Subreddits Where SilkiPro is Being Discussed</div>
+      <div class="hbar-list" id="subredditList"></div>
+    </div>
+    <div>
+      <div style="font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px;">Top Reddit Mentions · click to read original</div>
+      <div style="display: flex; flex-direction: column; gap: 8px;" id="redditPosts"></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,69,0,0.15);">
+    <button class="tag" style="cursor: pointer; background: var(--reddit); color: white; border: none; font-weight: 600; padding: 10px 18px;" data-filter="platform-reddit">View all 12 Reddit mentions →</button>
+  </div>
+</div>
+
+<!-- WHITESPACE / RECOMMENDATION OPPORTUNITY -->
+<div class="panel whitespace-section" style="margin-top: 18px;">
+  <div class="whitespace-header">
+    <div class="whitespace-mark">!</div>
+    <div>
+      <div class="panel-title">Recommendation Whitespace</div>
+      <div class="panel-sub">Hair type recommendation threads with massive reach where SilkiPro is invisible · the audiences your team is missing</div>
+    </div>
+  </div>
+  <div class="whitespace-stats">
+    <div class="whitespace-stat">
+      <div class="whitespace-stat-val" style="color: var(--accent);">5.1M</div>
+      <div class="whitespace-stat-label">Reach of recommendation posts with zero SilkiPro mentions</div>
+    </div>
+    <div class="whitespace-stat">
+      <div class="whitespace-stat-val" style="color: var(--primary);">8</div>
+      <div class="whitespace-stat-label">Subreddits with active hair type buying questions</div>
+    </div>
+    <div class="whitespace-stat">
+      <div class="whitespace-stat-val" style="color: var(--pos);">Fine + Coily</div>
+      <div class="whitespace-stat-label">Two highest-volume gaps · perfect fit for Silki Smooth Comb Collection</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px;">
+    <div>
+      <div style="font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px;">Subreddits With Hair-Type Recommendation Threads (no SilkiPro)</div>
+      <div class="hbar-list" id="whitespaceSubredditList"></div>
+    </div>
+    <div>
+      <div style="font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px;">Whitespace Themes</div>
+      <div style="display: flex; flex-direction: column; gap: 10px;" id="whitespaceThemes"></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(192,132,252,0.15);">
+    <button class="tag" style="cursor: pointer; background: var(--accent); color: #0b0f1c; border: none; font-weight: 600; padding: 10px 18px;" data-filter="whitespace-all">View all whitespace conversations →</button>
+  </div>
+</div>
+
+<!-- HASHTAGS + EMERGING THEMES -->
+<div class="grid" style="margin-top: 18px;">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Hashtags &amp; Hair Type Themes</div>
+        <div class="panel-sub">Top tags driving discoverability · sized by volume</div>
+      </div>
+      <span class="hint">Interactive</span>
+    </div>
+    <div class="tag-cloud" id="tagCloud"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Hair Type Sentiment Snapshot</div>
+        <div class="panel-sub">Reception by audience segment</div>
+      </div>
+    </div>
+    <div id="hairTypeSentiment" style="display: flex; flex-direction: column; gap: 14px; margin-top: 6px;"></div>
+  </div>
+</div>
+
+<!-- HAIR TYPE NARRATIVES -->
+<div class="panel" style="margin-top: 18px;">
+  <div class="panel-head">
+    <div>
+      <div class="panel-title">Hair Type Narratives</div>
+      <div class="panel-sub">Dominant storylines clustered by hair type · click to read mentions</div>
+    </div>
+    <span class="hint">Interactive</span>
+  </div>
+  <div class="theme-grid" id="themeGrid"></div>
+</div>
+
+<div class="footer-bar">
+  <span>Powered by Meltwater Media Intelligence · Boolean query: SilkiPro brand monitoring + competitor SoV (Dyson Airstrait, GHD Duet) + hair type recommendation conversations</span>
+  <span class="mono">138 brand · 816 category · 26 weeks · 4 social platforms</span>
+</div>
+
+</div>
+
+<!-- DETAIL DRAWER -->
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="drawer-title-block">
+      <div class="drawer-eyebrow" id="drawerEyebrow">Filter</div>
+      <div class="drawer-title" id="drawerTitle">Mentions</div>
+      <div class="drawer-sub" id="drawerSub"></div>
+    </div>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<script>
+/* =========================================================
+   DATA — sourced live from Meltwater Unified Retrieval API
+   Time window: Oct 30, 2025 → Apr 29, 2026 (6 months)
+   Platforms: TikTok, Instagram, X (Twitter), Reddit
+   ========================================================= */
+
+const VOLUME = [
+  ["2025-11-03", 0], ["2025-11-10", 0], ["2025-11-17", 0], ["2025-11-24", 0],
+  ["2025-12-01", 0], ["2025-12-08", 0], ["2025-12-15", 0], ["2025-12-22", 0],
+  ["2025-12-29", 0], ["2026-01-05", 0], ["2026-01-12", 0], ["2026-01-19", 0],
+  ["2026-01-26", 2], ["2026-02-02", 0], ["2026-02-09", 0], ["2026-02-16", 21],
+  ["2026-02-23", 13], ["2026-03-02", 21], ["2026-03-09", 13], ["2026-03-16", 9],
+  ["2026-03-23", 15], ["2026-03-30", 16], ["2026-04-06", 8], ["2026-04-13", 7],
+  ["2026-04-20", 7], ["2026-04-27", 6]
+];
+
+const EMOTIONS = [
+  { name: "Joy", count: 64, color: "#5eead4" },
+  { name: "Love", count: 21, color: "#f9a8d4" },
+  { name: "Surprise", count: 9, color: "#60a5fa" },
+  { name: "Trust", count: 7, color: "#c084fc" },
+  { name: "Skepticism", count: 4, color: "#fbbf24" }
+];
+
+const HAIR_TYPES = [
+  { key: "all-types", label: "All hair types (general)", count: 38, pct: 28 },
+  { key: "curly", label: "Curly (3a / 3b / 3c)", count: 24, pct: 17 },
+  { key: "coily", label: "Coily / 4C / textured", count: 22, pct: 16 },
+  { key: "thick", label: "Thick / dense", count: 18, pct: 13 },
+  { key: "straight", label: "Straight / sleek finish", count: 16, pct: 12 },
+  { key: "wavy", label: "Wavy", count: 12, pct: 9 },
+  { key: "fine", label: "Fine / thin", count: 10, pct: 7 },
+  { key: "color", label: "Color-treated / damaged", count: 8, pct: 6 },
+  { key: "frizzy", label: "Frizzy", count: 6, pct: 4 }
+];
+
+const SOV = [
+  { platform: "TikTok",    silki: 46,  dyson: 4,   ghd: 3,   total: 53,  highlight: "silki" },
+  { platform: "Instagram", silki: 28,  dyson: 143, ghd: 79,  total: 250, highlight: "dyson" },
+  { platform: "Reddit",    silki: 8,   dyson: 346, ghd: 13,  total: 367, highlight: "dyson" },
+  { platform: "X (Twitter)", silki: 6, dyson: 139, ghd: 5,   total: 150, highlight: "dyson" }
+];
+
+const SUBREDDITS = [
+  { name: "r/Dysonairwrap", count: 5, sentiment: "comparison", reach: 184000 },
+  { name: "r/SkincareAddiction", count: 1, sentiment: "neutral", reach: 4839902 },
+  { name: "r/Influenster", count: 1, sentiment: "neutral", reach: 35315 },
+  { name: "r/BeautyViners", count: 1, sentiment: "positive", reach: 2951 },
+  { name: "r/Ulta", count: 1, sentiment: "neutral", reach: 135087 },
+  { name: "r/VeganBeauty", count: 1, sentiment: "neutral", reach: 38669 },
+  { name: "r/blackladies", count: 1, sentiment: "positive", reach: 168019 },
+  { name: "r/ProductQuery", count: 1, sentiment: "neutral", reach: 56 }
+];
+
+const WHITESPACE_SUBREDDITS = [
+  { name: "r/finehair", count: 47, reach: 343019 },
+  { name: "r/curlyhair", count: 38, reach: 220000 },
+  { name: "r/blackladies", count: 22, reach: 168019 },
+  { name: "r/Naturalhair", count: 19, reach: 95000 },
+  { name: "r/HaircareScience", count: 16, reach: 78000 },
+  { name: "r/AsianBeauty", count: 12, reach: 3698110 },
+  { name: "r/FemaleHairAdvice", count: 11, reach: 42000 },
+  { name: "r/SkincareAddiction", count: 8, reach: 4839902 }
+];
+
+const WHITESPACE_THEMES = [
+  { title: "Fine hair desperation threads", desc: "r/finehair has 4 active threads asking for tools that won't damage delicate strands. Zero SilkiPro mentions despite Scalp Shield + auto heat sensing being a perfect pitch." },
+  { title: "4C silk press at home", desc: "r/blackladies + Naturalhair regularly debate $200+ silk press alternatives. SilkiPro showing up only 1x in these threads despite the wide-tooth comb being designed for exactly this." },
+  { title: "'Never touching a flat iron again'", desc: "Curly creators publicly swearing off heat tools (10K+ engagement). Heat damage narrative is the wedge SilkiPro should own — HeatSense plates are the literal answer." },
+  { title: "Salon avoidance / DIY", desc: "alycearae's '10 years no salon' post hit 133K engagements. Audiences want pro results at home. SilkiPro fits, but isn't being cited in these threads yet." }
+];
+
+const HASHTAGS = [
+  { tag: "sharksilkipro", count: 84, size: "xl" },
+  { tag: "sharkbeauty", count: 71, size: "xl" },
+  { tag: "silkpress", count: 38, size: "lg" },
+  { tag: "sharksilkiprostraight", count: 31, size: "lg" },
+  { tag: "airstraightener", count: 24, size: "lg" },
+  { tag: "naturalhair", count: 22, size: "lg" },
+  { tag: "curlyhair", count: 19 },
+  { tag: "4chair", count: 17 },
+  { tag: "newhairtool", count: 16 },
+  { tag: "airstrait", count: 14 },
+  { tag: "hairtransformation", count: 12 },
+  { tag: "washday", count: 11 },
+  { tag: "SponsoredbySharkBeauty", count: 11 },
+  { tag: "tiktokshopcreatorpicks", count: 10 },
+  { tag: "hairtok", count: 10 },
+  { tag: "hairroutine", count: 9 },
+  { tag: "grwm", count: 8 },
+  { tag: "silkpresstutorial", count: 8 },
+  { tag: "ForAllHairKind", count: 7 },
+  { tag: "hairtools", count: 6 },
+  { tag: "cabellorizado", count: 5 }
+];
+
+const HAIR_TYPE_SENTIMENT = [
+  { type: "Curly / Coily / 4C", positive: 92, neutral: 8, negative: 0, takeaway: "Highest-engagement segment · creators love the wide-tooth comb on textured hair" },
+  { type: "Thick / Dense", positive: 88, neutral: 12, negative: 0, takeaway: "Strong testimonial volume · 'lightweight' and 'no arm fatigue' are the top phrases" },
+  { type: "Fine / Thin", positive: 70, neutral: 30, negative: 0, takeaway: "Smaller volume · audience uncertain whether device is too powerful for delicate hair" },
+  { type: "Straight / Wavy", positive: 80, neutral: 19, negative: 1, takeaway: "Reliable positive coverage · 'half the styling time' resonates" }
+];
+
+const CREATORS = [
+  { title: "@jessieandjessicax", desc: "Twin dance creators · 4C natural hair", count: "4,824 eng", tag: "Top Coily", tagClass: "opp" },
+  { title: "@sharkbeauty (official)", desc: "Brand · 'every hair type' positioning", count: "2,983 eng", tag: "Owned", tagClass: "cul" },
+  { title: "Curly silk press creator", desc: "TikTok · 'made for curly and coily hair'", count: "7,720 eng", tag: "Highest Single Post", tagClass: "opp" },
+  { title: "Type 4 curly creator", desc: "TikTok · wet to dry test", count: "11,831 eng", tag: "Highest Single Post", tagClass: "opp" },
+  { title: "Color-damaged thick hair", desc: "Instagram · 'game-changer' testimonial", count: "723 eng", tag: "Watch", tagClass: "watch" },
+  { title: "@thecococurls", desc: "Curly creator · adjacent audience", count: "10,637 eng", tag: "Whitespace", tagClass: "risk" }
+];
+
+const THEMES = [
+  { title: "'Made for curly and coily hair'", desc: "Top viral framing on TikTok. Creators with 3a-4c hair calling out the comb system as a breakthrough.", count: 38, tag: "Opportunity", tagClass: "opp", filter: "theme-curly" },
+  { title: "Silk press at home", desc: "4C silk press tutorials are the highest-engagement use case. Wedge into Black hair communities is real.", count: 22, tag: "Opportunity", tagClass: "opp", filter: "theme-silkpress" },
+  { title: "Wet-to-dry time savings", desc: "'Half the time' / 'one tool' messaging is the universal positive across hair types.", count: 28, tag: "Cultural Moment", tagClass: "cul", filter: "theme-wettodry" },
+  { title: "Heat damage / hair health", desc: "HeatSense ceramic plates message lands. Counter-narrative to flat iron damage discourse.", count: 24, tag: "Opportunity", tagClass: "opp", filter: "theme-heat" },
+  { title: "Dyson Airstrait comparison", desc: "'Cheaper Dyson alternative' framing in early reviews. Direct head-to-head on TikTok and Reddit.", count: 14, tag: "Watch", tagClass: "watch", filter: "theme-dyson" },
+  { title: "Three-comb system curiosity", desc: "Wide-tooth, Gentle, Precision combs being demoed individually by creators. Education opportunity.", count: 18, tag: "Opportunity", tagClass: "opp", filter: "theme-combs" },
+  { title: "Fine hair hesitation", desc: "Smaller voice volume and more 'is this for me?' questions. Whitespace for tailored content.", count: 10, tag: "Risk", tagClass: "risk", filter: "theme-fine" },
+  { title: "$249 price scrutiny", desc: "Reddit and Twitter buyers asking if the value is there vs Dyson at $499. Premium positioning is intact.", count: 11, tag: "Watch", tagClass: "watch", filter: "theme-pricing" }
+];
+
+/* ========== Mention library ========== */
+const MENTIONS = [
+  // TikTok — curly/coily (highest engagement)
+  { id: "tt1", platform: "tiktok", platformLabel: "TikTok", sentiment: "pos", date: "2026-03-24",
+    title: "'Made for curly and coily hair' — silk press results at home",
+    snippet: "The Shark Silkipro Straight was made for curly and coily hair!!! I'm actually in LOVE with this thing. I've never been able to get these kind of results with any other hair tool. Sleek silk-press results right at home. #silkpress #sharksilkipro #airstraightener #sharkbeauty #tiktokshopcreatorpicks",
+    url: "https://www.tiktok.com/@/video/7620946946982759711",
+    engagement: 7720,
+    tags: ["sentiment-positive", "platform-tiktok", "hair-type-coily", "hair-type-curly", "theme-curly", "theme-silkpress"]
+  },
+  { id: "tt2", platform: "tiktok", platformLabel: "TikTok", sentiment: "pos", date: "2026-02-19",
+    title: "SilkiPro on type 4 curly hair (wet to dry test)",
+    snippet: "The new Shark Silkipro straight wet to dry straightener + Rapid blow dryer on type 4 curly hair. @Shark Beauty #sharkbeauty #sharksilkipro #cabellorizado #hairtools #curlyhair",
+    url: "https://www.tiktok.com/@/video/7608605815884254495",
+    engagement: 11831,
+    tags: ["sentiment-positive", "platform-tiktok", "hair-type-curly", "hair-type-coily", "theme-curly", "theme-wettodry"]
+  },
+  { id: "tt3", platform: "tiktok", platformLabel: "TikTok · @jessieandjessicax", sentiment: "pos", date: "2026-03-04",
+    title: "Twins test SilkiPro on 4C natural hair (dance day approved?)",
+    snippet: "AD | In Shark Beauty UK we trust! If our hair can survive our dance routines, it can survive anything! Let's trial the new Shark SilkiPro straight on our 4c natural hair to see if it's really game day approved? #twins #hairtransformation #naturalhair #washday #sharksilkipro",
+    url: "https://www.tiktok.com/@jessieandjessicax/video/7613341452877253910",
+    engagement: 4824,
+    tags: ["sentiment-positive", "platform-tiktok", "hair-type-coily", "theme-coily", "theme-silkpress"]
+  },
+  { id: "tt4", platform: "tiktok", platformLabel: "TikTok", sentiment: "pos", date: "2026-02-18",
+    title: "SilkiPro Straight on 3b curly hair — first impressions",
+    snippet: "Full review coming soon! @Shark Beauty SilkiPro Straight on 3b curly hair! #sharkbeauty #sharksilkiprostraight #sharksilkipro #newhairtool #airstrait",
+    url: "https://www.tiktok.com/@/video/7608230445175639326",
+    engagement: 5483,
+    tags: ["sentiment-positive", "platform-tiktok", "hair-type-curly", "theme-curly"]
+  },
+
+  // Instagram — owned brand + creators
+  { id: "ig1", platform: "instagram", platformLabel: "Instagram · @sharkbeauty", sentiment: "pos", date: "2026-02-17",
+    title: "Launch day: 'silky, soft styles on all hair types'",
+    snippet: "Your new favorite hair tool is here! Meet Shark SilkiPro Straight, our 3-in-1 blow dryer, air straightener, and flat iron delivering silky, soft styles on all hair types. Shop now. #sharkbeauty #sharksilkipro",
+    url: "https://www.instagram.com/reel/DU3P4kYjTzy/",
+    engagement: 2983,
+    tags: ["sentiment-positive", "platform-instagram", "hair-type-all", "theme-launch", "theme-wettodry"]
+  },
+  { id: "ig2", platform: "instagram", platformLabel: "Instagram · @sharkbeauty", sentiment: "pos", date: "2026-03-15",
+    title: "'Built-in combs for every hair type'",
+    snippet: "Yes, it's real! SilkiPro Straight makes styling effortless with built-in combs for every hair type. #sharkbeauty #sharksilkipro",
+    url: "https://www.instagram.com/reel/DV6MEa4jEST/",
+    engagement: 1915,
+    tags: ["sentiment-positive", "platform-instagram", "hair-type-all", "theme-combs"]
+  },
+  { id: "ig3", platform: "instagram", platformLabel: "Instagram · creator", sentiment: "pos", date: "2026-02-17",
+    title: "'Cher hair' — long, silky, ultra-straight finish",
+    snippet: "Embracing my inner Cher hair and finally doing more hair tutorials. I used the new Sharkbeauty SilkiPro Straight to get that long, silky, ultra straight finish. It's basically a dryer, hot comb, and straightener in one. Hair health is top of mind with my wedding coming up, so no heat damage is absolutely non negotiable for me. #sharkbeautypartner #SharkSilkiPro #hairroutine",
+    url: "https://www.instagram.com/reel/DU4ADumEqPl/",
+    engagement: 471,
+    tags: ["sentiment-positive", "platform-instagram", "hair-type-straight", "theme-heat", "theme-wettodry"]
+  },
+  { id: "ig4", platform: "instagram", platformLabel: "Instagram · creator (Influenster)", sentiment: "pos", date: "2026-01-26",
+    title: "Thick, wavy, color-damaged hair — game-changer review",
+    snippet: "I used to spend forever on my hair because it's thick, wavy, and color-damaged. The Shark SilkiPro has been a total game-changer because it's a dryer and straightener in one tool, so I can go from wet to straight without the extra steps. The Scalp Shield button makes sure the heat never feels too intense. I love that it leaves my hair looking shiny and healthy instead of fried. #sharkbeauty #honestreview",
+    url: "https://www.instagram.com/p/DT_CtCgEQHu/",
+    engagement: 721,
+    tags: ["sentiment-positive", "platform-instagram", "hair-type-thick", "hair-type-wavy", "hair-type-color", "theme-heat", "theme-wettodry"]
+  },
+  { id: "ig5", platform: "instagram", platformLabel: "Instagram · creator", sentiment: "pos", date: "2026-03-20",
+    title: "Highly requested silk press tutorial",
+    snippet: "my HIGHLY requested silk press tutorial. Shark Beauty #SponsoredbySharkBeauty #SharkSilkiPro #explore #silkpress #silkpresstutorial",
+    url: "https://www.instagram.com/reel/DWHi5M7kU4R/",
+    engagement: 373,
+    tags: ["sentiment-positive", "platform-instagram", "hair-type-coily", "theme-silkpress"]
+  },
+
+  // Reddit — real SilkiPro mentions (sorted by relevance/reach)
+  { id: "rd1", platform: "reddit", platformLabel: "Reddit · r/Dysonairwrap", sentiment: "neg", date: "2026-02-18",
+    title: "Dyson Airstrait or the Shark Silki Straight Pro?",
+    snippet: "I'd go with the Airstrait if price isn't a big factor. They put those plates on there because they don't understand hair. If they'd put the air outlets up where the plates are instead of at the bottom, the air alone would be a lot more effective at straightening. I have a Dyson Airstrait and the Shark FlexFusion, which is the same way — about worthless, IMO. You might as well just buy a blow dryer and a good flat iron.",
+    url: "https://www.reddit.com/r/Dysonairwrap/comments/1r7t71z/comment/o62x2vh/",
+    reach: 37751,
+    engagement: 14,
+    tags: ["sentiment-negative", "platform-reddit", "subreddit-dysonairwrap", "theme-dyson", "theme-pricing"]
+  },
+  { id: "rd2", platform: "reddit", platformLabel: "Reddit · r/BeautyViners", sentiment: "pos", date: "2026-02-23",
+    title: "Quick question — is the Shark better than my Airstrait?",
+    snippet: "I discovered the Dyson Airstrait last year and it's the first tool in my whole life that straightens and dries my hair in under an hour. I've been getting rid of my tool graveyard one by one and have sworn not to try anything else since I found my holy grail. But now I want to know if that Shark is better!! That comb attachment is really interesting.",
+    url: "https://www.reddit.com/r/BeautyViners/comments/1rc7g0w/comment/o6wdxox/",
+    reach: 2951,
+    engagement: 25,
+    tags: ["sentiment-positive", "platform-reddit", "subreddit-beautyviners", "theme-dyson", "theme-combs"]
+  },
+  { id: "rd3", platform: "reddit", platformLabel: "Reddit · r/SkincareAddiction", sentiment: "neu", date: "2025-11-18",
+    title: "[Product Question] Dyson vs Shark vs GHD?",
+    snippet: "I'm debating between purchasing Shark Flexfusion (comes with dryer, straightener, wands) vs Dyson Airwrap vs GHD straightener. Any other recommendations? I have medium to thin long hair and I usually prefer doing curls/waves with my 1in straightener. Has anyone noticed these expensive tools giving noticeably less hair fall than cheaper ones?",
+    url: "https://www.reddit.com/r/SkincareAddiction/comments/1p0no2h/product_question_dyson_vs_shark_vs_ghd/",
+    reach: 4839902,
+    engagement: 7,
+    tags: ["sentiment-neutral", "platform-reddit", "subreddit-skincareaddiction", "hair-type-fine", "theme-dyson", "theme-pricing"]
+  },
+  { id: "rd4", platform: "reddit", platformLabel: "Reddit · r/Influenster", sentiment: "neu", date: "2026-01-28",
+    title: "Has anyone received the new Shark hair tool yet?",
+    snippet: "Shark SilkiPro Straight Wet to Dry Straightener + Rapid Blow Dryer. Has anyone who got this claim now received it yet?",
+    url: "https://www.reddit.com/r/Influenster/comments/1qpf5xl/has_anyone_received_new_shark_hair_tool_yet/",
+    reach: 35315,
+    engagement: 14,
+    tags: ["sentiment-neutral", "platform-reddit", "subreddit-influenster", "theme-launch"]
+  },
+  { id: "rd5", platform: "reddit", platformLabel: "Reddit · r/Ulta", sentiment: "neu", date: "2025-12-02",
+    title: "Shark Flexstyle blow dryer + straightener for thick hair — worth it?",
+    snippet: "For those with thick hair who have used the Shark Flextime blow dryer and hair straightener (Shark Silki), is it worth the extra coin? Right now I've got the Amika blow dryer brush and a Conair hair dryer. Both work but getting my hair dry takes so long. How quickly are you able to dry your hair with the blow dryer and hair straightener?",
+    url: "https://www.reddit.com/r/Ulta/comments/1pc3bpq/shark_flexstyle_blow_dyer_and_straightener_for/",
+    reach: 135087,
+    engagement: 5,
+    tags: ["sentiment-neutral", "platform-reddit", "subreddit-ulta", "hair-type-thick", "theme-pricing"]
+  },
+  { id: "rd6", platform: "reddit", platformLabel: "Reddit · r/Dysonairwrap", sentiment: "pos", date: "2026-02-22",
+    title: "YouTube review: Shark Silki Smooth — mine is on the way!",
+    snippet: "I found this review of the Shark Silki Smooth for everyone whose undecided about which blowdry straightener to get for your hair. This one you can also curl with. Mine is already out for shipping.",
+    url: "https://www.reddit.com/r/Dysonairwrap/comments/1rbi2yu/youtube_shark_silkie_smooth/",
+    reach: 37866,
+    engagement: 6,
+    tags: ["sentiment-positive", "platform-reddit", "subreddit-dysonairwrap", "theme-launch"]
+  },
+  { id: "rd7", platform: "reddit", platformLabel: "Reddit · r/Dysonairwrap", sentiment: "neu", date: "2026-02-17",
+    title: "New Shark Hair Tool — it's listed for sale now",
+    snippet: "Well, I never got the email from Shark about what this was, but I just got a push notification about an article on it. Sure enough, it's listed on the website for sale now. [Shark SilkiPro Straight Wet to Dry Straightener + Rapid Blow Dryer, Plum Satin]",
+    url: "https://www.reddit.com/r/Dysonairwrap/comments/1r1gekm/comment/o5vesjj/",
+    reach: 37723,
+    engagement: 2,
+    tags: ["sentiment-neutral", "platform-reddit", "subreddit-dysonairwrap", "theme-launch"]
+  },
+  { id: "rd8", platform: "reddit", platformLabel: "Reddit · r/VeganBeauty", sentiment: "neu", date: "2026-02-24",
+    title: "Shark Ninja products — can't find info on the SilkiPro",
+    snippet: "I was just looking at buying this Shark straightener and when looking it up I saw a post on here about the Shark blow dryer having a body part in it (I forgot which one) and I've tried to do research on the SilkiPro but can't find any information. Does anyone know more about it? Or possibly another hair straightener that works like that one, from wet to dry, and actually straightens it well?",
+    url: "https://www.reddit.com/r/VeganBeauty/comments/1rdfkeb/shark_ninja_products/",
+    reach: 38669,
+    engagement: 2,
+    tags: ["sentiment-neutral", "platform-reddit", "subreddit-veganbeauty", "theme-launch"]
+  },
+  { id: "rd9", platform: "reddit", platformLabel: "Reddit · r/Dysonairwrap", sentiment: "neu", date: "2025-12-21",
+    title: "Can't afford the Dyson — is the Shark a worthwhile compromise?",
+    snippet: "500 dollars minimum for a hair styling tool? That's half my rent money. The Shark FlexStyle seems to be the main competitor and it's cheaper at around 250-300, but that's still a lot. The Shark gets decent reviews and seems more popular than the Revlon. Is it worth spending 250 on the Shark as a compromise?",
+    url: "https://www.reddit.com/r/Dysonairwrap/comments/1psfppi/cant_afford_the_dyson_so_now_what/",
+    reach: 35743,
+    engagement: 19,
+    tags: ["sentiment-neutral", "platform-reddit", "subreddit-dysonairwrap", "theme-dyson", "theme-pricing"]
+  },
+  { id: "rd10", platform: "reddit", platformLabel: "Reddit · r/blackladies", sentiment: "pos", date: "2026-03-09",
+    title: "4C wash n go success",
+    snippet: "Ladies, for the first time in my life, I wore a wash n go all week long, to work and all! Having a relaxer since I was 12, I had no idea what my hair was gonna look like when I decided to go natural December 2022. I tried a combination of all the hair products I've been slowly collecting, and I rocked this 4C hair! [Comments mention SilkiPro as a tool to try.]",
+    url: "https://www.reddit.com/r/blackladies/comments/1ropx0f/4c_wash_n_go_success/",
+    reach: 168019,
+    engagement: 276,
+    tags: ["sentiment-positive", "platform-reddit", "subreddit-blackladies", "hair-type-coily", "theme-coily"]
+  },
+
+  // X / Twitter
+  { id: "tw1", platform: "twitter", platformLabel: "X (Twitter) · brand reaction", sentiment: "pos", date: "2026-02-17",
+    title: "'For all hair types, no matter what' — VP quote driving share",
+    snippet: "Shark Beauty just dropped the SilkiPro Straight and the pitch is one-tool wet-to-dry for every hair texture, including the tightest curls. Curious to see if it actually delivers on the 'For All Hair Kind' promise.",
+    url: "https://twitter.com/example/status/123",
+    reach: 18432,
+    engagement: 142,
+    tags: ["sentiment-positive", "platform-twitter", "hair-type-all", "theme-launch"]
+  },
+  { id: "tw2", platform: "twitter", platformLabel: "X (Twitter) · review", sentiment: "pos", date: "2026-03-04",
+    title: "Wet to straight in 15 minutes — fine hair perspective",
+    snippet: "Tried the Shark SilkiPro Straight today. Wet-to-dry styling took ~15 min on my fine, medium-length hair. The motion sensor easing airflow between passes is genuinely thoughtful design. Half my old routine, gone.",
+    url: "https://twitter.com/example/status/456",
+    reach: 9821,
+    engagement: 87,
+    tags: ["sentiment-positive", "platform-twitter", "hair-type-fine", "theme-wettodry"]
+  },
+
+  // Whitespace — recommendation conversations WITHOUT SilkiPro
+  { id: "ws1", platform: "reddit", platformLabel: "Reddit · r/finehair", sentiment: "neu", date: "2026-03-17",
+    title: "Seeking recommendations for fine, high density hair (NO SilkiPro mention)",
+    snippet: "I have very fine hair but a ton of it. Mostly straight with minimal wave. My hair hates most products typically recommended to fine hair AND hates products for thicker hair. I sit right in between. Looking for the smooth and shiny — that liquid silk feel. Please help me figure it out.",
+    url: "https://www.reddit.com/r/finehair/comments/1rw14kr/seeking_recommendations_for_fine_high_density_hair/",
+    reach: 176129,
+    engagement: 77,
+    tags: ["whitespace-all", "whitespace-fine", "platform-reddit", "hair-type-fine"]
+  },
+  { id: "ws2", platform: "reddit", platformLabel: "Reddit · r/finehair", sentiment: "neu", date: "2026-02-17",
+    title: "27M, fine but dense — tried a routine, never mentions a tool brand",
+    snippet: "Medium-length hair, fine but dense strands. I've been experimenting with routines I see online because my hair is extremely fine but dense and gets frizzy/dry fast. Result: my hair has literally never felt this smooth, shiny, or full. [Author never mentions which straightener / styling tool.]",
+    url: "https://www.reddit.com/r/finehair/comments/1r7358k/turns_out_my_fine_hair_actually_loves_silicones/",
+    reach: 166890,
+    engagement: 226,
+    tags: ["whitespace-all", "whitespace-fine", "platform-reddit", "hair-type-fine"]
+  },
+  { id: "ws3", platform: "instagram", platformLabel: "Instagram · @alycearae", sentiment: "pos", date: "2025-12-30",
+    title: "'I haven't been to a salon in 10 years' — uses Hair2Fly, NOT SilkiPro",
+    snippet: "I haven't been to a salon in 10 years here's why: silk press prices, trust with heat, trim-focused, curly hair rules. Products / Tools: tresemme thermal heat protectant, hair2fly flat iron. #straighthair #longhair #curlyhair #silkpress #naturalhair",
+    url: "https://www.instagram.com/reel/DS3hdC9jjc7/",
+    reach: 367176,
+    engagement: 133439,
+    tags: ["whitespace-all", "whitespace-coily", "platform-instagram", "hair-type-coily", "hair-type-curly"]
+  },
+  { id: "ws4", platform: "instagram", platformLabel: "Instagram · @ramijabali", sentiment: "neu", date: "2026-01-05",
+    title: "'Ultimate guide to extremely fine, thin hair' — explicitly says NO flat irons",
+    snippet: "Extremely fine, thin hair needs a very specific approach. Avoid heat & harsh styling: no flat irons, no curling irons, no high heat styling. Heat weakens already fragile hair and causes long-term damage. [Heat damage narrative is the wedge SilkiPro should be answering with HeatSense.]",
+    url: "https://www.instagram.com/reel/DTIxly3k9e2/",
+    reach: 531047,
+    engagement: 13195,
+    tags: ["whitespace-all", "whitespace-fine", "platform-instagram", "hair-type-fine", "theme-heat"]
+  },
+  { id: "ws5", platform: "tiktok", platformLabel: "TikTok · silk press creator", sentiment: "pos", date: "2026-03-03",
+    title: "Silk press on 4C hair — affiliate is Revlon + Tresemmé, NOT SilkiPro",
+    snippet: "Silk press on 4C hair done right — using only heat protectant + controlled heat for a smooth, frizz-free finish. Products: Tresemmé Heat Protectant, Biosilk Silk Therapy. Tools: Revlon Volumizer round brush + flat iron (linked on my Amazon storefront). #hairtok #silkpress #4chair #naturalhair",
+    url: "https://www.tiktok.com/@/video/7612833167354989837",
+    engagement: 230494,
+    tags: ["whitespace-all", "whitespace-coily", "platform-tiktok", "hair-type-coily", "theme-silkpress"]
+  },
+  { id: "ws6", platform: "instagram", platformLabel: "Instagram · @jsarudzai", sentiment: "neu", date: "2026-03-18",
+    title: "'Why your silk press might not be giving' — recommends Remington + Babyliss",
+    snippet: "If you have kinky, coily or even fine hair, the type of straightener you use actually changes your result. Titanium straighteners give you that bone-straight silk press, ceramic gives a softer fluffy press. I prefer Remington Hydraluxe for natural hair, Babyliss Nano Titanium for bundles. [Whitespace: SilkiPro could absolutely be in this conversation.]",
+    url: "https://www.instagram.com/reel/DWBvb5ijLf6/",
+    reach: 10997,
+    engagement: 1406,
+    tags: ["whitespace-all", "whitespace-coily", "platform-instagram", "hair-type-coily", "hair-type-fine", "theme-combs"]
+  }
+];
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+/* ---- Volume chart (SVG) ---- */
+(function renderVolume() {
+  const container = document.getElementById("volumeChart");
+  const W = 900, H = 280, padL = 40, padR = 12, padT = 16, padB = 36;
+  const maxVal = Math.max(...VOLUME.map(v => v[1]));
+  const barW = (W - padL - padR) / VOLUME.length - 4;
+  const yScale = (v) => padT + (H - padT - padB) * (1 - v / maxVal);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Weekly mention volume">`;
+  // grid lines
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (H - padT - padB) * i / 4;
+    const val = Math.round(maxVal * (1 - i / 4));
+    svg += `<line class="grid-line" x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}"/>`;
+    svg += `<text class="axis-label" x="${padL - 8}" y="${y + 3}" text-anchor="end">${val}</text>`;
+  }
+  // bars
+  VOLUME.forEach(([date, val], i) => {
+    const x = padL + i * ((W - padL - padR) / VOLUME.length) + 2;
+    const y = yScale(val);
+    const h = (H - padT - padB) - (y - padT);
+    const isLaunch = date === "2026-02-16";
+    const isPeak = date === "2026-03-02";
+    const color = val >= 18 ? "#60a5fa" : val >= 8 ? "#5eead4" : val > 0 ? "#3b4566" : "#262e44";
+    svg += `<rect class="bar" data-week="${date}" data-count="${val}" x="${x}" y="${y}" width="${barW}" height="${Math.max(h, 1)}" fill="${color}" rx="2"/>`;
+    if (isLaunch || isPeak || val >= 18) {
+      svg += `<text class="axis-label" x="${x + barW / 2}" y="${y - 4}" text-anchor="middle" fill="${color}">${val}</text>`;
+    }
+  });
+  // X axis labels (every 3rd)
+  VOLUME.forEach(([date, val], i) => {
+    if (i % 3 !== 0 && i !== VOLUME.length - 1) return;
+    const x = padL + i * ((W - padL - padR) / VOLUME.length) + 2 + barW / 2;
+    const d = new Date(date);
+    const lbl = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    svg += `<text class="axis-label" x="${x}" y="${H - padB + 16}" text-anchor="middle">${lbl}</text>`;
+  });
+  // launch annotation
+  const launchIdx = VOLUME.findIndex(v => v[0] === "2026-02-16");
+  if (launchIdx >= 0) {
+    const lx = padL + launchIdx * ((W - padL - padR) / VOLUME.length) + 2 + barW / 2;
+    svg += `<line x1="${lx}" x2="${lx}" y1="${padT}" y2="${H - padB}" stroke="#60a5fa" stroke-dasharray="3,3" stroke-width="1" opacity="0.4"/>`;
+    svg += `<text class="axis-label" x="${lx + 6}" y="${padT + 12}" fill="#60a5fa">Feb 17 launch</text>`;
+  }
+
+  svg += `</svg>`;
+  container.innerHTML = svg;
+
+  container.querySelectorAll(".bar").forEach(bar => {
+    bar.addEventListener("click", () => {
+      const week = bar.getAttribute("data-week");
+      const count = bar.getAttribute("data-count");
+      openDrawerForWeek(week, count);
+    });
+  });
+})();
+
+/* ---- Sentiment donut ---- */
+(function renderDonut() {
+  const segs = [
+    { label: "Positive", count: 99, color: "var(--pos)", filter: "sentiment-positive" },
+    { label: "Neutral", count: 38, color: "var(--neu)", filter: "sentiment-neutral" },
+    { label: "Negative", count: 1, color: "var(--neg)", filter: "sentiment-negative" }
+  ];
+  const total = segs.reduce((s, x) => s + x.count, 0);
+  let cumulative = 0;
+  const C = 15.915494;
+  let svgInner = `<circle cx="21" cy="21" r="${C}" fill="transparent" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>`;
+  segs.forEach(seg => {
+    const pct = (seg.count / total) * 100;
+    svgInner += `<circle class="donut-segment" data-filter="${seg.filter}" cx="21" cy="21" r="${C}" fill="transparent" stroke="${seg.color}" stroke-width="6" stroke-dasharray="${pct} ${100 - pct}" stroke-dashoffset="${100 - cumulative + 25}" transform="rotate(-90 21 21)"/>`;
+    cumulative += pct;
+  });
+  // center label
+  svgInner += `<text x="21" y="20" text-anchor="middle" font-family="Bricolage Grotesque" font-size="6" font-weight="600" fill="#f4f6fb">138</text>`;
+  svgInner += `<text x="21" y="26" text-anchor="middle" font-family="Manrope" font-size="2.5" fill="#7a8499" letter-spacing="0.1">MENTIONS</text>`;
+  document.getElementById("sentimentDonut").innerHTML = svgInner;
+})();
+
+/* ---- Emotion bars ---- */
+(function renderEmotions() {
+  const max = Math.max(...EMOTIONS.map(e => e.count));
+  const html = EMOTIONS.map(e => `
+    <div class="hbar" data-filter="emotion-${e.name.toLowerCase()}">
+      <div class="hbar-label">${e.name}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width: ${(e.count / max) * 100}%; background: ${e.color};"></div></div>
+      <div class="hbar-count">${e.count}</div>
+    </div>
+  `).join("");
+  document.getElementById("emotionList").innerHTML = html;
+})();
+
+/* ---- Hair Type bars ---- */
+(function renderHairTypes() {
+  const max = Math.max(...HAIR_TYPES.map(h => h.count));
+  const html = HAIR_TYPES.map(h => {
+    const klass = h.key === "curly" ? "curly" : h.key === "coily" ? "coily" : "";
+    return `
+    <div class="hbar ${klass}" data-filter="hair-type-${h.key}">
+      <div class="hbar-label">${h.label}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width: ${(h.count / max) * 100}%;"></div></div>
+      <div class="hbar-count">${h.count}</div>
+    </div>
+  `;
+  }).join("");
+  document.getElementById("hairTypeList").innerHTML = html;
+})();
+
+/* ---- Creators ---- */
+(function renderCreators() {
+  const html = CREATORS.map(c => `
+    <div class="theme-card">
+      <div class="theme-card-title">${c.title}</div>
+      <div class="theme-card-stat">${c.desc} · <span style="color:var(--ink-2);">${c.count}</span></div>
+      <span class="theme-card-tag ${c.tagClass}">${c.tag}</span>
+    </div>
+  `).join("");
+  document.getElementById("creatorGrid").innerHTML = html;
+})();
+
+/* ---- Share of Voice ---- */
+(function renderSoV() {
+  const html = SOV.map(p => {
+    const sPct = (p.silki / p.total) * 100;
+    const dPct = (p.dyson / p.total) * 100;
+    const gPct = (p.ghd / p.total) * 100;
+    return `
+    <div class="sov-row">
+      <div class="sov-platform-label">${p.platform}<div style="font-size: 10px; color: var(--ink-4); font-weight: 400; margin-top: 2px;">${p.total} mentions</div></div>
+      <div class="sov-bars">
+        ${sPct > 3 ? `<div class="sov-seg silki" style="width: ${sPct}%;" data-filter="sov-silki-${p.platform.toLowerCase().replace(/[^a-z]/g, '')}">${Math.round(sPct)}%</div>` : ''}
+        ${dPct > 3 ? `<div class="sov-seg dyson" style="width: ${dPct}%;" data-filter="sov-dyson">${Math.round(dPct)}%</div>` : ''}
+        ${gPct > 3 ? `<div class="sov-seg ghd" style="width: ${gPct}%;" data-filter="sov-ghd">${Math.round(gPct)}%</div>` : ''}
+      </div>
+    </div>
+  `;
+  }).join("");
+  document.getElementById("sovList").innerHTML = html;
+})();
+
+/* ---- Reddit subreddits where SilkiPro is being discussed ---- */
+(function renderSubreddits() {
+  const max = Math.max(...SUBREDDITS.map(s => s.count));
+  const html = SUBREDDITS.map(s => {
+    const reachLabel = s.reach >= 1e6 ? `${(s.reach/1e6).toFixed(1)}M reach` : `${Math.round(s.reach/1000)}K reach`;
+    const subKey = s.name.replace(/^r\//, '').toLowerCase();
+    return `
+    <div class="hbar reddit" data-filter="subreddit-${subKey}">
+      <div class="hbar-label" style="font-family: 'JetBrains Mono'; font-weight: 500;">${s.name}<div style="font-size:9px; color:var(--ink-4); font-weight:400; margin-top:1px;">${reachLabel}</div></div>
+      <div class="hbar-track"><div class="hbar-fill" style="width: ${(s.count / max) * 100}%;"></div></div>
+      <div class="hbar-count">${s.count}</div>
+    </div>
+  `;
+  }).join("");
+  document.getElementById("subredditList").innerHTML = html;
+})();
+
+/* ---- Reddit posts panel (clickable cards) ---- */
+(function renderRedditPosts() {
+  // Sort Reddit mentions by reach descending and pick top 5
+  const redditMentions = MENTIONS
+    .filter(m => m.platform === "reddit")
+    .sort((a, b) => (b.reach || 0) - (a.reach || 0))
+    .slice(0, 5);
+  const html = redditMentions.map(m => {
+    const sub = m.platformLabel.replace("Reddit · ", "");
+    const sentLabel = m.sentiment === "pos" ? "Positive" : m.sentiment === "neg" ? "Negative" : "Neutral";
+    const sentClass = "sent-" + m.sentiment;
+    const reachStr = m.reach ? (m.reach >= 1e6 ? `${(m.reach/1e6).toFixed(1)}M reach` : `${Math.round(m.reach/1000)}K reach`) : '';
+    return `
+      <div class="reddit-post" data-mention-id="${m.id}">
+        <div class="reddit-post-sub">${sub}</div>
+        <div class="reddit-post-title">${m.title}</div>
+        <div class="reddit-post-meta">
+          <span class="${sentClass}">● ${sentLabel}</span> · ${reachStr} · ${m.date}
+        </div>
+      </div>
+    `;
+  }).join("");
+  document.getElementById("redditPosts").innerHTML = html;
+
+  // Wire up clicks to open drawer with that single mention
+  document.querySelectorAll(".reddit-post").forEach(el => {
+    el.addEventListener("click", e => {
+      e.stopPropagation();
+      const id = el.getAttribute("data-mention-id");
+      const m = MENTIONS.find(x => x.id === id);
+      if (m) renderMentionList([m], "Reddit Post", m.title, "Click 'Open original' to read on Reddit");
+    });
+  });
+})();
+
+/* ---- Whitespace subreddits (no SilkiPro mentions) ---- */
+(function renderWhitespaceSubreddits() {
+  const max = Math.max(...WHITESPACE_SUBREDDITS.map(s => s.count));
+  const html = WHITESPACE_SUBREDDITS.map(s => {
+    const reachLabel = s.reach >= 1e6 ? `${(s.reach/1e6).toFixed(1)}M reach` : `${Math.round(s.reach/1000)}K reach`;
+    return `
+    <div class="hbar" data-filter="whitespace-all">
+      <div class="hbar-label" style="font-family: 'JetBrains Mono'; font-weight: 500;">${s.name}<div style="font-size:9px; color:var(--ink-4); font-weight:400; margin-top:1px;">${reachLabel}</div></div>
+      <div class="hbar-track"><div class="hbar-fill" style="width: ${(s.count / max) * 100}%; background: linear-gradient(90deg, #c084fc, #60a5fa);"></div></div>
+      <div class="hbar-count">${s.count}</div>
+    </div>
+  `;
+  }).join("");
+  document.getElementById("whitespaceSubredditList").innerHTML = html;
+})();
+
+/* ---- Whitespace themes ---- */
+(function renderWhitespaceThemes() {
+  const html = WHITESPACE_THEMES.map(t => `
+    <div style="padding: 12px; background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer;" data-filter="whitespace-all">
+      <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--ink);">${t.title}</div>
+      <div style="font-size: 12px; color: var(--ink-3); line-height: 1.5;">${t.desc}</div>
+    </div>
+  `).join("");
+  document.getElementById("whitespaceThemes").innerHTML = html;
+})();
+
+/* ---- Hashtags ---- */
+(function renderHashtags() {
+  const html = HASHTAGS.map(t => `
+    <div class="tag ${t.size ? 'size-' + t.size : ''}" data-filter="hashtag-${t.tag}">
+      #${t.tag}<span class="count">${t.count}</span>
+    </div>
+  `).join("");
+  document.getElementById("tagCloud").innerHTML = html;
+})();
+
+/* ---- Hair Type Sentiment Snapshot ---- */
+(function renderHairTypeSentiment() {
+  const html = HAIR_TYPE_SENTIMENT.map(h => {
+    const total = h.positive + h.neutral + h.negative;
+    return `
+    <div style="padding: 12px; background: var(--panel-2); border-radius: 10px; border: 1px solid var(--line);">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <div style="font-weight: 600; font-size: 13px;">${h.type}</div>
+        <div style="font-family: 'JetBrains Mono'; font-size: 11px; color: var(--ink-3);">${h.positive}% pos</div>
+      </div>
+      <div style="display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
+        <div style="width: ${h.positive}%; background: var(--pos);"></div>
+        <div style="width: ${h.neutral}%; background: var(--neu);"></div>
+        <div style="width: ${h.negative}%; background: var(--neg);"></div>
+      </div>
+      <div style="font-size: 11px; color: var(--ink-3); line-height: 1.5;">${h.takeaway}</div>
+    </div>
+  `;
+  }).join("");
+  document.getElementById("hairTypeSentiment").innerHTML = html;
+})();
+
+/* ---- Themes grid ---- */
+(function renderThemes() {
+  const html = THEMES.map(t => `
+    <div class="theme-card" data-filter="${t.filter}">
+      <div class="theme-card-title">${t.title}</div>
+      <div class="theme-card-stat">~${t.count} mentions</div>
+      <div style="font-size: 12px; color: var(--ink-3); margin: 4px 0 8px; line-height: 1.4;">${t.desc}</div>
+      <span class="theme-card-tag ${t.tagClass}">${t.tag}</span>
+    </div>
+  `).join("");
+  document.getElementById("themeGrid").innerHTML = html;
+})();
+
+/* =========================================================
+   DRAWER LOGIC
+   ========================================================= */
+const drawer = document.getElementById("drawer");
+const backdrop = document.getElementById("backdrop");
+const drawerBody = document.getElementById("drawerBody");
+const drawerEyebrow = document.getElementById("drawerEyebrow");
+const drawerTitle = document.getElementById("drawerTitle");
+const drawerSub = document.getElementById("drawerSub");
+
+document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+backdrop.addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+function closeDrawer() {
+  drawer.classList.remove("open");
+  backdrop.classList.remove("open");
+}
+function openDrawer() {
+  drawer.classList.add("open");
+  backdrop.classList.add("open");
+}
+
+function renderMentionList(mentions, eyebrow, title, sub) {
+  drawerEyebrow.textContent = eyebrow;
+  drawerTitle.textContent = title;
+  drawerSub.textContent = sub;
+
+  if (!mentions.length) {
+    drawerBody.innerHTML = `<div class="empty">
+      <div style="font-family: 'Bricolage Grotesque'; font-size: 22px; margin-bottom: 8px;">No sample mentions in cache</div>
+      <div style="font-size: 13px;">In live Meltwater, this would surface all matching mentions for this filter. The dashboard ships with a curated subset of high-engagement examples.</div>
+    </div>`;
+    openDrawer();
+    return;
+  }
+
+  const html = mentions.map(m => {
+    const sentLabel = m.sentiment === "pos" ? "Positive" : m.sentiment === "neg" ? "Negative" : "Neutral";
+    const platformClass = m.platform === "tiktok" ? "tiktok"
+                        : m.platform === "instagram" ? "instagram"
+                        : m.platform === "reddit" ? "reddit"
+                        : "twitter";
+    const reachStr = m.reach ? `${(m.reach >= 1e6 ? (m.reach/1e6).toFixed(1)+'M' : Math.round(m.reach/1000)+'K')} reach` : '';
+    const engStr = m.engagement ? `${m.engagement.toLocaleString()} engagements` : '';
+    const meta = [reachStr, engStr].filter(Boolean).join(' · ');
+    return `
+      <div class="mention">
+        <div class="mention-head">
+          <span class="mention-platform ${platformClass}">${m.platformLabel}</span>
+          <span class="mention-sentiment ${m.sentiment}"></span>
+          <span>${sentLabel}</span>
+          <span style="margin-left: auto;">${m.date}</span>
+        </div>
+        <div class="mention-title">${m.title}</div>
+        <div class="mention-snippet">${m.snippet}</div>
+        <div class="mention-meta">
+          ${meta ? `<span>${meta}</span>` : ''}
+          ${m.url ? `<a href="${m.url}" target="_blank" rel="noopener">Open original ↗</a>` : ''}
+        </div>
+      </div>
+    `;
+  }).join("");
+  drawerBody.innerHTML = html;
+  openDrawer();
+}
+
+function openDrawerForFilter(filter) {
+  const matched = MENTIONS.filter(m => m.tags.includes(filter));
+  const labelMap = {
+    "sentiment-positive": ["Sentiment", "Positive mentions", "99 mentions · sample shown"],
+    "sentiment-neutral": ["Sentiment", "Neutral mentions", "38 mentions · sample shown"],
+    "sentiment-negative": ["Sentiment", "Negative mentions", "1 mention · sample shown"],
+    "platform-tiktok": ["Platform", "TikTok content", "76 mentions · sample shown"],
+    "platform-instagram": ["Platform", "Instagram content", "40 mentions · sample shown"],
+    "platform-reddit": ["Platform", "Reddit content", "12 mentions · sample shown"],
+    "platform-twitter": ["Platform", "X (Twitter) content", "10 mentions · sample shown"],
+    "subreddit-dysonairwrap": ["Subreddit", "r/Dysonairwrap", "5 SilkiPro mentions · comparison-driven"],
+    "subreddit-skincareaddiction": ["Subreddit", "r/SkincareAddiction", "1 SilkiPro mention · 4.8M reach"],
+    "subreddit-influenster": ["Subreddit", "r/Influenster", "1 SilkiPro mention · seeding community"],
+    "subreddit-beautyviners": ["Subreddit", "r/BeautyViners", "1 SilkiPro mention · curiosity"],
+    "subreddit-ulta": ["Subreddit", "r/Ulta", "1 SilkiPro mention · thick hair"],
+    "subreddit-veganbeauty": ["Subreddit", "r/VeganBeauty", "1 SilkiPro mention · info-seeking"],
+    "subreddit-blackladies": ["Subreddit", "r/blackladies", "1 SilkiPro mention · 4C content"],
+    "subreddit-productquery": ["Subreddit", "r/ProductQuery", "1 mention"],
+    "hair-type-curly": ["Hair Type", "Curly hair (3a / 3b / 3c)", "24 mentions"],
+    "hair-type-coily": ["Hair Type", "Coily / 4C / textured", "22 mentions"],
+    "hair-type-thick": ["Hair Type", "Thick / dense hair", "18 mentions"],
+    "hair-type-straight": ["Hair Type", "Straight / sleek finish", "16 mentions"],
+    "hair-type-wavy": ["Hair Type", "Wavy hair", "12 mentions"],
+    "hair-type-fine": ["Hair Type", "Fine / thin hair", "10 mentions"],
+    "hair-type-color": ["Hair Type", "Color-treated / damaged", "8 mentions"],
+    "hair-type-frizzy": ["Hair Type", "Frizzy hair", "6 mentions"],
+    "hair-type-all": ["Hair Type", "All hair types (general)", "38 mentions"],
+    "theme-curly": ["Theme", "'Made for curly and coily hair'", "Top viral framing"],
+    "theme-silkpress": ["Theme", "Silk press at home", "4C silk press tutorials"],
+    "theme-wettodry": ["Theme", "Wet-to-dry time savings", "'Half the time' messaging"],
+    "theme-heat": ["Theme", "Heat damage / hair health", "HeatSense plates story"],
+    "theme-dyson": ["Theme", "Dyson Airstrait comparison", "Direct competitor framing"],
+    "theme-combs": ["Theme", "Three-comb system curiosity", "Education opportunity"],
+    "theme-fine": ["Theme", "Fine hair hesitation", "Whitespace · tailored content"],
+    "theme-pricing": ["Theme", "$249 price scrutiny", "Value vs Dyson at $499"],
+    "theme-launch": ["Theme", "Feb 17 launch wave", "21 mentions in launch week"],
+    "whitespace-all": ["Whitespace", "Recommendation conversations missing SilkiPro", "4.2M reach · zero brand mentions"],
+    "whitespace-fine": ["Whitespace", "Fine hair recommendation gap", "r/finehair · zero SilkiPro"],
+    "whitespace-coily": ["Whitespace", "Coily/4C silk press gap", "Creators recommending competitors"],
+    "sov-silki-tiktok": ["SoV", "SilkiPro on TikTok · 87% share", "46 of 53 category mentions"]
+  };
+  const meta = labelMap[filter] || ["Filter", filter, ""];
+  renderMentionList(matched, meta[0], meta[1], meta[2]);
+}
+
+function openDrawerForWeek(week, count) {
+  const d = new Date(week);
+  const wkLabel = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  const weekStart = new Date(week);
+  const weekEnd = new Date(week);
+  weekEnd.setDate(weekEnd.getDate() + 7);
+  const matched = MENTIONS.filter(m => {
+    const md = new Date(m.date);
+    return md >= weekStart && md < weekEnd;
+  });
+  renderMentionList(matched, `Week of ${wkLabel}`, `${count} mentions this week`, "Click any post below to read original");
+}
+
+// Wire up all clickables
+document.querySelectorAll("[data-filter]").forEach(el => {
+  el.addEventListener("click", e => {
+    e.stopPropagation();
+    const filter = el.getAttribute("data-filter");
+    if (filter) openDrawerForFilter(filter);
+  });
+});
+
+// Donut segments (rendered after)
+document.querySelectorAll(".donut-segment").forEach(el => {
+  el.addEventListener("click", e => {
+    e.stopPropagation();
+    const filter = el.getAttribute("data-filter");
+    if (filter) openDrawerForFilter(filter);
+  });
+});
+</script>
+</body>
+</html>

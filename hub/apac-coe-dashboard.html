@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SharkNinja APAC · Marketing Centre of Excellence</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mw-teal:#28BBBB; --mw-teal-medium:#00A7A5; --mw-teal-dark:#1C7070;
+  --mw-teal-t1:#A3DFDF; --mw-teal-t2:#C0EBEB; --mw-teal-t3:#E1EFF0;
+  --mw-gray:#F0F4F4; --mw-black:#1A1A1A; --mw-white:#FFFFFF;
+  --pos:#1C7070; --neg:#C0453B; --warn:#E08A1E;
+  --ink-60:rgba(26,26,26,.62); --ink-40:rgba(26,26,26,.42);
+  --line:#E1EFF0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',Arial,Helvetica,sans-serif;color:var(--mw-black);background:var(--mw-gray);line-height:1.45;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{letter-spacing:-.02em;font-weight:700;line-height:1.1}
+a{color:var(--mw-teal-dark)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 22px}
+
+/* Top bar */
+.topbar{background:var(--mw-teal-dark);color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 14px rgba(0,0,0,.18)}
+.topbar .wrap{display:flex;align-items:center;gap:18px;height:62px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:15px;white-space:nowrap}
+.eyecon{width:30px;height:30px;border-radius:50%;background:var(--mw-teal);display:grid;place-items:center;flex:none}
+.eyecon span{width:11px;height:11px;border-radius:50%;background:#fff}
+.topbar .sub{font-weight:400;font-size:12px;color:var(--mw-teal-t2)}
+.live{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--mw-teal-t2);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#46e0a0;box-shadow:0 0 0 0 rgba(70,224,160,.7);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(70,224,160,.6)}70%{box-shadow:0 0 0 8px rgba(70,224,160,0)}100%{box-shadow:0 0 0 0 rgba(70,224,160,0)}}
+
+/* Demo banner */
+.demobar{background:#FFFAE7;border-bottom:1px solid #FFCC01;color:#7a5a00;font-size:12px;padding:7px 0}
+.demobar .wrap{display:flex;gap:8px;align-items:center}
+
+/* Nav */
+.nav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:62px;z-index:40;overflow-x:auto}
+.nav .wrap{display:flex;gap:4px}
+.nav button{font-family:inherit;border:0;background:none;padding:14px 14px;font-size:13px;font-weight:500;color:var(--ink-60);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;letter-spacing:-.01em}
+.nav button:hover{color:var(--mw-black);background:var(--mw-teal-t3)}
+.nav button.active{color:var(--mw-teal-dark);border-bottom-color:var(--mw-teal);font-weight:600}
+
+/* Sections */
+.panel{display:none;padding:26px 0 60px;animation:fade .25s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.phead{margin-bottom:6px}
+.phead h2{font-size:24px}
+.phead p{color:var(--ink-60);font-size:13.5px;margin-top:4px;max-width:880px}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mw-teal-dark);margin:30px 0 12px}
+
+/* AI briefing callout */
+.ai{background:#fff;border:1px solid var(--line);border-left:4px solid var(--mw-teal);border-radius:12px;padding:18px 20px;margin:16px 0}
+.ai .tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mw-teal-dark);margin-bottom:9px}
+.ai .tag .ico{width:18px;height:18px;border-radius:50%;background:var(--mw-teal);display:grid;place-items:center;color:#fff;font-size:10px;font-weight:900}
+.ai p{font-size:13.5px;margin-bottom:8px}
+.ai p:last-child{margin-bottom:0}
+.ai strong{color:var(--mw-black)}
+.ai.amber{border-left-color:var(--warn)}
+.ai.amber .tag,.ai.amber .ico{color:var(--warn)}
+.ai.amber .ico{background:var(--warn)}
+
+/* KPI grid */
+.kgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.kpi{background:#fff;border:1px solid var(--line);border-top:3px solid var(--mw-teal);border-radius:12px;padding:15px 16px}
+.kpi .l{font-size:11.5px;color:var(--ink-60);font-weight:500;letter-spacing:-.01em}
+.kpi .v{font-size:27px;font-weight:700;margin:4px 0 2px;letter-spacing:-.03em}
+.kpi .d{font-size:12px;font-weight:600}
+.up{color:var(--pos)} .down{color:var(--neg)} .flat{color:var(--ink-40)}
+.kpi.health{border-top-color:var(--mw-teal-medium)}
+.gauge{display:flex;align-items:center;gap:14px}
+.ring{--p:0;width:74px;height:74px;border-radius:50%;flex:none;background:conic-gradient(var(--mw-teal) calc(var(--p)*1%),var(--mw-teal-t3) 0);display:grid;place-items:center}
+.ring::before{content:'';position:absolute;width:54px;height:54px;border-radius:50%;background:#fff}
+.ring b{position:relative;font-size:18px;font-weight:700}
+
+/* cards & charts */
+.cards{display:grid;gap:16px}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:1fr 1fr 1fr}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{font-size:14.5px;margin-bottom:3px}
+.card .cs{font-size:12px;color:var(--ink-60);margin-bottom:12px}
+.chartbox{position:relative;height:260px}
+.chartbox.sm{height:210px}
+.chartbox.lg{height:320px}
+@media(max-width:900px){.c2,.c3{grid-template-columns:1fr}}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{background:var(--mw-teal);color:#fff;text-align:left;padding:9px 11px;font-weight:600;font-size:11.5px;letter-spacing:-.01em;position:sticky;top:0}
+tbody td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:hover{background:var(--mw-teal-t3)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tbl-wrap{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:560px}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.pill.g{background:#e4f3ee;color:var(--pos)} .pill.r{background:#fbe7e5;color:var(--neg)} .pill.y{background:#fff3d6;color:#9a6a00}
+.bar{height:7px;border-radius:6px;background:var(--mw-teal-t3);overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--mw-teal)}
+.mut{color:var(--ink-60)}
+.tiny{font-size:11px;color:var(--ink-40)}
+
+/* market chips */
+.mchips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.mchip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:500;cursor:pointer}
+.mchip.active{background:var(--mw-teal-dark);color:#fff;border-color:var(--mw-teal-dark)}
+
+/* correlation flow */
+.flow{display:flex;flex-direction:column;gap:7px;margin:8px 0}
+.fnode{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:500}
+.fnode .n{width:24px;height:24px;border-radius:50%;background:var(--mw-teal-t3);color:var(--mw-teal-dark);display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.fnode .corr{margin-left:auto;font-size:11px;font-weight:600;color:var(--mw-teal-dark);background:var(--mw-teal-t3);padding:3px 9px;border-radius:14px}
+.farrow{text-align:center;color:var(--mw-teal);font-size:13px;line-height:.6;margin:-2px 0}
+
+/* recommendations */
+.rec{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px;border-left:4px solid var(--mw-teal)}
+.rec.p1{border-left-color:var(--neg)} .rec.p2{border-left-color:var(--warn)} .rec.p3{border-left-color:var(--mw-teal)}
+.rec .rt{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.rec h4{font-size:14.5px}
+.rec .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:12px}
+.rec .meta b{display:block;font-size:14px;color:var(--mw-teal-dark)}
+.rec .meta span{color:var(--ink-60)}
+.prio{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:5px}
+.prio.p1{background:#fbe7e5;color:var(--neg)} .prio.p2{background:#fff3d6;color:#9a6a00} .prio.p3{background:var(--mw-teal-t3);color:var(--mw-teal-dark)}
+.seg{font-size:11px;font-weight:600;color:var(--mw-teal-dark);background:var(--mw-teal-t3);padding:3px 10px;border-radius:14px}
+.conf{margin-left:auto;font-size:11.5px;color:var(--ink-60)}
+
+/* sources */
+.srcs{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.src{font-size:11px;background:#fff;border:1px solid var(--line);border-radius:7px;padding:5px 10px;color:var(--ink-60);display:flex;align-items:center;gap:6px}
+.src b{width:7px;height:7px;border-radius:2px;background:var(--mw-teal)}
+footer{border-top:1px solid var(--line);padding:22px 0;font-size:11.5px;color:var(--ink-40);text-align:center}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-60);margin-top:10px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.note{font-size:11.5px;color:var(--ink-40);margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <div class="brand"><span class="eyecon"><span></span></span>
+    <div>SharkNinja · APAC Marketing Centre of Excellence
+      <div class="sub">Powered by Claude + Meltwater · Model Context Protocol</div>
+    </div>
+  </div>
+  <div class="live"><span class="dot"></span> 9 sources connected · Q2 FY26 · updated 30 Jun 2026</div>
+</div></div>
+
+<div class="demobar"><div class="wrap">
+  <strong>Vision demonstration.</strong>&nbsp;Illustrative data shows what a Claude + MCP-connected COE delivers once Shopify, GA, Meta, TikTok, marketplaces, Power BI & internal sales are linked alongside Meltwater. Figures are modelled, not live — review before any decision.
+</div></div>
+
+<nav class="nav"><div class="wrap" id="nav"></div></nav>
+
+<div class="wrap">
+
+<!-- ============ OVERVIEW ============ -->
+<section class="panel active" id="overview">
+  <div class="phead"><h2>Executive overview</h2>
+    <p>One pane of glass across seven markets, nine platforms and the full marketing-to-revenue chain. The command centre continuously answers: what happened, why, what commercial impact it created, and what to do next.</p></div>
+
+  <div class="ai">
+    <div class="tag"><span class="ico">C</span> Claude executive briefing · Q2 FY26</div>
+    <p><strong>APAC marketing is healthy and accelerating.</strong> Revenue attributed to marketing reached <strong>US$148.2M</strong> (+12.8% QoQ) at a blended <strong>5.4x ROI</strong>, with marketing health scoring <strong>78/100</strong> — up 6 points. Growth is led by <strong>ANZ</strong> and <strong>Japan</strong>, where the Ninja Creami and Ninja SLUSHi launches converted unusually strong organic advocacy into Shopify revenue.</p>
+    <p><strong>Why it happened:</strong> the chain is consistent — a +31% lift in positive "ease of use" and "innovation" conversation 2–3 weeks ahead of sales preceded the Creami sell-through, and review ratings of 4.6★+ correlated with a +5.1pt conversion-rate uplift. Influencer-led commerce (not awareness) drove ~18% of incremental kitchen revenue.</p>
+    <p><strong>Where to focus next:</strong> (1) protect the <strong>Shark FlexStyle</strong> story in Korea where "noise" and "price" sentiment is softening conversion; (2) scale the Creami/SLUSHi influencer model into <strong>Indonesia & Malaysia</strong> where SOV is rising but spend is under-indexed; (3) fix the <strong>Indonesia delivery-complaint</strong> cluster before it suppresses ratings. Detailed actions in Executive Recommendations.</p>
+  </div>
+
+  <div class="sec-label">APAC marketing health</div>
+  <div class="kgrid">
+    <div class="kpi health"><div class="l">APAC Marketing Health Score</div>
+      <div class="gauge"><div class="ring" style="--p:78;position:relative"><b>78</b></div>
+      <div><div class="d up">▲ 6 pts QoQ</div><div class="tiny">Composite: ROI, SOV, sentiment, conversion, reviews</div></div></div></div>
+    <div class="kpi"><div class="l">Marketing ROI (blended)</div><div class="v">5.4×</div><div class="d up">▲ 0.7× QoQ</div></div>
+    <div class="kpi"><div class="l">Revenue attributed to marketing</div><div class="v">$148.2M</div><div class="d up">▲ 12.8% QoQ</div></div>
+    <div class="kpi"><div class="l">Share of Voice (category, APAC)</div><div class="v">34.6%</div><div class="d up">▲ 2.9 pts</div></div>
+    <div class="kpi"><div class="l">Brand sentiment (net positive)</div><div class="v">+41</div><div class="d up">▲ 4 pts</div></div>
+    <div class="kpi"><div class="l">Sales growth (QoQ)</div><div class="v">+12.8%</div><div class="d up">▲ vs +7.1% LQ</div></div>
+  </div>
+
+  <div class="sec-label">Performance landscape</div>
+  <div class="cards c2">
+    <div class="card"><h3>Revenue & ROI by market</h3><div class="cs">Attributed revenue (bars, US$M) vs marketing ROI (line, ×)</div>
+      <div class="chartbox"><canvas id="ovMarket"></canvas></div></div>
+    <div class="card"><h3>Marketing-attributed revenue trend</h3><div class="cs">APAC, last 8 quarters (US$M)</div>
+      <div class="chartbox"><canvas id="ovTrend"></canvas></div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="card"><h3>Top performing markets</h3><div class="cs">By marketing ROI this quarter</div>
+      <table><thead><tr><th>Market</th><th class="num">Revenue</th><th class="num">Growth</th><th class="num">ROI</th></tr></thead>
+      <tbody>
+        <tr><td>Australia & NZ</td><td class="num">$42.0M</td><td class="num up">+14.2%</td><td class="num"><b>6.1×</b></td></tr>
+        <tr><td>Japan</td><td class="num">$38.4M</td><td class="num up">+15.6%</td><td class="num"><b>5.8×</b></td></tr>
+        <tr><td>India</td><td class="num">$18.1M</td><td class="num up">+22.4%</td><td class="num"><b>5.2×</b></td></tr>
+        <tr><td>Singapore</td><td class="num">$11.2M</td><td class="num up">+9.1%</td><td class="num">4.9×</td></tr>
+        <tr><td>South Korea</td><td class="num">$22.3M</td><td class="num up">+6.8%</td><td class="num">4.4×</td></tr>
+      </tbody></table></div>
+    <div class="card"><h3>Top performing campaigns</h3><div class="cs">By revenue attributed this quarter</div>
+      <table><thead><tr><th>Campaign</th><th>Market</th><th class="num">Revenue</th><th class="num">ROAS</th></tr></thead>
+      <tbody>
+        <tr><td>Creami "Scoop of Summer"</td><td>ANZ</td><td class="num">$14.8M</td><td class="num"><b>7.9×</b></td></tr>
+        <tr><td>SLUSHi Frozen Drops</td><td>Japan</td><td class="num">$11.3M</td><td class="num"><b>7.1×</b></td></tr>
+        <tr><td>FlexStyle Glass Hair</td><td>Korea</td><td class="num">$8.6M</td><td class="num">4.8×</td></tr>
+        <tr><td>Detect Pro Deep Clean</td><td>ANZ</td><td class="num">$6.9M</td><td class="num">5.6×</td></tr>
+        <tr><td>Crispi Air-Fry India</td><td>India</td><td class="num">$5.4M</td><td class="num">6.2×</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="ai amber" style="margin:0">
+      <div class="tag"><span class="ico">!</span> Biggest risks</div>
+      <p><strong>1 · Korea FlexStyle conversion drag.</strong> Rising "noise" + "price" negativity is correlating with a −3.2pt conversion decline — est. $1.4M revenue at risk.</p>
+      <p><strong>2 · Indonesia delivery complaints.</strong> A growing 1★ cluster on Shopee/Lazada (logistics, not product) threatens a 4.5★→4.2★ slide.</p>
+      <p><strong>3 · Creami supply.</strong> ANZ demand is outpacing availability — "out of stock" mentions up 4×; spend efficiency declining late-quarter.</p>
+    </div>
+    <div class="ai" style="margin:0">
+      <div class="tag"><span class="ico">+</span> Biggest opportunities</div>
+      <p><strong>1 · Scale influencer-commerce model</strong> (Creami/SLUSHi) into Indonesia & Malaysia — SOV rising, spend under-indexed. Est. +$3.8M.</p>
+      <p><strong>2 · CryoGlow / LED Face Mask beauty wave</strong> in Korea & Singapore — purchase-intent conversation +47% with thin paid support.</p>
+      <p><strong>3 · Amplify "ease of use" message</strong> — the single attribute most correlated with conversion across kitchen & floorcare.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARKETS ============ -->
+<section class="panel" id="markets">
+  <div class="phead"><h2>Market performance</h2>
+    <p>Select a market to see its full commercial + media picture and Claude's read on why it is performing the way it is.</p></div>
+  <div class="mchips" id="mchips"></div>
+
+  <div class="ai" id="mNarr"><div class="tag"><span class="ico">C</span> Claude market read</div><p id="mNarrTxt"></p></div>
+
+  <div class="kgrid" id="mKpis" style="margin-top:6px"></div>
+
+  <div class="cards c2" style="margin-top:16px">
+    <div class="card"><h3>Conversation volume & sentiment</h3><div class="cs">Weekly mentions (bars) vs net sentiment (line)</div>
+      <div class="chartbox"><canvas id="mConv"></canvas></div></div>
+    <div class="card"><h3>Funnel: traffic → conversion</h3><div class="cs">Website sessions to purchase, this quarter</div>
+      <div class="chartbox"><canvas id="mFunnel"></canvas></div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="card"><h3>Top products</h3><div class="cs">By attributed revenue in market</div><div id="mProd"></div></div>
+    <div class="card"><h3>Top campaigns & influencers</h3><div class="cs">Commercial contribution</div><div id="mCamp"></div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><h3>Fastest-growing consumer trends</h3><div class="cs">Emerging demand signals, indexed growth QoQ</div><div id="mTrend"></div></div>
+</section>
+
+<!-- ============ CAMPAIGNS ============ -->
+<section class="panel" id="campaigns">
+  <div class="phead"><h2>Campaign performance & marketing ROI</h2>
+    <p>Beyond engagement: Claude correlates every campaign's reach and creative with downstream Shopify revenue, ROAS and incremental sales lift.</p></div>
+
+  <div class="ai"><div class="tag"><span class="ico">C</span> Claude campaign intelligence</div>
+    <p><strong>Highest revenue:</strong> Creami "Scoop of Summer" (ANZ) — $14.8M at 7.9× ROAS; influencer-led recipe content carried 41% of conversions. <strong>Highest ROI channel:</strong> creator-commerce + owned email retargeting, not paid social broad reach.</p>
+    <p><strong>Engaged but didn't convert:</strong> "FlexStyle Glass Hair" (Korea) generated the most engagement per dollar yet a below-average 2.1% add-to-cart rate — messaging skewed aspirational over functional; "noise" objections went unaddressed. <strong>Recommended fix:</strong> shift 20% of spend to comparison/demo creative and bundle a quiet-mode message.</p></div>
+
+  <div class="cards c2">
+    <div class="card"><h3>Reach mix vs revenue</h3><div class="cs">Organic / paid / earned / influencer reach (stacked) vs revenue (line)</div>
+      <div class="chartbox lg"><canvas id="cReach"></canvas></div></div>
+    <div class="card"><h3>Engagement vs conversion</h3><div class="cs">Each bubble a campaign — size = revenue</div>
+      <div class="chartbox lg"><canvas id="cBubble"></canvas></div>
+      <div class="legend"><span><i style="background:#28BBBB"></i>Converts well</span><span><i style="background:#E08A1E"></i>Engages, under-converts</span></div></div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:18px"><table><thead><tr>
+    <th>Campaign</th><th>Mkt</th><th>Product</th><th>Channel</th><th>Creative theme</th><th class="num">Spend</th>
+    <th class="num">Eng. rate</th><th class="num">Sessions</th><th class="num">Add-to-cart</th><th class="num">Revenue</th>
+    <th class="num">ROAS</th><th class="num">CPP</th><th class="num">Incr. lift</th></tr></thead>
+    <tbody id="campRows"></tbody></table></div>
+  <div class="note">CPP = cost per purchase. Incr. lift = modelled incremental sales vs synthetic control (geo holdout). ROI shown net of media + production.</div>
+</section>
+
+<!-- ============ CONSUMER ============ -->
+<section class="panel" id="consumer">
+  <div class="phead"><h2>Consumer intelligence</h2>
+    <p>Organic conversation across news, social, forums and blogs — segmented into the product categories that matter to the APAC portfolio.</p></div>
+
+  <div class="kgrid">
+    <div class="kpi"><div class="l">Conversation volume (APAC)</div><div class="v">1.84M</div><div class="d up">▲ 19% QoQ</div></div>
+    <div class="kpi"><div class="l">Net sentiment</div><div class="v">+41</div><div class="d up">▲ 4 pts</div></div>
+    <div class="kpi"><div class="l">Share of Voice</div><div class="v">34.6%</div><div class="d up">▲ 2.9 pts</div></div>
+    <div class="kpi"><div class="l">Purchase-intent mentions</div><div class="v">96.2K</div><div class="d up">▲ 28% QoQ</div></div>
+  </div>
+
+  <div class="cards c2" style="margin-top:16px">
+    <div class="card"><h3>Conversation & channel mix</h3><div class="cs">Where the APAC conversation happens</div>
+      <div class="chartbox"><canvas id="conChannel"></canvas></div></div>
+    <div class="card"><h3>Emotion analysis</h3><div class="cs">Emotional drivers of brand conversation</div>
+      <div class="chartbox"><canvas id="conEmotion"></canvas></div></div>
+  </div>
+
+  <div class="sec-label">By product category</div>
+  <div class="cards c3" id="catCards"></div>
+
+  <div class="ai" style="margin-top:18px"><div class="tag"><span class="ico">C</span> Claude consumer synthesis</div>
+    <p><strong>What consumers love:</strong> Creami's "café dessert at home" framing and Crispi's portability; Shark Detect Pro's automatic dirt-sensing wows first-time owners. <strong>What they dislike:</strong> FlexStyle noise, Creami container cleaning friction, and beauty-device price.</p>
+    <p><strong>Emerging needs:</strong> quieter motors, dishwasher-safe parts, and "results-proof" content for beauty. <strong>Strongest organic advocacy:</strong> Ninja Creami and Shark Detect Pro — both convert advocacy into measurable Shopify revenue.</p></div>
+</section>
+
+<!-- ============ ATTRIBUTES ============ -->
+<section class="panel" id="attributes">
+  <div class="phead"><h2>Product attribute intelligence</h2>
+    <p>Conversations decomposed into the 18 attributes that drive purchase decisions — each tied to sentiment, review ratings and a modelled correlation with revenue.</p></div>
+
+  <div class="ai"><div class="tag"><span class="ico">C</span> What this tells marketing</div>
+    <p><strong>Ease of use</strong> and <strong>innovation</strong> are the highest revenue-correlated attributes (r = 0.71 / 0.66) — these are the messages to amplify. <strong>Noise</strong> and <strong>price</strong> are the biggest negative drags, concentrated on FlexStyle and beauty devices. <strong>Cleaning & maintenance</strong> is a swing attribute: positive for floorcare, a friction point for Creami.</p></div>
+
+  <div class="cards c2">
+    <div class="card"><h3>Attribute sentiment vs revenue correlation</h3><div class="cs">Bubble size = conversation volume · right = stronger revenue link</div>
+      <div class="chartbox lg"><canvas id="attrScatter"></canvas></div></div>
+    <div class="card"><h3>Positive vs negative by attribute</h3><div class="cs">Top 10 attributes by volume</div>
+      <div class="chartbox lg"><canvas id="attrBar"></canvas></div></div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:18px"><table><thead><tr>
+    <th>Attribute</th><th class="num">Volume</th><th class="num">Positive</th><th class="num">Negative</th>
+    <th class="num">Review ★</th><th class="num">Revenue corr.</th><th class="num">Purchase intent</th><th>vs key competitor</th></tr></thead>
+    <tbody id="attrRows"></tbody></table></div>
+  <div class="note">Competitor benchmark vs category leaders per market (Dyson — floorcare/beauty; Breville/De'Longhi — kitchen). Correlation is modelled association, not proven causation.</div>
+</section>
+
+<!-- ============ INFLUENCERS ============ -->
+<section class="panel" id="influencers">
+  <div class="phead"><h2>Influencer intelligence</h2>
+    <p>Which creators generated real commercial impact — not just awareness — measured to Shopify revenue, coupon redemptions and ROAS.</p></div>
+
+  <div class="ai"><div class="tag"><span class="ico">C</span> Claude creator read</div>
+    <p><strong>Commercial drivers:</strong> mid-tier food creators in ANZ & Japan (@kitchen.nori, @melbeats) drove the highest revenue-per-post via recipe demonstrations and trackable coupons. <strong>Awareness-only:</strong> two macro lifestyle creators delivered huge reach but near-zero coupon redemption — reallocate. <strong>Invest more:</strong> the food + "satisfying clean" niches. <strong>White space:</strong> Indonesia & Malaysia have strong audience fit but minimal current activation.</p></div>
+
+  <div class="cards c2">
+    <div class="card"><h3>Reach vs sales generated</h3><div class="cs">Bubble = ROI · top-left = awareness-only · bottom-right = commercial</div>
+      <div class="chartbox lg"><canvas id="inflBubble"></canvas></div></div>
+    <div class="card"><h3>Revenue by creator tier</h3><div class="cs">Attributed Shopify revenue (US$K)</div>
+      <div class="chartbox lg"><canvas id="inflTier"></canvas></div></div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:18px"><table><thead><tr>
+    <th>Creator</th><th>Market</th><th class="num">Audience</th><th>Quality</th><th>Brand fit</th>
+    <th class="num">Eng. rate</th><th class="num">Earned reach</th><th class="num">Sales</th><th class="num">Coupons</th>
+    <th class="num">ROAS</th><th class="num">CPA</th></tr></thead>
+    <tbody id="inflRows"></tbody></table></div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section class="panel" id="reviews">
+  <div class="phead"><h2>Marketplace review intelligence</h2>
+    <p>Reviews aggregated across Shopee, Lazada, Amazon and the brand site — turned into early-warning signals before issues hit sales.</p></div>
+
+  <div class="kgrid">
+    <div class="kpi"><div class="l">Average rating (APAC)</div><div class="v">4.5★</div><div class="d up">▲ 0.1 QoQ</div></div>
+    <div class="kpi"><div class="l">Review volume</div><div class="v">38.6K</div><div class="d up">▲ 24% QoQ</div></div>
+    <div class="kpi"><div class="l">5★ share</div><div class="v">61%</div><div class="d up">▲ 3 pts</div></div>
+    <div class="kpi"><div class="l">1★ share</div><div class="v">7.2%</div><div class="d down">▲ 1.1 pts</div></div>
+  </div>
+
+  <div class="cards c2" style="margin-top:16px">
+    <div class="card"><h3>Rating trend by marketplace</h3><div class="cs">Average star rating, last 6 months</div>
+      <div class="chartbox"><canvas id="revTrend"></canvas></div></div>
+    <div class="card"><h3>Review volume by platform</h3><div class="cs">This quarter</div>
+      <div class="chartbox"><canvas id="revVol"></canvas></div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="card"><h3>★★★★★ Top reasons for 5-star reviews</h3>
+      <div id="rev5"></div></div>
+    <div class="card"><h3>★ Top reasons for 1-star reviews</h3>
+      <div id="rev1"></div></div>
+  </div>
+
+  <div class="ai amber" style="margin-top:18px"><div class="tag"><span class="ico">!</span> Early-warning signals</div>
+    <p><strong>Indonesia delivery cluster:</strong> 1★ reviews mentioning "late"/"damaged box" up 3.4× MoM — logistics, not product. Acting now protects a 4.5★→4.2★ slide and ~$0.6M at risk.</p>
+    <p><strong>Creami container defect chatter:</strong> small but rising "lid cracked" mentions in ANZ — flag to product before it scales. <strong>Reinforce in marketing:</strong> "dishwasher-safe" and "2-year warranty" messages directly answer the top complaints.</p></div>
+</section>
+
+<!-- ============ CORRELATION ENGINE ============ -->
+<section class="panel" id="engine">
+  <div class="phead"><h2>Business correlation engine</h2>
+    <p>The hero of the COE. Claude reasons across all nine connected sources at once to move from <em>reporting metrics</em> to <em>understanding cause and effect</em> — marketing → conversation → coverage → influencers → traffic → reviews → Shopify → revenue → repeat purchase.</p></div>
+
+  <div class="grid2">
+    <div class="card"><h3>The connected chain</h3><div class="cs">Strength of link to downstream revenue (modelled correlation)</div>
+      <div class="flow">
+        <div class="fnode"><span class="n">1</span> Marketing campaigns <span class="corr">r 0.68</span></div><div class="farrow">▼</div>
+        <div class="fnode"><span class="n">2</span> Organic consumer conversation <span class="corr">r 0.74</span></div><div class="farrow">▼</div>
+        <div class="fnode"><span class="n">3</span> Media coverage / PR <span class="corr">r 0.52</span></div><div class="farrow">▼</div>
+        <div class="fnode"><span class="n">4</span> Influencer activity <span class="corr">r 0.63</span></div><div class="farrow">▼</div>
+        <div class="fnode"><span class="n">5</span> Website traffic <span class="corr">r 0.81</span></div><div class="farrow">▼</div>
+        <div class="fnode"><span class="n">6</span> Marketplace reviews <span class="corr">r 0.59</span></div><div class="farrow">▼</div>
+        <div class="fnode"><span class="n">7</span> Shopify sales → Revenue <span class="corr">r 0.88</span></div><div class="farrow">▼</div>
+        <div class="fnode"><span class="n">8</span> Repeat purchase <span class="corr">r 0.46</span></div>
+      </div></div>
+    <div class="card"><h3>Conversation leads sales</h3><div class="cs">Positive "ease of use + innovation" conversation vs Shopify revenue — note the ~2–3 week lead</div>
+      <div class="chartbox lg"><canvas id="engLead"></canvas></div>
+      <div class="note">When advocacy conversation rises, revenue follows ~2–3 weeks later (cross-correlation peak at lag −18 days).</div></div>
+  </div>
+
+  <div class="sec-label">What the engine concludes</div>
+  <div class="cards c2">
+    <div class="card"><h3>Cause-and-effect findings</h3>
+      <table><thead><tr><th>Signal → outcome</th><th class="num">Strength</th><th>Read</th></tr></thead><tbody>
+        <tr><td>Creami advocacy → Shopify revenue</td><td class="num"><span class="pill g">r 0.79</span></td><td>Leads sales ~3 wks</td></tr>
+        <tr><td>Review ★ ≥ 4.6 → conversion rate</td><td class="num"><span class="pill g">+5.1pt</span></td><td>Strong, causal-likely</td></tr>
+        <tr><td>"Ease of use" sentiment → ATC rate</td><td class="num"><span class="pill g">r 0.71</span></td><td>Top message to amplify</td></tr>
+        <tr><td>Influencer coupon use → incremental sales</td><td class="num"><span class="pill g">r 0.63</span></td><td>Real uplift, not awareness</td></tr>
+        <tr><td>FlexStyle "noise" negativity → conversion</td><td class="num"><span class="pill r">−3.2pt</span></td><td>Active drag, Korea</td></tr>
+        <tr><td>Delivery complaints → repeat purchase</td><td class="num"><span class="pill r">r −0.41</span></td><td>Indonesia risk</td></tr>
+      </tbody></table></div>
+    <div class="card"><h3>Marketing efficiency by market</h3><div class="cs">Revenue generated per $1 of marketing spend</div>
+      <div class="chartbox"><canvas id="engEff"></canvas></div></div>
+  </div>
+
+  <div class="ai" style="margin-top:18px"><div class="tag"><span class="ico">C</span> The "so what"</div>
+    <p>The engine demonstrates AI moving beyond dashboards: <strong>organic advocacy is a leading indicator of revenue</strong>, <strong>review quality is a conversion lever</strong> not just a CX metric, and <strong>influencer value must be judged on coupon-tracked sales</strong> rather than reach. The highest-efficiency markets (ANZ, Japan) share one trait — tight alignment between the attribute consumers praise and the message marketing pushes.</p></div>
+</section>
+
+<!-- ============ RECOMMENDATIONS ============ -->
+<section class="panel" id="recos">
+  <div class="phead"><h2>Executive recommendations</h2>
+    <p>Claude's action plan for the APAC Marketing Director — segmented by function, each with rationale, expected commercial impact, revenue opportunity, confidence and priority.</p></div>
+  <div id="recoList"></div>
+
+  <div class="srcs">
+    <span class="src"><b></b>Meltwater — News, Social Listening, Influencer</span>
+    <span class="src"><b></b>Shopify</span>
+    <span class="src"><b></b>Google Analytics</span>
+    <span class="src"><b></b>Google Trends</span>
+    <span class="src"><b></b>Meta</span>
+    <span class="src"><b></b>TikTok</span>
+    <span class="src"><b></b>Marketplace reviews (Shopee · Lazada · Amazon)</span>
+    <span class="src"><b></b>Power BI</span>
+    <span class="src"><b></b>Internal sales data</span>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  SharkNinja APAC Marketing Centre of Excellence · Vision demonstration · Powered by Claude + Meltwater via Model Context Protocol<br>
+  Illustrative / modelled data for demonstration only — not live platform data. All AI-generated insight must be reviewed and verified by a human before any decision.
+</footer>
+
+<script>
+/* ---------- DATA ---------- */
+const MK={
+ anz:{name:"Australia & New Zealand",rev:42.0,growth:14.2,spend:6.9,roi:6.1,sov:38,sent:48,conv:312,eng:6.4,traffic:2.9,cr:4.8,rating:4.6,
+   read:"ANZ is the efficiency leader. The Creami 'Scoop of Summer' launch converted exceptional organic advocacy into $14.8M at 7.9× ROAS; recipe-led creator content carried 41% of conversions. Detect Pro's auto-sensing demo content lifted floorcare. <strong>Watch:</strong> Creami supply can't keep pace — 'out of stock' mentions up 4×. <strong>Do next:</strong> secure inventory, extend the creator-commerce playbook to Detect Pro, and pre-empt the Creami container-cleaning friction with 'dishwasher-safe' messaging.",
+   prod:[["Ninja Creami",16.8,4.7],["Shark Detect Pro",9.2,4.6],["Ninja Crispi",6.1,4.5],["Shark FlexStyle",4.4,4.3]],
+   camp:[["Creami Scoop of Summer","Campaign","$14.8M · 7.9×"],["Detect Pro Deep Clean","Campaign","$6.9M · 5.6×"],["@kitchen.nori","Influencer","$2.1M · 9.4×"],["@cleanwithme.au","Influencer","$1.3M · 6.1×"]],
+   trend:[["At-home café desserts",182],["Auto-sensing floorcare",141],["High-protein frozen treats",128],["Quiet appliances",116]]},
+ japan:{name:"Japan",rev:38.4,growth:15.6,spend:6.6,roi:5.8,sov:41,sent:44,conv:298,eng:5.9,traffic:2.6,cr:4.5,rating:4.6,
+   read:"Japan's SLUSHi 'Frozen Drops' launch tapped a strong summer frozen-drink trend — $11.3M at 7.1× ROAS with standout earned coverage. Sentiment is high on design and innovation. <strong>Watch:</strong> conversation skews awareness; tighten retargeting to convert. <strong>Do next:</strong> pair SLUSHi with Creami in bundled creator content and lean into design-led storytelling, Japan's highest-praised attribute.",
+   prod:[["Ninja SLUSHi",13.9,4.7],["Ninja Creami",10.2,4.6],["Shark FlexStyle",6.8,4.4],["Ninja Blast",3.6,4.5]],
+   camp:[["SLUSHi Frozen Drops","Campaign","$11.3M · 7.1×"],["Creami Summer JP","Campaign","$7.4M · 6.0×"],["@melbeats","Influencer","$1.8M · 8.2×"],["@tokyo.kitchen","Influencer","$1.1M · 5.4×"]],
+   trend:[["Frozen drinks at home",174],["Design-led appliances",149],["Compact kitchen tech",133],["Beauty-tech routines",121]]},
+ korea:{name:"South Korea",rev:22.3,growth:6.8,spend:5.1,roi:4.4,sov:33,sent:36,conv:241,eng:5.2,traffic:2.1,cr:3.9,rating:4.3,
+   read:"Korea is the watch-market. FlexStyle 'Glass Hair' generated the most engagement-per-dollar but a weak 2.1% add-to-cart — aspirational creative left 'noise' and 'price' objections unanswered, dragging conversion −3.2pt. Beauty (CryoGlow, LED mask) shows a fast-rising purchase-intent wave with thin paid support. <strong>Do next:</strong> shift 20% of FlexStyle spend to demo/comparison + quiet-mode messaging; fund the beauty wave before competitors.",
+   prod:[["Shark FlexStyle",8.1,4.2],["CryoGlow",4.9,4.4],["LED Face Mask",3.8,4.3],["Ninja Creami",3.1,4.5]],
+   camp:[["FlexStyle Glass Hair","Campaign","$8.6M · 4.8×"],["CryoGlow Beauty Tech","Campaign","$3.2M · 5.1×"],["@seoul.beauty","Influencer","$1.0M · 4.2×"],["@k.hairlab","Influencer","$0.7M · 3.6×"]],
+   trend:[["Glass-hair styling",158],["At-home beauty devices",147],["Quiet hair tools",129],["LED skincare",124]]},
+ india:{name:"India",rev:18.1,growth:22.4,spend:3.5,roi:5.2,sov:29,sent:40,conv:268,eng:6.1,traffic:2.4,cr:4.1,rating:4.4,
+   read:"India is the fastest-growing market (+22.4%). The Crispi 'Air-Fry' campaign matched a strong healthy-cooking trend at a low CPP — $5.4M at 6.2× ROAS. Mobile-first traffic converts well via UPI checkout. <strong>Do next:</strong> scale Crispi creator content in regional languages and expand assortment; SOV headroom is large vs spend.",
+   prod:[["Ninja Crispi",7.2,4.5],["Ninja Blast",4.1,4.4],["Shark cordless vacuums",3.6,4.3],["Ninja Creami",2.3,4.4]],
+   camp:[["Crispi Air-Fry India","Campaign","$5.4M · 6.2×"],["Blast On-the-Go","Campaign","$3.1M · 5.5×"],["@cookwith.ria","Influencer","$0.9M · 7.1×"],["@desi.kitchen","Influencer","$0.6M · 5.9×"]],
+   trend:[["Healthy air-frying",176],["Portable blending",151],["Festive gifting appliances",138],["Value bundles",127]]},
+ sg:{name:"Singapore",rev:11.2,growth:9.1,spend:2.3,roi:4.9,sov:35,sent:45,conv:198,eng:5.6,traffic:1.7,cr:4.6,rating:4.6,
+   read:"Singapore is a high-quality, high-conversion hub. Premium positioning works — strong ratings and sentiment across kitchen and beauty. SLUSHi and Creami over-index with young professionals. <strong>Do next:</strong> use SG as the APAC test-bed for beauty (CryoGlow) before regional rollout; protect premium price perception.",
+   prod:[["Ninja Creami",4.1,4.7],["Ninja SLUSHi",2.9,4.6],["CryoGlow",2.0,4.5],["Shark Detect Pro",1.6,4.6]],
+   camp:[["Creami Café SG","Campaign","$3.6M · 6.3×"],["SLUSHi Summer SG","Campaign","$2.2M · 5.8×"],["@sg.foodie","Influencer","$0.6M · 6.8×"],["@tidy.sg","Influencer","$0.4M · 5.2×"]],
+   trend:[["Premium home café",165],["Beauty-tech adoption",144],["Small-space appliances",131],["Sustainability claims",118]]},
+ my:{name:"Malaysia",rev:9.1,growth:11.7,spend:2.0,roi:4.6,sov:27,sent:42,conv:176,eng:5.4,traffic:1.5,cr:4.0,rating:4.4,
+   read:"Malaysia shows rising SOV but under-indexed spend — a clear scale opportunity. Halal-friendly cooking content and value bundles resonate. Creami and Crispi lead. <strong>Do next:</strong> replicate the ANZ/Japan influencer-commerce model here; Ramadan/festive windows are high-intent.",
+   prod:[["Ninja Crispi",3.2,4.4],["Ninja Creami",2.7,4.5],["Ninja Blast",1.8,4.3],["Shark cordless vacuums",1.4,4.3]],
+   camp:[["Crispi Raya Kitchen","Campaign","$2.4M · 5.9×"],["Creami Cool Treats","Campaign","$1.6M · 5.2×"],["@my.makan","Influencer","$0.5M · 6.4×"],["@rumah.bersih","Influencer","$0.3M · 4.8×"]],
+   trend:[["Festive home cooking",169],["Value appliance bundles",148],["Frozen desserts",132],["Portable blenders",122]]},
+ indo:{name:"Indonesia",rev:8.1,growth:10.4,spend:1.9,roi:4.3,sov:24,sent:38,conv:189,eng:5.8,traffic:1.6,cr:3.7,rating:4.2,
+   read:"Indonesia has the largest audience and fast-rising conversation, but a delivery-complaint cluster on Shopee/Lazada (logistics, not product) is suppressing ratings and repeat purchase (r −0.41). Spend is under-indexed vs opportunity. <strong>Do next:</strong> fix fulfilment/marketplace logistics first, then scale creator-commerce; protect the 4.5★→4.2★ slide before it hits sales.",
+   prod:[["Ninja Crispi",2.6,4.2],["Ninja Blast",1.9,4.2],["Ninja Creami",1.7,4.3],["Shark cordless vacuums",1.2,4.1]],
+   camp:[["Crispi Goreng Sehat","Campaign","$2.1M · 5.4×"],["Blast Daily Fresh","Campaign","$1.4M · 4.9×"],["@dapur.indo","Influencer","$0.4M · 5.6×"],["@bersih.id","Influencer","$0.2M · 4.1×"]],
+   trend:[["Healthy frying",171],["Affordable blending",153],["Social-commerce deals",141],["Frozen treats",126]]}
+};
+const MORDER=["anz","japan","korea","india","sg","my","indo"];
+
+const CAMPAIGNS=[
+ ["Creami Scoop of Summer","ANZ","Ninja Creami","TikTok+Creator","At-home café dessert",1.87,7.8,1240,9.2,14.8,7.9,18,"+22%",1],
+ ["SLUSHi Frozen Drops","Japan","Ninja SLUSHi","TikTok+PR","Summer frozen drinks",1.59,6.9,1020,8.1,11.3,7.1,21,"+19%",1],
+ ["FlexStyle Glass Hair","Korea","Shark FlexStyle","Meta+Creator","Aspirational glass-hair",1.79,9.6,1380,2.1,8.6,4.8,46,"+6%",0],
+ ["Detect Pro Deep Clean","ANZ","Shark Detect Pro","Meta+Search","Auto dirt-sensing demo",1.23,5.1,720,6.4,6.9,5.6,24,"+15%",1],
+ ["Crispi Air-Fry India","India","Ninja Crispi","Meta+Creator","Healthy air-frying",0.87,6.4,910,7.6,5.4,6.2,16,"+18%",1],
+ ["CryoGlow Beauty Tech","Korea","CryoGlow","Creator+Search","Results-proof skincare",0.63,7.2,540,5.1,3.2,5.1,31,"+12%",1],
+ ["Creami Café SG","Singapore","Ninja Creami","Meta+Email","Premium home café",0.57,6.1,430,7.9,3.6,6.3,15,"+14%",1],
+ ["Blast On-the-Go","India","Ninja Blast","TikTok","Portable blending",0.56,6.8,610,6.2,3.1,5.5,19,"+11%",1],
+ ["Crispi Raya Kitchen","Malaysia","Ninja Crispi","Meta+Creator","Festive cooking",0.41,5.9,360,6.0,2.4,5.9,18,"+10%",1],
+ ["Crispi Goreng Sehat","Indonesia","Ninja Crispi","TikTok+Shopee","Healthy frying value",0.39,7.1,470,5.4,2.1,5.4,20,"+9%",1],
+ ["LED Mask Glow Up","Korea","LED Face Mask","Creator","At-home LED skincare",0.34,6.6,300,4.2,1.9,4.7,28,"+7%",0],
+ ["Detect Pro SG Tidy","Singapore","Shark Detect Pro","Search+Email","Effortless clean",0.29,4.4,210,6.8,1.6,5.0,17,"+8%",1]
+];
+
+const ATTR=[
+ ["Ease of use",214,82,9,4.6,0.71,"High","+8 vs Dyson"],
+ ["Innovation",198,79,11,4.6,0.66,"High","+12 vs Breville"],
+ ["Product performance",231,74,15,4.5,0.62,"High","+6 vs Dyson"],
+ ["Design",176,80,8,4.6,0.48,"Med","+9 vs Dyson"],
+ ["Value for money",169,61,24,4.3,0.55,"High","+4 vs Breville"],
+ ["Cleaning & maintenance",148,52,38,4.1,0.34,"Med","−3 vs Dyson"],
+ ["Noise",97,29,63,3.8,-0.28,"Low","−11 vs Dyson"],
+ ["Price",142,40,49,4.0,-0.22,"Med","−7 vs Breville"],
+ ["Durability",118,68,21,4.4,0.41,"Med","+2 vs Dyson"],
+ ["Reliability",109,71,18,4.4,0.44,"Med","+5 vs Dyson"],
+ ["Customer service",86,57,32,4.1,0.19,"Low","+1 vs Dyson"],
+ ["Delivery",78,49,42,4.0,0.12,"Low","−6 vs market"],
+ ["Accessories",64,66,20,4.3,0.27,"Low","+3 vs Breville"],
+ ["Warranty",58,73,14,4.5,0.31,"Low","+8 vs market"],
+ ["Promotions",71,64,22,4.2,0.36,"Med","+2 vs market"],
+ ["Product availability",53,38,52,3.9,-0.18,"Med","−5 vs market"],
+ ["Retail experience",49,60,25,4.2,0.21,"Low","+1 vs market"],
+ ["Sustainability",44,67,17,4.3,0.24,"Low","+4 vs Dyson"]
+];
+
+const INFL=[
+ ["@kitchen.nori","ANZ",480,"High","Excellent",7.9,3.2,2.1,4800,9.4,"$11","commercial"],
+ ["@melbeats","Japan",520,"High","Excellent",7.1,3.6,1.8,4100,8.2,"$14","commercial"],
+ ["@cookwith.ria","India",310,"High","Strong",8.4,1.9,0.9,2600,7.1,"$9","commercial"],
+ ["@sg.foodie","Singapore",260,"High","Strong",6.8,1.4,0.6,1800,6.8,"$12","commercial"],
+ ["@cleanwithme.au","ANZ",340,"Med","Strong",6.1,2.1,1.3,2900,6.1,"$16","commercial"],
+ ["@my.makan","Malaysia",220,"Med","Strong",6.4,1.1,0.5,1500,6.4,"$13","commercial"],
+ ["@seoul.beauty","Korea",610,"Med","Good",5.2,2.8,1.0,2100,4.2,"$22","mixed"],
+ ["@tokyo.kitchen","Japan",290,"High","Strong",5.4,1.5,1.1,1700,5.4,"$17","commercial"],
+ ["@lifestyle.macro1","ANZ",2400,"Low","Fair",2.1,6.8,0.3,400,1.4,"$78","awareness"],
+ ["@travel.macro2","Japan",1900,"Low","Fair",1.9,5.2,0.2,300,1.2,"$92","awareness"]
+];
+
+const CATS=[
+ {g:"Kitchen",sent:46,vol:"742K",items:["Ninja Crispi","Ninja Creami","Ninja Blast","Ninja SLUSHi"],
+   love:"\"Café dessert at home\", portability, healthy air-frying",dislike:"Creami container cleaning, occasional noise"},
+ {g:"Floorcare",sent:43,vol:"518K",items:["Shark HydroVac","Shark Detect Pro","Cordless vacuums"],
+   love:"Auto dirt-sensing, suction power, effortless cleaning",dislike:"Battery life on long sessions, bin size"},
+ {g:"Beauty",sent:38,vol:"384K",items:["FlexStyle","CryoGlow","LED Face Mask"],
+   love:"Salon results at home, multi-styling, visible skin results",dislike:"FlexStyle noise, device price, results take time"}
+];
+
+const RECOS=[
+ {seg:"Ecommerce",p:1,t:"Secure Ninja Creami inventory in ANZ before demand outpaces supply",
+  why:"'Out of stock' mentions are up 4× as Creami advocacy keeps climbing — late-quarter spend is buying demand we can't fulfil, hurting ROI and risking 1★ availability reviews.",
+  impact:"Protects the #1 revenue line and recovers lost conversion on the highest-ROAS campaign.",rev:"$2.4M recovered",conf:88,src:"Shopify · Internal sales · Meltwater · Marketplace reviews"},
+ {seg:"Country Marketing — Korea",p:1,t:"Reposition Shark FlexStyle from aspirational to functional + quiet-mode",
+  why:"FlexStyle engages strongly but converts at just 2.1% ATC; 'noise' and 'price' objections drag conversion −3.2pt. Demo/comparison creative answers the actual purchase barrier.",
+  impact:"Recovers conversion drag and lifts ROAS from 4.8× toward category norm.",rev:"$1.4M at risk recovered",conf:79,src:"Meltwater · Meta · GA · Shopify"},
+ {seg:"Ecommerce — Indonesia",p:1,t:"Fix marketplace fulfilment before scaling Indonesia spend",
+  why:"A delivery-complaint cluster (logistics, not product) is up 3.4× and correlates with falling repeat purchase (r −0.41), threatening a 4.5★→4.2★ ratings slide.",
+  impact:"Stabilises ratings and repeat purchase; unlocks safe spend scaling into a large audience.",rev:"$0.6M protected, $1.9M unlocked",conf:82,src:"Marketplace reviews · Shopify · Internal sales"},
+ {seg:"Influencer Marketing",p:2,t:"Reallocate macro-awareness budget to mid-tier creator-commerce",
+  why:"Two macro creators delivered huge reach but near-zero coupon redemption; mid-tier food creators drive 5–8× the revenue-per-post via trackable recipe demos.",
+  impact:"Same budget, materially higher attributed sales and measurable ROAS.",rev:"+$2.2M",conf:84,src:"Meltwater Influencer · Klear · Shopify (coupon)"},
+ {seg:"Regional Marketing",p:2,t:"Scale the Creami/SLUSHi influencer-commerce playbook into Malaysia & Indonesia",
+  why:"Both markets show rising SOV with under-indexed spend; the ANZ/Japan model is proven and transferable, with festive windows high-intent.",
+  impact:"Captures SOV headroom and grows two emerging markets efficiently.",rev:"+$3.8M",conf:76,src:"Meltwater · Google Trends · Power BI · Shopify"},
+ {seg:"Product Marketing",p:2,t:"Make 'ease of use' and 'innovation' the lead message across kitchen & floorcare",
+  why:"These are the two highest revenue-correlated attributes (r 0.71 / 0.66); current creative under-uses them relative to design and lifestyle framing.",
+  impact:"Aligns the praised attribute with the pushed message — the trait shared by top-efficiency markets.",rev:"+$2.6M",conf:80,src:"Meltwater attributes · GA · Shopify"},
+ {seg:"Communications & PR",p:3,t:"Build a 'results-proof' earned narrative for the Korea & Singapore beauty wave",
+  why:"CryoGlow / LED mask purchase-intent conversation is up 47% with thin support; credible third-party proof addresses the 'results take time' barrier.",
+  impact:"Converts an organic beauty wave into pipeline ahead of competitors.",rev:"+$1.5M",conf:72,src:"Meltwater News · GenAI Lens · GA"},
+ {seg:"Product Marketing",p:3,t:"Pre-empt Creami cleaning friction with 'dishwasher-safe + 2-yr warranty' messaging",
+  why:"'Cleaning/maintenance' is Creami's main friction and rising 'lid cracked' chatter is an early defect signal; warranty and dishwasher-safe messages directly answer top complaints.",
+  impact:"Protects sentiment and reduces a future returns/1★ risk on the top product.",rev:"$0.9M protected",conf:74,src:"Marketplace reviews · Meltwater · Internal sales"}
+];
+
+/* ---------- NAV ---------- */
+const PANELS=[["overview","Overview"],["markets","Markets"],["campaigns","Campaigns & ROI"],["consumer","Consumer"],["attributes","Attributes"],["influencers","Influencers"],["reviews","Reviews"],["engine","Correlation Engine"],["recos","Recommendations"]];
+const nav=document.getElementById('nav');
+const rendered={};
+PANELS.forEach(([id,label],i)=>{const b=document.createElement('button');b.textContent=label;if(i===0)b.classList.add('active');b.onclick=()=>show(id,b);nav.appendChild(b);});
+function show(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  if(!rendered[id]){renderCharts(id);rendered[id]=true;}
+}
+
+/* ---------- CHART HELPERS ---------- */
+const T='#28BBBB',TM='#00A7A5',TD='#1C7070',T1='#A3DFDF',T2='#C0EBEB',T3='#E1EFF0',INK='#1A1A1A',ORG='#E08A1E',NEG='#C0453B';
+Chart.defaults.font.family="'Poppins',Arial,sans-serif";
+Chart.defaults.font.size=11;Chart.defaults.color='#1A1A1A';
+const noGrid={grid:{display:false}};
+const softGrid={grid:{color:'#E1EFF0'},border:{display:false}};
+function mk(id,cfg){const el=document.getElementById(id);if(el)new Chart(el,cfg);}
+
+function renderCharts(id){
+ if(id==='overview'){
+  mk('ovMarket',{type:'bar',data:{labels:MORDER.map(k=>MK[k].name.replace("Australia & New Zealand","ANZ")),
+    datasets:[{label:'Revenue $M',data:MORDER.map(k=>MK[k].rev),backgroundColor:T,borderRadius:5,order:2},
+      {label:'ROI ×',data:MORDER.map(k=>MK[k].roi),type:'line',yAxisID:'y1',borderColor:ORG,backgroundColor:ORG,tension:.3,pointRadius:4,order:1}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:noGrid,y:{...softGrid,title:{display:true,text:'US$M'}},y1:{position:'right',grid:{display:false},title:{display:true,text:'ROI ×'},min:0,max:8}}}});
+  mk('ovTrend',{type:'line',data:{labels:['Q3 FY24','Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26'],
+    datasets:[{label:'Attributed revenue $M',data:[98,104,109,118,121,128,131,148],borderColor:T,backgroundColor:'rgba(40,187,187,.12)',fill:true,tension:.35,pointRadius:3}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:noGrid,y:softGrid}}});
+ }
+ if(id==='markets'){renderMarket(currentMk);}
+ if(id==='campaigns'){
+  const c=CAMPAIGNS;
+  mk('cReach',{type:'bar',data:{labels:c.map(r=>r[0].split(' ').slice(0,2).join(' ')),
+    datasets:[
+     {label:'Organic',data:c.map(r=>r[5]*0.9),backgroundColor:T,stack:'r'},
+     {label:'Paid',data:c.map(r=>r[5]*1.4),backgroundColor:TD,stack:'r'},
+     {label:'Earned',data:c.map(r=>r[5]*0.5),backgroundColor:T1,stack:'r'},
+     {label:'Influencer',data:c.map(r=>r[5]*0.8),backgroundColor:ORG,stack:'r'},
+     {label:'Revenue $M',data:c.map(r=>r[9]),type:'line',yAxisID:'y1',borderColor:INK,backgroundColor:INK,tension:.3,pointRadius:3}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{...noGrid,ticks:{maxRotation:60,minRotation:45}},y:{...softGrid,stacked:true,title:{display:true,text:'Reach index'}},y1:{position:'right',grid:{display:false},title:{display:true,text:'Rev $M'}}}}});
+  mk('cBubble',{type:'bubble',data:{datasets:[
+     {label:'Converts well',data:c.filter(r=>r[14]).map(r=>({x:r[6],y:r[8],r:Math.max(6,r[9]*1.4)})),backgroundColor:'rgba(40,187,187,.55)',borderColor:TD},
+     {label:'Engages, under-converts',data:c.filter(r=>!r[14]).map(r=>({x:r[6],y:r[8],r:Math.max(6,r[9]*1.4)})),backgroundColor:'rgba(224,138,30,.55)',borderColor:ORG}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{...softGrid,title:{display:true,text:'Engagement rate %'}},y:{...softGrid,title:{display:true,text:'Add-to-cart rate %'}}}}});
+  const tb=document.getElementById('campRows');
+  tb.innerHTML=c.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td class="mut">${r[4]}</td>
+    <td class="num">$${r[5]}M</td><td class="num">${r[6]}%</td><td class="num">${r[7]}K</td>
+    <td class="num">${r[8]}%</td><td class="num"><b>$${r[9]}M</b></td>
+    <td class="num">${r[10]}×</td><td class="num">$${r[11]}</td><td class="num up">${r[12]}</td></tr>`).join('');
+ }
+ if(id==='consumer'){
+  mk('conChannel',{type:'doughnut',data:{labels:['Social','Forums','News','Blogs','Video'],
+    datasets:[{data:[44,21,17,10,8],backgroundColor:[T,TD,T1,ORG,T2],borderWidth:2,borderColor:'#fff'}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
+  mk('conEmotion',{type:'bar',data:{labels:['Joy','Trust','Anticipation','Surprise','Frustration','Disappointment'],
+    datasets:[{data:[38,26,18,9,6,3],backgroundColor:['#28BBBB','#1C7070','#A3DFDF','#C0EBEB','#E08A1E','#C0453B'],borderRadius:5}]},
+    options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{...softGrid,title:{display:true,text:'% of emotional mentions'}},y:noGrid}}});
+  document.getElementById('catCards').innerHTML=CATS.map(c=>`
+    <div class="card"><h3>${c.g}</h3><div class="cs">${c.vol} mentions · net sentiment +${c.sent}</div>
+     <div style="margin:6px 0 10px"><div class="bar" style="height:9px"><i style="width:${c.sent+50}%"></i></div></div>
+     <div class="tiny" style="margin-bottom:8px">${c.items.map(i=>`<span class="seg" style="margin:2px 4px 2px 0;display:inline-block">${i}</span>`).join('')}</div>
+     <p style="font-size:12.5px"><strong>Love:</strong> ${c.love}</p>
+     <p style="font-size:12.5px;margin-top:5px"><strong>Watch:</strong> ${c.dislike}</p></div>`).join('');
+ }
+ if(id==='attributes'){
+  mk('attrScatter',{type:'bubble',data:{datasets:[{label:'Attributes',
+    data:ATTR.map(a=>({x:a[5],y:a[2]-a[3],r:Math.max(5,a[1]/14)})),
+    backgroundColor:ATTR.map(a=>a[5]>=0.4?'rgba(40,187,187,.55)':a[5]<0?'rgba(192,69,59,.5)':'rgba(224,138,30,.5)'),
+    borderColor:ATTR.map(a=>a[5]>=0.4?TD:a[5]<0?NEG:ORG)}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>ATTR[c.dataIndex][0]+' · corr '+ATTR[c.dataIndex][5]}}},
+     scales:{x:{...softGrid,title:{display:true,text:'Revenue correlation →'}},y:{...softGrid,title:{display:true,text:'Net sentiment (pos−neg)'}}}}});
+  const top=ATTR.slice(0,10);
+  mk('attrBar',{type:'bar',data:{labels:top.map(a=>a[0]),
+    datasets:[{label:'Positive',data:top.map(a=>a[2]),backgroundColor:T,stack:'s'},
+      {label:'Negative',data:top.map(a=>-a[3]),backgroundColor:NEG,stack:'s'}]},
+    options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'bottom'}},scales:{x:{...softGrid,title:{display:true,text:'% sentiment'}},y:{...noGrid,stacked:true}}}});
+  document.getElementById('attrRows').innerHTML=ATTR.map(a=>{const cc=a[5]>=0.4?'g':a[5]<0?'r':'y';
+    return `<tr><td>${a[0]}</td><td class="num">${a[1]}K</td><td class="num up">${a[2]}%</td><td class="num down">${a[3]}%</td>
+    <td class="num">${a[4]}★</td><td class="num"><span class="pill ${cc}">${a[5]>0?'+':''}${a[5]}</span></td>
+    <td class="num">${a[6]}</td><td class="${a[7].startsWith('+')?'up':'down'}">${a[7]}</td></tr>`}).join('');
+ }
+ if(id==='influencers'){
+  mk('inflBubble',{type:'bubble',data:{datasets:[
+    {label:'Commercial',data:INFL.filter(i=>i[11]==='commercial').map(i=>({x:i[6],y:i[7],r:Math.max(6,i[9]*1.5)})),backgroundColor:'rgba(40,187,187,.55)',borderColor:TD},
+    {label:'Mixed',data:INFL.filter(i=>i[11]==='mixed').map(i=>({x:i[6],y:i[7],r:Math.max(6,i[9]*1.5)})),backgroundColor:'rgba(224,138,30,.55)',borderColor:ORG},
+    {label:'Awareness-only',data:INFL.filter(i=>i[11]==='awareness').map(i=>({x:i[6],y:i[7],r:Math.max(6,i[9]*1.5)})),backgroundColor:'rgba(192,69,59,.45)',borderColor:NEG}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{...softGrid,title:{display:true,text:'Earned reach (M)'}},y:{...softGrid,title:{display:true,text:'Sales generated ($M)'}}}}});
+  mk('inflTier',{type:'bar',data:{labels:['Mid-tier food','Cleaning niche','Beauty','Macro lifestyle'],
+    datasets:[{label:'Attributed revenue $K',data:[11300,4200,3100,700],backgroundColor:[T,TM,T1,NEG],borderRadius:5}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:noGrid,y:{...softGrid,title:{display:true,text:'US$K'}}}}});
+  document.getElementById('inflRows').innerHTML=INFL.map(i=>`<tr><td>${i[0]}</td><td>${i[1]}</td><td class="num">${i[2]}K</td>
+    <td><span class="pill ${i[3]==='High'?'g':i[3]==='Med'?'y':'r'}">${i[3]}</span></td><td>${i[4]}</td>
+    <td class="num">${i[5]}%</td><td class="num">${i[6]}M</td><td class="num"><b>$${i[7]}M</b></td>
+    <td class="num">${i[8]}</td><td class="num">${i[9]}×</td><td class="num">${i[10]}</td></tr>`).join('');
+ }
+ if(id==='reviews'){
+  mk('revTrend',{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],
+    datasets:[
+     {label:'Amazon',data:[4.5,4.5,4.6,4.6,4.6,4.7],borderColor:T,tension:.3,pointRadius:2},
+     {label:'Shopee',data:[4.4,4.4,4.3,4.3,4.2,4.2],borderColor:ORG,tension:.3,pointRadius:2},
+     {label:'Lazada',data:[4.4,4.5,4.4,4.4,4.3,4.3],borderColor:TD,tension:.3,pointRadius:2},
+     {label:'Brand site',data:[4.6,4.6,4.7,4.7,4.7,4.8],borderColor:T1,tension:.3,pointRadius:2}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:noGrid,y:{...softGrid,min:4,max:5}}}});
+  mk('revVol',{type:'bar',data:{labels:['Amazon','Shopee','Lazada','Brand site'],
+    datasets:[{label:'Reviews',data:[14200,11800,8400,4200],backgroundColor:[T,TD,TM,T1],borderRadius:5}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:noGrid,y:softGrid}}});
+  const five=[["Easy to use, intuitive setup",28],["Genuinely innovative / wows",22],["Performs as promised",19],["Great design & build",16],["Worth the price / good value",15]];
+  const one=[["Delivery: late or damaged (Indonesia)",31],["Noise too high (FlexStyle)",24],["Hard to clean (Creami container)",18],["Price too high for results (beauty)",15],["Out of stock / availability",12]];
+  document.getElementById('rev5').innerHTML=five.map(r=>themeRow(r[0],r[1],'g')).join('');
+  document.getElementById('rev1').innerHTML=one.map(r=>themeRow(r[0],r[1],'r')).join('');
+ }
+ if(id==='engine'){
+  mk('engLead',{type:'line',data:{labels:['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8','Wk9','Wk10','Wk11','Wk12'],
+    datasets:[
+     {label:'Positive advocacy conversation',data:[40,52,68,61,55,72,88,79,66,84,95,90],borderColor:T,backgroundColor:'rgba(40,187,187,.1)',fill:true,tension:.35,pointRadius:2},
+     {label:'Shopify revenue (lagged)',data:[null,null,42,55,70,63,58,75,90,82,69,87],borderColor:ORG,borderDash:[5,4],tension:.35,pointRadius:2}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:noGrid,y:{...softGrid,title:{display:true,text:'Indexed'}}}}});
+  mk('engEff',{type:'bar',data:{labels:MORDER.map(k=>MK[k].name.replace("Australia & New Zealand","ANZ")),
+    datasets:[{label:'Revenue per $1 spend',data:MORDER.map(k=>+(MK[k].rev/MK[k].spend).toFixed(1)),backgroundColor:MORDER.map(k=>MK[k].roi>=5.5?T:MK[k].roi>=4.7?TM:ORG),borderRadius:5}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:noGrid,y:{...softGrid,title:{display:true,text:'$ revenue / $ spend'}}}}});
+ }
+ if(id==='recos'){
+  document.getElementById('recoList').innerHTML=RECOS.map(r=>`
+   <div class="rec p${r.p}">
+     <div class="rt"><span class="seg">${r.seg}</span><span class="prio p${r.p}">${r.p===1?'Priority 1 — now':r.p===2?'Priority 2 — this quarter':'Priority 3 — plan'}</span>
+       <span class="conf">Confidence ${r.conf}%</span></div>
+     <h4>${r.t}</h4>
+     <p style="font-size:13px;margin-top:6px"><strong>Rationale:</strong> ${r.why}</p>
+     <p style="font-size:13px;margin-top:5px"><strong>Expected impact:</strong> ${r.impact}</p>
+     <div class="meta"><div><b>${r.rev}</b><span>Revenue opportunity</span></div>
+       <div><b>${r.conf}%</b><span>Confidence</span></div>
+       <div style="flex:1;min-width:200px"><b style="font-size:12px;color:var(--ink-60);font-weight:500">Sources</b><span>${r.src}</span></div></div>
+   </div>`).join('');
+ }
+}
+function themeRow(label,pct,cls){return `<div style="display:flex;align-items:center;gap:10px;margin:9px 0">
+  <div style="flex:1;font-size:12.5px">${label}</div>
+  <div class="bar" style="width:120px"><i style="width:${pct*3}%;background:${cls==='r'?NEG:T}"></i></div>
+  <div class="num" style="width:38px;font-weight:600;font-size:12px">${pct}%</div></div>`;}
+
+/* ---------- MARKETS interactivity ---------- */
+let currentMk='anz';
+const chips=document.getElementById('mchips');
+MORDER.forEach((k,i)=>{const c=document.createElement('div');c.className='mchip'+(i===0?' active':'');c.textContent=MK[k].name;c.onclick=()=>{currentMk=k;document.querySelectorAll('.mchip').forEach(x=>x.classList.remove('active'));c.classList.add('active');renderMarket(k);};chips.appendChild(c);});
+let mCharts=[];
+function renderMarket(k){
+  const m=MK[k];
+  document.getElementById('mNarrTxt').innerHTML=m.read;
+  document.getElementById('mKpis').innerHTML=`
+   ${kpi('Revenue','$'+m.rev+'M','up','▲ '+m.growth+'% growth')}
+   ${kpi('Marketing spend','$'+m.spend+'M','flat','')}
+   ${kpi('Marketing ROI',m.roi+'×',m.roi>=5?'up':'flat','')}
+   ${kpi('Share of Voice',m.sov+'%','up','')}
+   ${kpi('Net sentiment','+'+m.sent,'up','')}
+   ${kpi('Conversion rate',m.cr+'%',m.cr>=4.3?'up':'down','')}
+   ${kpi('Website traffic',m.traffic+'M','up','sessions/qtr')}
+   ${kpi('Review rating',m.rating+'★',m.rating>=4.5?'up':'flat','')}`;
+  // products
+  document.getElementById('mProd').innerHTML='<table><thead><tr><th>Product</th><th class="num">Revenue $M</th><th class="num">Rating</th><th>Share</th></tr></thead><tbody>'+
+   m.prod.map(p=>{const max=m.prod[0][1];return `<tr><td>${p[0]}</td><td class="num"><b>${p[1]}</b></td><td class="num">${p[2]}★</td><td><div class="bar"><i style="width:${p[1]/max*100}%"></i></div></td></tr>`}).join('')+'</tbody></table>';
+  document.getElementById('mCamp').innerHTML='<table><thead><tr><th>Name</th><th>Type</th><th class="num">Contribution</th></tr></thead><tbody>'+
+   m.camp.map(c=>`<tr><td>${c[0]}</td><td><span class="seg">${c[1]}</span></td><td class="num">${c[2]}</td></tr>`).join('')+'</tbody></table>';
+  document.getElementById('mTrend').innerHTML=m.trend.map(t=>`<div style="display:flex;align-items:center;gap:12px;margin:10px 0">
+     <div style="width:220px;font-size:13px">${t[0]}</div><div class="bar" style="flex:1"><i style="width:${(t[1]-100)/0.9}%"></i></div>
+     <div class="num up" style="width:60px;font-weight:600">+${t[1]-100}%</div></div>`).join('');
+  // charts
+  mCharts.forEach(c=>c.destroy());mCharts=[];
+  const conv=document.getElementById('mConv');
+  if(conv){mCharts.push(new Chart(conv,{type:'bar',data:{labels:['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'],
+    datasets:[{label:'Mentions (K)',data:gen(m.conv),backgroundColor:T1,borderRadius:4,order:2},
+     {label:'Net sentiment',data:gen(m.sent,true),type:'line',yAxisID:'y1',borderColor:TD,tension:.3,pointRadius:2,order:1}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:noGrid,y:softGrid,y1:{position:'right',grid:{display:false},min:0,max:70}}}}));}
+  const fn=document.getElementById('mFunnel');
+  if(fn){const sess=m.traffic*1000;mCharts.push(new Chart(fn,{type:'bar',data:{labels:['Sessions (K)','Product views','Add-to-cart','Checkout','Purchase'],
+    datasets:[{data:[sess,sess*0.62,sess*0.18,sess*0.09,sess*(m.cr/100)].map(x=>Math.round(x)),backgroundColor:[T1,T2,T,TM,TD],borderRadius:5}]},
+    options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{...softGrid},y:noGrid}}}));}
+}
+function kpi(l,v,cls,d){return `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div>${d?`<div class="d ${cls}">${d}</div>`:''}</div>`;}
+function gen(base,sent){const a=[];let v=base*(sent?0.8:0.85);for(let i=0;i<12;i++){v=v*(0.94+Math.random()*0.16);a.push(+(sent?Math.min(68,v):v).toFixed(sent?0:1));}return a;}
+</script>
+</body>
+</html>

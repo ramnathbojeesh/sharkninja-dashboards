@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Shark ChillPill — Conversation Intelligence | Meltwater</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg-2: #0f1524;
+    --panel: #131a2c;
+    --panel-2: #1a2238;
+    --line: rgba(255,255,255,0.06);
+    --line-strong: rgba(255,255,255,0.12);
+    --ink: #f4f6fb;
+    --ink-2: #c1c8d8;
+    --ink-3: #7a8499;
+    --ink-4: #525c73;
+    --pos: #5eead4;
+    --pos-soft: rgba(94,234,212,0.15);
+    --neu: #fbbf24;
+    --neu-soft: rgba(251,191,36,0.15);
+    --neg: #f87171;
+    --neg-soft: rgba(248,113,113,0.15);
+    --primary: #60a5fa;
+    --primary-soft: rgba(96,165,250,0.18);
+    --accent: #c084fc;
+    --reddit: #ff4500;
+    --shadow-lg: 0 20px 50px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(ellipse 100% 60% at 30% -10%, rgba(96,165,250,0.10), transparent 50%),
+                radial-gradient(ellipse 80% 50% at 90% 0%, rgba(192,132,252,0.06), transparent 50%),
+                var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display {
+    font-family: 'Bricolage Grotesque', serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ===== Layout ===== */
+  .shell {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 32px 80px;
+  }
+  header.top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: grid;
+    place-items: center;
+    color: #0b0f1c;
+    font-family: 'Bricolage Grotesque';
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .brand-text { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.18em; }
+  h1.title {
+    font-family: 'Bricolage Grotesque';
+    font-weight: 600;
+    font-size: 38px;
+    letter-spacing: -0.025em;
+    margin: 4px 0 6px;
+    line-height: 1.05;
+  }
+  h1.title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--primary);
+    font-family: 'Bricolage Grotesque';
+  }
+  .subtitle { color: var(--ink-3); font-size: 13px; }
+  .subtitle b { color: var(--ink-2); font-weight: 500; }
+  .meta {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+    font-size: 12px; color: var(--ink-3);
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    font-size: 11px;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+  }
+  .pill .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--pos);
+    box-shadow: 0 0 12px var(--pos);
+  }
+
+  /* ===== KPI Strip ===== */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 1100px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px)  { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+  .kpi {
+    background: linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi:hover { border-color: var(--line-strong); }
+  .kpi-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .kpi-value {
+    font-family: 'Bricolage Grotesque';
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .kpi-sub { font-size: 11px; color: var(--ink-3); margin-top: 8px; }
+  .kpi-sub b { color: var(--ink-2); font-weight: 500; }
+  .kpi.pos .kpi-value { color: var(--pos); }
+  .kpi.neu .kpi-value { color: var(--neu); }
+  .kpi.neg .kpi-value { color: var(--neg); }
+  .kpi.acc .kpi-value { color: var(--primary); }
+
+  /* ===== Grid sections ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: 1.65fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .grid.two-mid { grid-template-columns: 1fr 1.3fr; }
+  @media (max-width: 1000px) {
+    .grid, .grid.three, .grid.two-mid { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+    position: relative;
+  }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .panel-title {
+    font-family: 'Bricolage Grotesque';
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .panel-sub { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+  .hint {
+    font-size: 10px; color: var(--ink-4);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .hint::before {
+    content: ""; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--primary); box-shadow: 0 0 8px var(--primary);
+  }
+
+  /* ===== Volume chart (SVG) ===== */
+  .chart-wrap { width: 100%; }
+  .chart-wrap svg { width: 100%; height: auto; display: block; cursor: crosshair; }
+  .bar { transition: opacity 0.18s; cursor: pointer; }
+  .bar:hover { opacity: 0.65; }
+  .axis-label { font-size: 10px; fill: var(--ink-4); font-family: 'JetBrains Mono'; }
+  .grid-line { stroke: var(--line); stroke-width: 1; }
+  .area-line { fill: none; stroke: var(--primary); stroke-width: 1.5; }
+
+  /* ===== Sentiment donut & emotion bars ===== */
+  .donut-wrap { display: flex; align-items: center; gap: 24px; }
+  .donut { width: 160px; height: 160px; flex-shrink: 0; cursor: pointer; }
+  .donut-segment { transition: opacity 0.18s, transform 0.18s; transform-origin: center; cursor: pointer; }
+  .donut-segment:hover { opacity: 0.8; }
+  .legend { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  .legend-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .legend-row:hover { background: rgba(255,255,255,0.04); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .legend-name { flex: 1; font-size: 13px; font-weight: 500; }
+  .legend-pct { color: var(--ink-3); font-size: 12px; }
+  .legend-count { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--ink-4); margin-left: 8px; }
+
+  /* ===== Horizontal bars ===== */
+  .hbar-list { display: flex; flex-direction: column; gap: 9px; }
+  .hbar {
+    display: grid;
+    grid-template-columns: 110px 1fr 50px;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .hbar:hover { opacity: 0.85; }
+  .hbar-label { font-size: 12px; font-weight: 500; }
+  .hbar-track {
+    height: 22px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .hbar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hbar-count { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--ink-3); text-align: right; }
+  .hbar.reddit .hbar-fill { background: linear-gradient(90deg, #ff4500, #ff8a4c); }
+  .hbar.theme .hbar-fill { background: linear-gradient(90deg, #5eead4, #60a5fa); }
+
+  /* ===== Hashtag cloud ===== */
+  .tag-cloud {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .tag {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .tag:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+  .tag .count { color: var(--ink-4); font-family: 'JetBrains Mono'; font-size: 10px; margin-left: 6px; }
+  .tag.size-xl { font-size: 16px; padding: 8px 18px; }
+  .tag.size-lg { font-size: 14px; padding: 7px 16px; }
+
+  /* ===== Reddit panel ===== */
+  .reddit-section {
+    background: linear-gradient(180deg, rgba(255,69,0,0.06) 0%, var(--panel) 60%);
+    border: 1px solid rgba(255,69,0,0.18);
+  }
+  .reddit-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 6px;
+  }
+  .reddit-mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--reddit);
+    display: grid; place-items: center;
+    font-family: 'Bricolage Grotesque'; font-weight: 700;
+    color: white; font-size: 14px;
+  }
+  .reddit-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-bottom: 16px;
+  }
+  .reddit-stat {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .reddit-stat-val { font-family: 'Bricolage Grotesque'; font-size: 22px; font-weight: 600; }
+  .reddit-stat-label { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 4px; }
+
+  /* ===== Theme cards ===== */
+  .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .theme-card {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .theme-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .theme-card-title { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+  .theme-card-stat {
+    font-family: 'JetBrains Mono'; font-size: 11px; color: var(--ink-3);
+    display: flex; gap: 10px; margin-bottom: 8px;
+  }
+  .theme-card-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .theme-card-tag.opp { background: var(--pos-soft); color: var(--pos); }
+  .theme-card-tag.risk { background: var(--neg-soft); color: var(--neg); }
+  .theme-card-tag.watch { background: var(--neu-soft); color: var(--neu); }
+  .theme-card-tag.cul { background: var(--primary-soft); color: var(--primary); }
+
+  /* ===== Geo map (simplified bars) ===== */
+  .geo-list { display: flex; flex-direction: column; gap: 8px; }
+  .geo-row { display: grid; grid-template-columns: 30px 1fr 50px; gap: 10px; align-items: center; cursor: pointer; }
+  .geo-flag {
+    font-size: 11px; font-family: 'JetBrains Mono'; font-weight: 600;
+    background: var(--panel-2); padding: 3px 6px; border-radius: 4px;
+    text-align: center; color: var(--ink-2);
+  }
+  .geo-track { height: 16px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; }
+  .geo-fill { height: 100%; background: linear-gradient(90deg, #60a5fa, #5eead4); border-radius: 4px; }
+  .geo-count { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--ink-3); text-align: right; }
+
+  /* ===== Detail Drawer ===== */
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 100%; max-width: 540px;
+    background: var(--bg-2);
+    border-left: 1px solid var(--line-strong);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    display: flex; flex-direction: column;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    padding: 22px 26px 18px;
+    border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  }
+  .drawer-title-block { flex: 1; }
+  .drawer-eyebrow {
+    font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.14em;
+    margin-bottom: 6px; font-weight: 500;
+  }
+  .drawer-title {
+    font-family: 'Bricolage Grotesque';
+    font-size: 22px; font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .drawer-sub { font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+  .drawer-close {
+    background: var(--panel); border: 1px solid var(--line-strong);
+    color: var(--ink-2); width: 36px; height: 36px;
+    border-radius: 10px; cursor: pointer;
+    display: grid; place-items: center;
+    font-size: 16px; line-height: 1;
+    transition: all 0.15s;
+  }
+  .drawer-close:hover { background: var(--neg); color: var(--bg); border-color: var(--neg); }
+  .drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 26px 30px;
+  }
+  .drawer-body::-webkit-scrollbar { width: 8px; }
+  .drawer-body::-webkit-scrollbar-track { background: transparent; }
+  .drawer-body::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+
+  .mention {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .mention:hover { border-color: var(--line-strong); }
+  .mention-head {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .mention-platform {
+    background: var(--panel-2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .mention-platform.reddit { background: rgba(255,69,0,0.15); color: #ff8a4c; }
+  .mention-platform.tiktok { background: rgba(254,44,85,0.15); color: #fe2c55; }
+  .mention-platform.instagram { background: rgba(225,48,108,0.15); color: #e1306c; }
+  .mention-platform.news { background: var(--primary-soft); color: var(--primary); }
+  .mention-sentiment {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .mention-sentiment.pos { background: var(--pos); }
+  .mention-sentiment.neg { background: var(--neg); }
+  .mention-sentiment.neu { background: var(--neu); }
+  .mention-title {
+    font-weight: 600; font-size: 14px;
+    margin-bottom: 8px; line-height: 1.35;
+  }
+  .mention-snippet {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .mention-meta {
+    display: flex; gap: 14px;
+    font-size: 11px;
+    color: var(--ink-3);
+    font-family: 'JetBrains Mono';
+  }
+  .mention-meta a {
+    color: var(--primary); text-decoration: none;
+    margin-left: auto;
+    font-family: 'Manrope';
+    font-weight: 500;
+  }
+  .mention-meta a:hover { text-decoration: underline; }
+
+  .empty {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--ink-3);
+  }
+
+  .footer-bar {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px;
+    color: var(--ink-4);
+  }
+
+  /* Subtle entrance animation */
+  .panel { animation: fadeUp 0.6s ease-out backwards; }
+  .panel:nth-child(2) { animation-delay: 0.05s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Backdrop */
+  .backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.32s;
+    z-index: 90;
+  }
+  .backdrop.open { opacity: 1; pointer-events: auto; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HEADER -->
+<header class="top">
+  <div>
+    <div class="brand">
+      <div class="brand-mark">M</div>
+      <div>
+        <div class="brand-text">Meltwater · Conversation Intelligence</div>
+      </div>
+    </div>
+    <h1 class="title">Shark ChillPill <em>— what the world is saying</em></h1>
+    <div class="subtitle">
+      <b>2,591 mentions</b> across news, social and forums · 6-month window
+      · <b>Oct 29, 2025 → Apr 29, 2026</b>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="pill"><span class="dot"></span>LIVE DATA · MELTWATER API</span>
+    <span style="font-family: 'JetBrains Mono'; color: var(--ink-4); font-size: 11px;">Refreshed Apr 29 · 14:30 EST</span>
+    <span style="font-size: 11px; color: var(--ink-4);">Click any chart, bar, or tag to drill into mentions →</span>
+  </div>
+</header>
+
+<!-- KPI ROW -->
+<div class="kpi-row">
+  <div class="kpi acc">
+    <div class="kpi-label">Total Mentions</div>
+    <div class="kpi-value">2,591</div>
+    <div class="kpi-sub">vs. <b>~62 pre-launch avg/wk</b></div>
+  </div>
+  <div class="kpi pos">
+    <div class="kpi-label">Positive</div>
+    <div class="kpi-value">53%</div>
+    <div class="kpi-sub"><b>1,354</b> mentions</div>
+  </div>
+  <div class="kpi neu">
+    <div class="kpi-label">Neutral</div>
+    <div class="kpi-value">44%</div>
+    <div class="kpi-sub"><b>1,123</b> mentions</div>
+  </div>
+  <div class="kpi neg">
+    <div class="kpi-label">Negative</div>
+    <div class="kpi-value">3%</div>
+    <div class="kpi-sub"><b>71</b> mentions · low risk</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Total Reach</div>
+    <div class="kpi-value">1.2B</div>
+    <div class="kpi-sub">Cumulative impressions</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Top Platform</div>
+    <div class="kpi-value" style="font-size: 22px; padding-top: 6px;">Online News</div>
+    <div class="kpi-sub"><b>959</b> · 38% share</div>
+  </div>
+</div>
+
+<!-- VOLUME + SENTIMENT -->
+<div class="grid">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Conversation Volume</div>
+        <div class="panel-sub">Weekly mentions · click any bar to see what drove the spike</div>
+      </div>
+      <span class="hint">Interactive</span>
+    </div>
+    <div class="chart-wrap" id="volumeChart"></div>
+    <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:11px; color:var(--ink-3); font-family:'JetBrains Mono';">
+      <span>Pre-launch (~10/wk)</span>
+      <span style="color: var(--primary);">↑ Mar 10 launch · 390 mentions</span>
+      <span style="color: var(--accent);">↑ Apr 6 Costco/Coachella · 512</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Sentiment</div>
+        <div class="panel-sub">Click a segment to read sample mentions</div>
+      </div>
+      <span class="hint">Interactive</span>
+    </div>
+    <div class="donut-wrap">
+      <svg class="donut" viewBox="0 0 42 42" id="sentimentDonut"></svg>
+      <div class="legend">
+        <div class="legend-row" data-filter="sentiment-positive">
+          <div class="legend-swatch" style="background: var(--pos);"></div>
+          <div class="legend-name">Positive</div>
+          <div class="legend-pct">53%</div>
+          <div class="legend-count">1,354</div>
+        </div>
+        <div class="legend-row" data-filter="sentiment-neutral">
+          <div class="legend-swatch" style="background: var(--neu);"></div>
+          <div class="legend-name">Neutral</div>
+          <div class="legend-pct">44%</div>
+          <div class="legend-count">1,123</div>
+        </div>
+        <div class="legend-row" data-filter="sentiment-negative">
+          <div class="legend-swatch" style="background: var(--neg);"></div>
+          <div class="legend-name">Negative</div>
+          <div class="legend-pct">3%</div>
+          <div class="legend-count">71</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line);">
+      <div style="font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Emotion mix · classified posts</div>
+      <div class="hbar-list" id="emotionList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLATFORM + TOP AUDIENCES -->
+<div class="grid two-mid">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Platform Mix</div>
+        <div class="panel-sub">Where conversations are happening</div>
+      </div>
+      <span class="hint">Interactive</span>
+    </div>
+    <div class="hbar-list" id="platformList"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Top Audiences &amp; Communities</div>
+        <div class="panel-sub">Where the most engaged conversations live</div>
+      </div>
+    </div>
+    <div class="theme-grid" id="audienceGrid"></div>
+  </div>
+</div>
+
+<!-- REDDIT DEEP DIVE -->
+<div class="panel reddit-section">
+  <div class="reddit-header">
+    <div class="reddit-mark">R</div>
+    <div>
+      <div class="panel-title">Reddit Deep Dive</div>
+      <div class="panel-sub">233 mentions · the audience SharkNinja's marketing team should be watching most closely</div>
+    </div>
+  </div>
+  <div class="reddit-stats">
+    <div class="reddit-stat">
+      <div class="reddit-stat-val">233</div>
+      <div class="reddit-stat-label">Reddit Mentions</div>
+    </div>
+    <div class="reddit-stat">
+      <div class="reddit-stat-val">12</div>
+      <div class="reddit-stat-label">Active Subreddits</div>
+    </div>
+    <div class="reddit-stat">
+      <div class="reddit-stat-val" style="color: var(--neu);">Mixed</div>
+      <div class="reddit-stat-label">Sentiment Lean · Skeptical</div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px;">
+    <div>
+      <div style="font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px;">Top Subreddits Driving Conversation</div>
+      <div class="hbar-list" id="subredditList"></div>
+    </div>
+    <div>
+      <div style="font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px;">Reddit Conversation Themes</div>
+      <div style="display: flex; flex-direction: column; gap: 10px;" id="redditThemes"></div>
+    </div>
+  </div>
+
+  <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,69,0,0.15);">
+    <button class="tag" style="cursor: pointer; background: var(--reddit); color: white; border: none; font-weight: 600; padding: 10px 18px;" data-filter="platform-reddit">View all 233 Reddit mentions →</button>
+  </div>
+</div>
+
+<!-- HASHTAGS + GEO -->
+<div class="grid" style="margin-top: 18px;">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Hashtags &amp; Themes</div>
+        <div class="panel-sub">Top tags driving discoverability · sized by volume</div>
+      </div>
+      <span class="hint">Interactive</span>
+    </div>
+    <div class="tag-cloud" id="tagCloud"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Where Conversation Lives</div>
+        <div class="panel-sub">Top countries · geo-located mentions</div>
+      </div>
+    </div>
+    <div class="geo-list" id="geoList"></div>
+  </div>
+</div>
+
+<!-- EMERGING THEMES -->
+<div class="panel" style="margin-top: 18px;">
+  <div class="panel-head">
+    <div>
+      <div class="panel-title">Emerging Themes &amp; Narratives</div>
+      <div class="panel-sub">Manually clustered storylines from the last 6 months · click to read mentions</div>
+    </div>
+    <span class="hint">Interactive</span>
+  </div>
+  <div class="theme-grid" id="themeGrid"></div>
+</div>
+
+<div class="footer-bar">
+  <span>Powered by Meltwater Media Intelligence · Boolean query optimized for Shark ChillPill brand mentions</span>
+  <span class="mono">2,591 mentions · 23 weeks · 16 platforms</span>
+</div>
+
+</div>
+
+<!-- DETAIL DRAWER -->
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="drawer-title-block">
+      <div class="drawer-eyebrow" id="drawerEyebrow">Filter</div>
+      <div class="drawer-title" id="drawerTitle">Mentions</div>
+      <div class="drawer-sub" id="drawerSub"></div>
+    </div>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<script>
+/* =========================================================
+   DATA — sourced live from Meltwater Unified Retrieval API
+   ========================================================= */
+
+const VOLUME = [
+  ["2025-10-27", 6], ["2025-11-03", 7], ["2025-11-10", 12], ["2025-11-17", 4],
+  ["2025-11-24", 2], ["2025-12-01", 6], ["2025-12-08", 5], ["2025-12-15", 4],
+  ["2025-12-22", 9], ["2025-12-29", 6], ["2026-01-05", 14], ["2026-01-12", 13],
+  ["2026-01-19", 6], ["2026-01-26", 5], ["2026-02-02", 12], ["2026-02-09", 3],
+  ["2026-02-16", 6], ["2026-02-23", 11], ["2026-03-02", 7], ["2026-03-09", 390],
+  ["2026-03-16", 198], ["2026-03-23", 275], ["2026-03-30", 180], ["2026-04-06", 512],
+  ["2026-04-13", 415], ["2026-04-20", 423], ["2026-04-27", 60]
+];
+
+const EMOTIONS = [
+  { name: "Joy", count: 330, color: "#5eead4" },
+  { name: "Surprise", count: 22, color: "#60a5fa" },
+  { name: "Love", count: 21, color: "#f9a8d4" },
+  { name: "Disgust", count: 24, color: "#a78bfa" },
+  { name: "Anger", count: 17, color: "#f87171" },
+  { name: "Sadness", count: 4, color: "#94a3b8" }
+];
+
+const PLATFORMS = [
+  { key: "news", label: "Online News", count: 959, pct: 38 },
+  { key: "twitter", label: "Twitter / X", count: 388, pct: 15 },
+  { key: "tiktok", label: "TikTok", count: 328, pct: 13 },
+  { key: "reddit", label: "Reddit", count: 233, pct: 9 },
+  { key: "instagram", label: "Instagram", count: 222, pct: 9 },
+  { key: "youtube", label: "YouTube", count: 116, pct: 5 },
+  { key: "pinterest", label: "Pinterest", count: 62, pct: 2 },
+  { key: "facebook", label: "Facebook", count: 53, pct: 2 },
+  { key: "broadcast-tv", label: "Broadcast TV", count: 52, pct: 2 },
+  { key: "bluesky", label: "Bluesky", count: 44, pct: 2 },
+  { key: "linkedin", label: "LinkedIn", count: 23, pct: 1 }
+];
+
+const HASHTAGS = [
+  { tag: "chillpill", count: 217, size: "xl" },
+  { tag: "sharkchillpill", count: 207, size: "xl" },
+  { tag: "shark", count: 124, size: "lg" },
+  { tag: "portablefan", count: 82, size: "lg" },
+  { tag: "fan", count: 56, size: "lg" },
+  { tag: "coolingfan", count: 42 },
+  { tag: "personalfan", count: 42 },
+  { tag: "tiktokmademebuyit", count: 38 },
+  { tag: "sharkpartner", count: 33 },
+  { tag: "sharkninja", count: 32 },
+  { tag: "sharkhome", count: 30 },
+  { tag: "minifan", count: 29 },
+  { tag: "staycool", count: 27 },
+  { tag: "summer", count: 27 },
+  { tag: "summeressentials", count: 26 },
+  { tag: "handheldfan", count: 23 },
+  { tag: "tiktokshopcreatorpicks", count: 23 },
+  { tag: "coachella", count: 18 },
+  { tag: "costcofinds", count: 17 },
+  { tag: "sharkbeauty", count: 19 },
+  { tag: "sharkfan", count: 20 }
+];
+
+const GEO = [
+  { code: "US", country: "United States", count: 728 },
+  { code: "GB", country: "United Kingdom", count: 207 },
+  { code: "JP", country: "Japan", count: 156 },
+  { code: "IN", country: "India", count: 140 },
+  { code: "AU", country: "Australia", count: 31 },
+  { code: "CA", country: "Canada", count: 16 },
+  { code: "FR", country: "France", count: 13 },
+  { code: "MY", country: "Malaysia", count: 12 },
+  { code: "AE", country: "UAE", count: 11 },
+  { code: "DE", country: "Germany", count: 10 }
+];
+
+const SUBREDDITS = [
+  { name: "r/Costco", count: 47, sentiment: "mixed" },
+  { name: "r/POTS", count: 31, sentiment: "positive" },
+  { name: "r/AskUK", count: 24, sentiment: "neutral" },
+  { name: "r/Hyperhidrosis", count: 18, sentiment: "neutral" },
+  { name: "r/dyson", count: 16, sentiment: "comparative" },
+  { name: "r/Influenster", count: 12, sentiment: "neutral" },
+  { name: "r/gadgets", count: 11, sentiment: "neutral" }
+];
+
+const REDDIT_THEMES = [
+  { title: "Is it worth $150?", desc: "Price-vs-value debate is the dominant Reddit conversation. Consumers split between believers and skeptics." },
+  { title: "Health condition use cases", desc: "Strong organic discussion in POTS, perimenopause, hyperhidrosis communities. Whitespace for SharkNinja." },
+  { title: "Dyson HushJet comparison", desc: "Dyson launched a $99 competing fan in early April. Direct head-to-head across r/dyson and r/gadgets." },
+  { title: "Costco distribution", desc: "Costco-exclusive 2-in-1 SKU has its own conversation thread. Buyers feel they got a deal at $125." }
+];
+
+const AUDIENCES = [
+  { title: "Health-condition communities", desc: "POTS, perimenopause, hyperhidrosis", count: "~80 mentions", tag: "Opportunity", tagClass: "opp" },
+  { title: "Costco shoppers", desc: "r/Costco + #costcofinds creators", count: "~75 mentions", tag: "Opportunity", tagClass: "opp" },
+  { title: "Festival / Coachella", desc: "Justin Bieber SKYLRK partnership", count: "~60 mentions", tag: "Cultural Moment", tagClass: "cul" },
+  { title: "TikTok beauty creators", desc: "Affiliate + Shark Partner program", count: "~150 mentions", tag: "Opportunity", tagClass: "opp" },
+  { title: "Tech reviewers", desc: "Engadget, Mashable, TechAdvisor", count: "~40 mentions", tag: "Watch", tagClass: "watch" },
+  { title: "Skeptical buyers", desc: "Pricing concerns, Dyson comparison", count: "~50 mentions", tag: "Risk", tagClass: "risk" }
+];
+
+const THEMES = [
+  { title: "Launch & buzz", desc: "March 10 launch dominated tech press. MSN, Engadget, Mashable, Prevention all covered.", count: 480, tag: "Cultural Moment", tagClass: "cul", filter: "theme-launch" },
+  { title: "InstaChill plate as differentiator", desc: "Cooling plate is the most-praised feature across reviews and TikTok demos.", count: 327, tag: "Opportunity", tagClass: "opp", filter: "theme-instachill" },
+  { title: "Coachella x Justin Bieber x SKYLRK", desc: "Limited-edition orange colorway dropped for Coachella weekend 2.", count: 60, tag: "Cultural Moment", tagClass: "cul", filter: "theme-coachella" },
+  { title: "Pricing pushback", desc: "$150 price tag is the #1 organic objection. Drives most of the negative sentiment.", count: 157, tag: "Risk", tagClass: "risk", filter: "theme-pricing" },
+  { title: "Dyson HushJet rivalry", desc: "Dyson $99 fan launched April. Frequently mentioned alongside ChillPill.", count: 95, tag: "Watch", tagClass: "watch", filter: "theme-dyson" },
+  { title: "POTS / chronic illness", desc: "r/POTS users discovered ChillPill as a flare-up tool. Authentic, unsponsored buzz.", count: 38, tag: "Opportunity", tagClass: "opp", filter: "theme-pots" },
+  { title: "Costco distribution", desc: "Costco-exclusive bundle drove a wave of Costco-finds creator content.", count: 72, tag: "Opportunity", tagClass: "opp", filter: "theme-costco" },
+  { title: "Color & aesthetic", desc: "7 colorways (Rose Gold, Matcha, Dragonfruit) drive social shareability.", count: 156, tag: "Opportunity", tagClass: "opp", filter: "theme-color" }
+];
+
+/* ========== Mention library ========== */
+const MENTIONS = [
+  // Reddit — POTS positive
+  { id: "r1", platform: "reddit", platformLabel: "Reddit · r/POTS", sentiment: "pos", date: "2026-04-17",
+    title: "Shark Chill Pill", reach: 118392,
+    snippet: "Its a very nice handheld fan. The fan attachment is actually cooling and the cooling plate is nice for when you need to cool fast. In high humidity the misting feels nice but doesnt help cool you down. Also the battery is great! overall I would say it's a worthy investment.",
+    url: "https://www.reddit.com/r/POTS/comments/1so1idf/comment/ogpufco/",
+    tags: ["sentiment-positive", "platform-reddit", "theme-instachill", "theme-pots"]
+  },
+  { id: "r2", platform: "reddit", platformLabel: "Reddit · r/POTS", sentiment: "neu", date: "2026-03-12",
+    title: "will report back on how well shark's new portable fan called chill pill works for pots",
+    reach: 113731,
+    snippet: "i've had pots since i was 16. i just bought this new shark portable fan product that just got released called 'chill pill.' it's pretty expensive it's $150. honestly i'm looking for anything at this point to help me. the only thing that has ever made me feel a bit better in a flare up is cold air. it has water mist and this cooling plate attachment.",
+    url: "https://www.reddit.com/r/POTS/comments/1rry7xj/will_report_back_on_how_well_sharks_new_portable/",
+    tags: ["sentiment-neutral", "platform-reddit", "theme-pots", "theme-pricing"]
+  },
+  // Reddit — POTS negative review
+  { id: "r3", platform: "reddit", platformLabel: "Reddit · r/POTS", sentiment: "neg", date: "2026-04-24",
+    title: "(update) reporting back on the new portable shark fan", reach: 119106,
+    snippet: "I'm gonna give a real review because all of the reviews on Reddit are overly positive to the point of suspicion. The fan is powerful and has 10 modes, but it doesn't cool. The cooling plate doesn't really do much. It's about 3 inches in diameter and it warms up quickly against skin. I paid $125 at Costco and this product isn't even close to being worth that. I'd say it's worth $60 at most. I'm returning mine.",
+    url: "https://www.reddit.com/r/POTS/comments/1rson6l/comment/oi2d3qc/",
+    tags: ["sentiment-negative", "platform-reddit", "theme-pricing", "theme-pots", "theme-costco"]
+  },
+  // Reddit — Costco
+  { id: "r4", platform: "reddit", platformLabel: "Reddit · r/Costco", sentiment: "neu", date: "2026-04-07",
+    title: "Shark ChillPill - Has anyone purchased?", reach: 1533831,
+    snippet: "Saw a post from a Costco influencer that I follow. I can't seem to find any reviews so I'm assuming it's new from Shark. Seems cool to have with Summer coming up. Thoughts?",
+    url: "https://www.reddit.com/r/Costco/comments/1seh3h3/shark_chillpill_has_anyone_purchased/",
+    tags: ["sentiment-neutral", "platform-reddit", "theme-costco"]
+  },
+  // Reddit — Costco negative
+  { id: "r5", platform: "reddit", platformLabel: "Reddit · r/Costco", sentiment: "neg", date: "2026-04-07",
+    title: "Reply: Shark ChillPill - Has anyone purchased?", reach: 1533928,
+    snippet: "Overpriced gimmick. It's a fan with a mister. I guess it works. Like all evaporative coolers, the cooling effect only works in places with low relative humidity. Otherwise, it's a mini fan and battery. Very expensive for what it is.",
+    url: "https://www.reddit.com/r/Costco/comments/1seh3h3/comment/oeqi5og/",
+    tags: ["sentiment-negative", "platform-reddit", "theme-pricing", "theme-costco"]
+  },
+  // Reddit — Hyperhidrosis
+  { id: "r6", platform: "reddit", platformLabel: "Reddit · r/Hyperhidrosis", sentiment: "neu", date: "2026-04-23",
+    title: "Do portable fans work?", reach: 63803,
+    snippet: "Summer is coming soon and I can already feel sweat dripping down my forehead and into my eyes at just 75F. Saw a commercial for the Shark ChillPill and after investigating the name Jisulife came up for portable fans. Anyone have any experience with these? The Shark one also advertises a cooling plate to press to your skin. Would hate to drop $150 or even like $70 on something that barely is better than the $15 plastic fan from Target.",
+    url: "https://www.reddit.com/r/Hyperhidrosis/comments/1st7dsz/do_portable_fans_work/",
+    tags: ["sentiment-neutral", "platform-reddit", "theme-pricing"]
+  },
+  // Reddit — AskUK
+  { id: "r7", platform: "reddit", platformLabel: "Reddit · r/AskUK", sentiment: "neu", date: "2026-04-18",
+    title: "Has anyone tried this Shark ChillPill fan?", reach: 2336561,
+    snippet: "I keep seeing ads for this: Shark ChillPill 3-in-1 Fan, Mist & InstaChill System. It is quite expensive but I do struggle with feeling over heated in the hotter months and would be interested in some genuine reviews.",
+    url: "https://www.reddit.com/r/AskUK/comments/1sou6q6/has_anyone_tried_this_shark_chillpill_fan/",
+    tags: ["sentiment-neutral", "platform-reddit"]
+  },
+  // Reddit — Dyson comparison
+  { id: "r8", platform: "reddit", platformLabel: "Reddit · r/dyson", sentiment: "neu", date: "2026-04-16",
+    title: "Dyson launches HushJet Mini Cool fan, its first handheld cooling device", reach: 39053,
+    snippet: "I keep going back and forth between this and the chill pill by Shark. I'm waiting for some real reviews on each before I pull the trigger.",
+    url: "https://www.reddit.com/r/dyson/comments/1smknjd/comment/oggdcs1/",
+    tags: ["sentiment-neutral", "platform-reddit", "theme-dyson"]
+  },
+  { id: "r9", platform: "reddit", platformLabel: "Reddit · r/dyson", sentiment: "neu", date: "2026-04-12",
+    title: "What do we think about the new Hushjet Mini Cool?", reach: 38933,
+    snippet: "I go to a lot of music concerts and festivals (60 last year), and many people carry handheld fans. Popular ones include Shark ChillPill ($149.99), JISULIFE Ultra2 ($89.99), and TORRAS COOLiFY ($49.99). Shark is a medium-tier brand. A Dyson-brand handheld fan that is bladeless for $99.99 seems like a fair price to me.",
+    url: "https://www.reddit.com/r/dyson/comments/1shn9tt/comment/ofqd2qr/",
+    tags: ["sentiment-neutral", "platform-reddit", "theme-dyson"]
+  },
+
+  // News — launch coverage
+  { id: "n1", platform: "news", platformLabel: "MSN / Engadget", sentiment: "pos", date: "2026-03-10",
+    title: "Shark's ChillPill puts a mister, fan and cold-plate in one portable package", reach: 85694671,
+    snippet: "Shark has been making some intriguing devices lately, and its newest offering is one I'm personally very excited about. The ChillPill is described as a 3-in-1 personal cooling system. I've had a ChillPill to test for a few days and while I think it's a bit pricey, I'm impressed by the sophistication and versatility you get for the money.",
+    url: "https://www.msn.com/en-us/news/technology/shark-s-chillpill-puts-a-mister-fan-and-cold-plate-in-one-portable-package/ar-AA1XU4px",
+    tags: ["sentiment-positive", "platform-news", "theme-launch", "theme-instachill"]
+  },
+  { id: "n2", platform: "news", platformLabel: "MSN / Lifestyle", sentiment: "pos", date: "2026-03-10",
+    title: "SharkNinja just dropped a $149 'personal air conditioner'", reach: 85694671,
+    snippet: "Today, Shark, a brand better known for dominating the vacuum and hair care markets, announced its boldest entry into the lifestyle tech space yet: the Shark ChillPill. Drawing inspiration from cryotherapy, this direct-contact plate can lower skin temperature by up to 16°F in a matter of seconds. The Shark ChillPill officially hits the market today, March 10, 2026, with a retail price of $149.99.",
+    url: "https://www.msn.com/en-us/lifestyle/shopping/sharkninja-just-dropped-a-149-personal-air-conditioner/ar-AA1XUv3Q",
+    tags: ["sentiment-positive", "platform-news", "theme-launch", "theme-pricing"]
+  },
+  { id: "n3", platform: "news", platformLabel: "Mashable", sentiment: "neu", date: "2026-03-10",
+    title: "A fan, mister, and ice pack in one — the Shark ChillPill might be the summer's hottest accessory", reach: 11546887,
+    snippet: "With historic heatwaves, the product of summer 2025 was the personal fan. Enter the Shark ChillPill. Shark's ChillPill is a handheld fan with digital controls. The one catch? Its $149.99 price tag. While you can score most personal fans for $25 or less online, the ChillPill is a much pricier fan.",
+    url: "https://mashable.com/article/shark-chillpill-portable-fan-release",
+    tags: ["sentiment-neutral", "platform-news", "theme-launch", "theme-pricing"]
+  },
+  { id: "n4", platform: "news", platformLabel: "TechAdvisor", sentiment: "pos", date: "2026-03-10",
+    title: "Shark ChillPill portable fan review: 3 palm-sized ways to keep cool", reach: 820309,
+    snippet: "Clever, versatile and very effective, the ChillPill is just what you need for sticky commutes and sweltering gigs, with a fan, cooling plate and vapour misting options. My only concern is that it's expensive and you'll want to make sure you don't drop it.",
+    url: "https://www.techadvisor.com/article/3083852/shark-chillpill-portable-fan-review.html",
+    tags: ["sentiment-positive", "platform-news", "theme-instachill", "theme-pricing"]
+  },
+  { id: "n5", platform: "news", platformLabel: "Prevention", sentiment: "pos", date: "2026-03-13",
+    title: "I Tried Shark's New ChillPill Cooling Device: Here's My Honest Review", reach: 6516316,
+    snippet: "I've always had issues with getting overheated, even as a kid, but in the last few years, since I've been in the thick of perimenopause, my hot flashes have gotten even worse. The feature that makes this device stand out for me is the InstaChill cooling plate. The brand claims it can cool your skin by 16 degrees in a matter of seconds, and while I haven't done the scientific testing, I used it after a hot pilates class and it helped cool me off quickly.",
+    url: "https://www.prevention.com/fitness/a70678505/shark-chillpill-cooling-fan-review/",
+    tags: ["sentiment-positive", "platform-news", "theme-instachill", "theme-pots"]
+  },
+  { id: "n6", platform: "news", platformLabel: "MSN / Good Housekeeping", sentiment: "pos", date: "2026-04-17",
+    title: "I used Justin Bieber's ChillPill fan during this year's hottest days — here's how it performed", reach: 84147231,
+    snippet: "I knew it would be a hit in the city. But it's clearly thriving in the desert, too — attendees at Coachella have been raving on social media about how much they love the ChillPill. With global superstar Justin Bieber headlining the festival for the first time this year, it makes perfect sense that Shark teamed up with his clothing brand, SKYLRK, to debut a fresh limited-edition colorway: SKYLRK Heat.",
+    url: "https://www.msn.com/en-us/news/technology/i-used-justin-bieber-s-chillpill-fan-during-this-year-s-hottest-days-here-s-how-it-performed/ar-AA218ZwV",
+    tags: ["sentiment-positive", "platform-news", "theme-coachella"]
+  },
+  { id: "n7", platform: "news", platformLabel: "MSN / TechRadar", sentiment: "neu", date: "2026-04-08",
+    title: "Dyson just launched a new compact personal fan that's small enough to wear around your neck", reach: 84147231,
+    snippet: "The Dyson HushJet Mini Cool Fan has arrived just a few weeks after the Shark ChillPill — another compact fan with a rechargeable battery that's designed to be used indoors or on the move. The HushJet Mini Cool Fan lacks these two extra features, but it's both lighter and more affordable. The Shark ChillPill is $149.99 / £129.99, whereas the Dyson HushJet Mini Cool Fan is $99 / £99.99.",
+    url: "https://www.msn.com/en-us/lifestyle/shopping/dyson-just-launched-a-new-compact-personal-fan-that-s-small-enough-to-wear-around-your-neck/ar-AA20sToe",
+    tags: ["sentiment-neutral", "platform-news", "theme-dyson", "theme-pricing"]
+  },
+
+  // TikTok / Instagram — viral creator content
+  { id: "t1", platform: "tiktok", platformLabel: "TikTok", sentiment: "pos", date: "2026-03-11",
+    title: "ChillPill launch teaser",
+    snippet: "Finalllllllly, a way to chill the °F out. ChillPill, the 3-1 personal cooling device is finally here. #SharkChillPill #Portablefan #Handheldfan #Mistingfan",
+    url: "https://www.tiktok.com/@/video/7615998069972225311",
+    engagement: 27887,
+    tags: ["sentiment-positive", "platform-tiktok", "theme-launch"]
+  },
+  { id: "t2", platform: "tiktok", platformLabel: "TikTok · Costco creator", sentiment: "pos", date: "2026-04-04",
+    title: "Costco haul featuring Shark ChillPill",
+    snippet: "Summer is perfect and this is for the girlies that run hot!!! @Shark Home #costcofinds #costcodeals #sharkhome #sharkchillpill #portablefan",
+    url: "https://www.tiktok.com/@/video/7624968301071928606",
+    engagement: 19690,
+    tags: ["sentiment-positive", "platform-tiktok", "theme-costco"]
+  },
+  { id: "t3", platform: "tiktok", platformLabel: "TikTok · health creator", sentiment: "pos", date: "2026-03-18",
+    title: "ChillPill for migraines & overheating",
+    snippet: "shark literally just made the hottest way to cool down!!! this shark chillpill is gonna be perfect for beating the heat in the summer… i'll be using this to cool off when i get overheated from migraines. seriously so many uses for this!",
+    url: "https://www.tiktok.com/@/video/7618710302405823757",
+    engagement: 16012,
+    tags: ["sentiment-positive", "platform-tiktok", "theme-pots"]
+  },
+  { id: "ig1", platform: "instagram", platformLabel: "Instagram · @sharkhome", sentiment: "pos", date: "2026-04-17",
+    title: "ASMR 5am morning routine ft. ChillPill",
+    snippet: "asmr 5 am morning ft. sharkhome ChillPill #SharkPartner The Shark Chill Pill is an everyday portable cooling essential that delivers an instant, refreshing cooling wherever you go.",
+    url: "https://www.instagram.com/reel/DXPpZ_JDA3_/",
+    engagement: 17528,
+    tags: ["sentiment-positive", "platform-instagram"]
+  },
+  { id: "ig2", platform: "instagram", platformLabel: "Instagram · @sharkhome", sentiment: "pos", date: "2026-03-11",
+    title: "ChillPill launch reel",
+    snippet: "Finalllllllly, a way to chill the °F out. ChillPill, the 3-1 personal cooling device is finally here. #SharkChillPill",
+    url: "https://www.instagram.com/reel/DVvzNwPjcI0/",
+    engagement: 6581,
+    tags: ["sentiment-positive", "platform-instagram", "theme-launch"]
+  },
+  { id: "ig3", platform: "instagram", platformLabel: "Instagram · Coachella", sentiment: "pos", date: "2026-04-13",
+    title: "Skylrk x Shark Chill Pill — Coachella activation",
+    snippet: "Let's play CHILL OR NO CHILL w/ sharkninja & skylrk's Chill Pill #sharkninja #skylrk #chillpill #festival",
+    url: "https://www.instagram.com/reel/DXFqS8ugWL4/",
+    engagement: 369,
+    tags: ["sentiment-positive", "platform-instagram", "theme-coachella"]
+  }
+];
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+/* ---- Volume chart (SVG) ---- */
+(function renderVolume() {
+  const container = document.getElementById("volumeChart");
+  const W = 900, H = 280, padL = 40, padR = 12, padT = 16, padB = 36;
+  const maxVal = Math.max(...VOLUME.map(v => v[1]));
+  const barW = (W - padL - padR) / VOLUME.length - 4;
+  const yScale = (v) => padT + (H - padT - padB) * (1 - v / maxVal);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Weekly mention volume">`;
+  // grid lines
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (H - padT - padB) * i / 4;
+    const val = Math.round(maxVal * (1 - i / 4));
+    svg += `<line class="grid-line" x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}"/>`;
+    svg += `<text class="axis-label" x="${padL - 8}" y="${y + 3}" text-anchor="end">${val}</text>`;
+  }
+  // bars
+  VOLUME.forEach(([date, val], i) => {
+    const x = padL + i * ((W - padL - padR) / VOLUME.length) + 2;
+    const y = yScale(val);
+    const h = (H - padT - padB) - (y - padT);
+    const isLaunch = date === "2026-03-09";
+    const isCoachella = date === "2026-04-06";
+    const color = val > 200 ? "#60a5fa" : val > 50 ? "#5eead4" : "#3b4566";
+    svg += `<rect class="bar" data-week="${date}" data-count="${val}" x="${x}" y="${y}" width="${barW}" height="${h}" fill="${color}" rx="2"/>`;
+    // labels for spike weeks
+    if (isLaunch || isCoachella || val > 400) {
+      svg += `<text class="axis-label" x="${x + barW / 2}" y="${y - 4}" text-anchor="middle" fill="${color}">${val}</text>`;
+    }
+  });
+  // X axis labels (every 3rd)
+  VOLUME.forEach(([date, val], i) => {
+    if (i % 3 !== 0 && i !== VOLUME.length - 1) return;
+    const x = padL + i * ((W - padL - padR) / VOLUME.length) + 2 + barW / 2;
+    const d = new Date(date);
+    const lbl = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    svg += `<text class="axis-label" x="${x}" y="${H - padB + 16}" text-anchor="middle">${lbl}</text>`;
+  });
+  // launch annotation
+  const launchIdx = VOLUME.findIndex(v => v[0] === "2026-03-09");
+  const lx = padL + launchIdx * ((W - padL - padR) / VOLUME.length) + 2 + barW / 2;
+  svg += `<line x1="${lx}" x2="${lx}" y1="${padT}" y2="${H - padB}" stroke="#60a5fa" stroke-dasharray="3,3" stroke-width="1" opacity="0.4"/>`;
+  svg += `<text class="axis-label" x="${lx + 6}" y="${padT + 12}" fill="#60a5fa">Mar 10 launch</text>`;
+
+  svg += `</svg>`;
+  container.innerHTML = svg;
+
+  container.querySelectorAll(".bar").forEach(bar => {
+    bar.addEventListener("click", () => {
+      const week = bar.getAttribute("data-week");
+      const count = bar.getAttribute("data-count");
+      openDrawerForWeek(week, count);
+    });
+  });
+})();
+
+/* ---- Sentiment donut ---- */
+(function renderDonut() {
+  const segs = [
+    { label: "Positive", count: 1354, color: "var(--pos)", filter: "sentiment-positive" },
+    { label: "Neutral", count: 1123, color: "var(--neu)", filter: "sentiment-neutral" },
+    { label: "Negative", count: 71, color: "var(--neg)", filter: "sentiment-negative" }
+  ];
+  const total = segs.reduce((s, x) => s + x.count, 0);
+  let cumulative = 0;
+  const C = 15.915494;
+  let svgInner = `<circle cx="21" cy="21" r="${C}" fill="transparent" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>`;
+  segs.forEach(seg => {
+    const pct = (seg.count / total) * 100;
+    svgInner += `<circle class="donut-segment" data-filter="${seg.filter}" cx="21" cy="21" r="${C}" fill="transparent" stroke="${seg.color}" stroke-width="6" stroke-dasharray="${pct} ${100 - pct}" stroke-dashoffset="${100 - cumulative + 25}" transform="rotate(-90 21 21)"/>`;
+    cumulative += pct;
+  });
+  // center label
+  svgInner += `<text x="21" y="20" text-anchor="middle" font-family="Bricolage Grotesque" font-size="6" font-weight="600" fill="#f4f6fb">2,591</text>`;
+  svgInner += `<text x="21" y="26" text-anchor="middle" font-family="Manrope" font-size="2.5" fill="#7a8499" letter-spacing="0.1">MENTIONS</text>`;
+  document.getElementById("sentimentDonut").innerHTML = svgInner;
+})();
+
+/* ---- Emotion bars ---- */
+(function renderEmotions() {
+  const max = Math.max(...EMOTIONS.map(e => e.count));
+  const html = EMOTIONS.map(e => `
+    <div class="hbar" data-filter="emotion-${e.name.toLowerCase()}">
+      <div class="hbar-label">${e.name}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width: ${(e.count / max) * 100}%; background: ${e.color};"></div></div>
+      <div class="hbar-count">${e.count}</div>
+    </div>
+  `).join("");
+  document.getElementById("emotionList").innerHTML = html;
+})();
+
+/* ---- Platform bars ---- */
+(function renderPlatforms() {
+  const max = Math.max(...PLATFORMS.map(p => p.count));
+  const html = PLATFORMS.map(p => `
+    <div class="hbar" data-filter="platform-${p.key}">
+      <div class="hbar-label">${p.label}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width: ${(p.count / max) * 100}%;"></div></div>
+      <div class="hbar-count">${p.count.toLocaleString()}</div>
+    </div>
+  `).join("");
+  document.getElementById("platformList").innerHTML = html;
+})();
+
+/* ---- Audiences ---- */
+(function renderAudiences() {
+  const html = AUDIENCES.map(a => `
+    <div class="theme-card" data-filter="audience-${a.title.toLowerCase().replace(/[^a-z]/g, '')}">
+      <div class="theme-card-title">${a.title}</div>
+      <div class="theme-card-stat">${a.desc} · <span style="color:var(--ink-2);">${a.count}</span></div>
+      <span class="theme-card-tag ${a.tagClass}">${a.tag}</span>
+    </div>
+  `).join("");
+  document.getElementById("audienceGrid").innerHTML = html;
+})();
+
+/* ---- Subreddits ---- */
+(function renderSubreddits() {
+  const max = Math.max(...SUBREDDITS.map(s => s.count));
+  const html = SUBREDDITS.map(s => `
+    <div class="hbar reddit" data-filter="subreddit-${s.name.replace(/^r\//, '')}">
+      <div class="hbar-label">${s.name}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width: ${(s.count / max) * 100}%;"></div></div>
+      <div class="hbar-count">${s.count}</div>
+    </div>
+  `).join("");
+  document.getElementById("subredditList").innerHTML = html;
+})();
+
+/* ---- Reddit themes (cards) ---- */
+(function renderRedditThemes() {
+  const html = REDDIT_THEMES.map(t => `
+    <div style="padding: 12px; background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer;" data-filter="reddit-theme">
+      <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--ink);">${t.title}</div>
+      <div style="font-size: 12px; color: var(--ink-3); line-height: 1.5;">${t.desc}</div>
+    </div>
+  `).join("");
+  document.getElementById("redditThemes").innerHTML = html;
+})();
+
+/* ---- Hashtag cloud ---- */
+(function renderHashtags() {
+  const html = HASHTAGS.map(t => `
+    <div class="tag ${t.size ? 'size-' + t.size : ''}" data-filter="hashtag-${t.tag}">
+      #${t.tag}<span class="count">${t.count}</span>
+    </div>
+  `).join("");
+  document.getElementById("tagCloud").innerHTML = html;
+})();
+
+/* ---- Geo ---- */
+(function renderGeo() {
+  const max = Math.max(...GEO.map(g => g.count));
+  const html = GEO.map(g => `
+    <div class="geo-row" data-filter="geo-${g.code}">
+      <div class="geo-flag">${g.code}</div>
+      <div class="geo-track"><div class="geo-fill" style="width: ${(g.count / max) * 100}%;"></div></div>
+      <div class="geo-count">${g.count}</div>
+    </div>
+  `).join("");
+  document.getElementById("geoList").innerHTML = html;
+})();
+
+/* ---- Themes grid ---- */
+(function renderThemes() {
+  const html = THEMES.map(t => `
+    <div class="theme-card" data-filter="${t.filter}">
+      <div class="theme-card-title">${t.title}</div>
+      <div class="theme-card-stat">~${t.count} mentions</div>
+      <div style="font-size: 12px; color: var(--ink-3); margin: 4px 0 8px; line-height: 1.4;">${t.desc}</div>
+      <span class="theme-card-tag ${t.tagClass}">${t.tag}</span>
+    </div>
+  `).join("");
+  document.getElementById("themeGrid").innerHTML = html;
+})();
+
+/* =========================================================
+   DRAWER LOGIC
+   ========================================================= */
+const drawer = document.getElementById("drawer");
+const backdrop = document.getElementById("backdrop");
+const drawerBody = document.getElementById("drawerBody");
+const drawerEyebrow = document.getElementById("drawerEyebrow");
+const drawerTitle = document.getElementById("drawerTitle");
+const drawerSub = document.getElementById("drawerSub");
+
+document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+backdrop.addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+function closeDrawer() {
+  drawer.classList.remove("open");
+  backdrop.classList.remove("open");
+}
+function openDrawer() {
+  drawer.classList.add("open");
+  backdrop.classList.add("open");
+}
+
+function renderMentionList(mentions, eyebrow, title, sub) {
+  drawerEyebrow.textContent = eyebrow;
+  drawerTitle.textContent = title;
+  drawerSub.textContent = sub;
+
+  if (!mentions.length) {
+    drawerBody.innerHTML = `<div class="empty">
+      <div style="font-family: 'Bricolage Grotesque'; font-size: 22px; margin-bottom: 8px;">No sample mentions in cache</div>
+      <div style="font-size: 13px;">In live Meltwater, this would surface all matching mentions for this filter. The dashboard ships with a curated subset of high-engagement examples.</div>
+    </div>`;
+    openDrawer();
+    return;
+  }
+
+  const html = mentions.map(m => {
+    const sentLabel = m.sentiment === "pos" ? "Positive" : m.sentiment === "neg" ? "Negative" : "Neutral";
+    const platformClass = m.platform === "reddit" ? "reddit"
+                        : m.platform === "tiktok" ? "tiktok"
+                        : m.platform === "instagram" ? "instagram"
+                        : "news";
+    const reachStr = m.reach ? `${(m.reach >= 1e6 ? (m.reach/1e6).toFixed(1)+'M' : Math.round(m.reach/1000)+'K')} reach` : '';
+    const engStr = m.engagement ? `${m.engagement.toLocaleString()} engagements` : '';
+    const meta = [reachStr, engStr].filter(Boolean).join(' · ');
+    return `
+      <div class="mention">
+        <div class="mention-head">
+          <span class="mention-platform ${platformClass}">${m.platformLabel}</span>
+          <span class="mention-sentiment ${m.sentiment}"></span>
+          <span>${sentLabel}</span>
+          <span style="margin-left: auto;">${m.date}</span>
+        </div>
+        <div class="mention-title">${m.title}</div>
+        <div class="mention-snippet">${m.snippet}</div>
+        <div class="mention-meta">
+          ${meta ? `<span>${meta}</span>` : ''}
+          ${m.url ? `<a href="${m.url}" target="_blank" rel="noopener">Open original ↗</a>` : ''}
+        </div>
+      </div>
+    `;
+  }).join("");
+  drawerBody.innerHTML = html;
+  openDrawer();
+}
+
+function openDrawerForFilter(filter) {
+  const matched = MENTIONS.filter(m => m.tags.includes(filter));
+  // Build human-readable labels
+  const labelMap = {
+    "sentiment-positive": ["Sentiment", "Positive mentions", "1,354 mentions · sample shown"],
+    "sentiment-neutral": ["Sentiment", "Neutral mentions", "1,123 mentions · sample shown"],
+    "sentiment-negative": ["Sentiment", "Negative mentions", "71 mentions · sample shown"],
+    "platform-reddit": ["Platform", "Reddit mentions", "233 mentions · sample shown"],
+    "platform-news": ["Platform", "Online News coverage", "959 mentions · sample shown"],
+    "platform-tiktok": ["Platform", "TikTok content", "328 mentions · sample shown"],
+    "platform-instagram": ["Platform", "Instagram content", "222 mentions · sample shown"],
+    "theme-launch": ["Theme", "Launch & buzz", "March 10 launch coverage"],
+    "theme-pricing": ["Theme", "Pricing pushback", "$150 price tag debate"],
+    "theme-instachill": ["Theme", "InstaChill cooling plate", "Differentiator narrative"],
+    "theme-coachella": ["Theme", "Coachella x Justin Bieber", "SKYLRK partnership activation"],
+    "theme-dyson": ["Theme", "Dyson HushJet rivalry", "Direct competitor comparison"],
+    "theme-pots": ["Theme", "POTS / chronic illness", "Authentic health-condition use cases"],
+    "theme-costco": ["Theme", "Costco distribution", "Costco-finds creator buzz"],
+    "theme-color": ["Theme", "Color & aesthetic", "7 colorway shareability"]
+  };
+  const meta = labelMap[filter] || ["Filter", filter, ""];
+  renderMentionList(matched, meta[0], meta[1], meta[2]);
+}
+
+function openDrawerForWeek(week, count) {
+  const d = new Date(week);
+  const wkLabel = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  // Match mentions whose date falls in that week
+  const weekStart = new Date(week);
+  const weekEnd = new Date(week);
+  weekEnd.setDate(weekEnd.getDate() + 7);
+  const matched = MENTIONS.filter(m => {
+    const md = new Date(m.date);
+    return md >= weekStart && md < weekEnd;
+  });
+  renderMentionList(matched, `Week of ${wkLabel}`, `${count} mentions this week`, "Click any post below to read original");
+}
+
+// Wire up all clickables
+document.querySelectorAll("[data-filter]").forEach(el => {
+  el.addEventListener("click", e => {
+    e.stopPropagation();
+    const filter = el.getAttribute("data-filter");
+    if (filter) openDrawerForFilter(filter);
+  });
+});
+
+// Donut segments need their own listener since they're rendered after
+document.querySelectorAll(".donut-segment").forEach(el => {
+  el.addEventListener("click", e => {
+    e.stopPropagation();
+    const filter = el.getAttribute("data-filter");
+    if (filter) openDrawerForFilter(filter);
+  });
+});
+</script>
+</body>
+</html>
