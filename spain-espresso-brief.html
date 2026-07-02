@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SharkNinja Espresso · Spain 90-Day Viral Brief · Meltwater</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #000;
+    background: #fff;
+    line-height: 1.5;
+    font-size: 14px;
+  }
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    background: #fff;
+  }
+
+  /* Header */
+  .hdr {
+    background: #28BBBB;
+    color: #fff;
+    padding: 32px 40px 28px 40px;
+  }
+  .hdr-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .hdr-brand { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9; }
+  .hdr-pill {
+    display: inline-block;
+    background: #fff;
+    color: #28BBBB;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .hdr h1 { font-size: 30px; font-weight: 900; margin-bottom: 6px; line-height: 1.15; }
+  .hdr-sub { font-size: 14px; opacity: 0.95; font-weight: 600; }
+  .hdr-meta {
+    margin-top: 16px;
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    opacity: 0.95;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    padding-top: 14px;
+  }
+  .hdr-meta b { font-weight: 800; }
+
+  /* Pulse */
+  .pulse {
+    background: #B627A1;
+    color: #fff;
+    padding: 18px 40px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .pulse b { font-weight: 800; }
+
+  /* KPI cards */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    padding: 24px 40px;
+    background: #fff;
+  }
+  .kpi {
+    border: 1px solid #C4F4F4;
+    border-left: 4px solid #28BBBB;
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: #fff;
+  }
+  .kpi-label { font-size: 10px; font-weight: 700; color: #4C4D4F; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .kpi-val { font-size: 22px; font-weight: 900; color: #000; line-height: 1.1; }
+  .kpi-sub { font-size: 11px; color: #4C4D4F; margin-top: 4px; }
+
+  /* Section */
+  .section { padding: 0 40px; margin-bottom: 26px; }
+  .sec-hdr {
+    background: #28BBBB;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sec-num { font-size: 11px; font-weight: 800; letter-spacing: 1px; opacity: 0.85; }
+  .sec-ttl { font-size: 16px; font-weight: 800; }
+  .sec-body {
+    border: 1px solid #EAEAEA;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 20px;
+    background: #fff;
+  }
+
+  /* Bullets / lists */
+  .bullets { display: flex; flex-direction: column; gap: 12px; }
+  .bullet { display: flex; gap: 12px; align-items: flex-start; }
+  .bullet-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #28BBBB;
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bullet-num.peak { background: #FFCC01; color: #000; }
+  .bullet-num.hot { background: #FF6221; color: #fff; }
+  .bullet-num.viral { background: #B627A1; color: #fff; }
+  .bullet-txt { flex: 1; font-size: 13.5px; color: #000; line-height: 1.55; }
+  .bullet-txt b { font-weight: 800; }
+
+  /* Two-col grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    align-items: stretch;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    align-items: stretch;
+  }
+  .card-mini {
+    border: 1px solid #EAEAEA;
+    border-radius: 10px;
+    padding: 14px;
+    background: #fff;
+  }
+  .card-mini-hdr { font-size: 12px; font-weight: 800; color: #28BBBB; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .card-mini-body { font-size: 13px; color: #000; line-height: 1.5; }
+  .card-mini-body b { font-weight: 800; }
+  .card-mini.viral { border-left: 4px solid #B627A1; }
+  .card-mini.hot { border-left: 4px solid #FF6221; }
+  .card-mini.peak { border-left: 4px solid #FFCC01; }
+  .card-mini.steady { border-left: 4px solid #28BBBB; }
+
+  /* Viral post cards */
+  .post-card {
+    border: 1px solid #EAEAEA;
+    border-radius: 10px;
+    padding: 14px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .plat-badge {
+    display: inline-block;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .pt-tw { background: #1DA1F2; }
+  .pt-ig { background: #C13584; }
+  .pt-tt { background: #000000; }
+  .pt-yt { background: #FF0000; }
+  .pt-rd { background: #FF4500; }
+  .pt-nw { background: #4C4D4F; }
+  .post-date { font-size: 11px; color: #4C4D4F; }
+  .post-author { font-size: 12px; font-weight: 700; color: #28BBBB; margin-bottom: 6px; }
+  .post-preview { font-size: 12.5px; color: #000; margin-bottom: 10px; line-height: 1.45; }
+  .eng-bar-wrap { background: #EAEAEA; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+  .eng-bar-fill { height: 100%; background: linear-gradient(to right, #B627A1, #28BBBB); }
+  .metrics-row { display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px; color: #4C4D4F; margin-bottom: 8px; }
+  .metrics-row span { white-space: nowrap; }
+  .spread-note { font-size: 11.5px; color: #000; background: #C4F4F4; padding: 7px 10px; border-radius: 6px; line-height: 1.4; margin-top: auto; }
+  .spread-note b { font-weight: 800; color: #28BBBB; }
+
+  /* Leaderboard table */
+  .lb-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .lb-table th { background: #C4F4F4; color: #000; font-weight: 800; padding: 10px 12px; text-align: left; border-bottom: 2px solid #28BBBB; }
+  .lb-table td { padding: 10px 12px; border-bottom: 1px solid #EAEAEA; vertical-align: middle; }
+  .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-weight: 800; font-size: 11px; color: #fff; }
+  .r1 { background: #FFCC01; color: #000; }
+  .r2 { background: #28BBBB; }
+  .r3 { background: #B627A1; }
+  .r-other { background: #4C4D4F; color: #fff; }
+  .topic-lbl { font-weight: 700; }
+  .vol-bar-wrap { background: #EAEAEA; width: 100%; height: 8px; border-radius: 4px; overflow: hidden; }
+  .vol-bar-fill { height: 100%; background: #28BBBB; }
+  .mom-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+  .mom-fire { background: #B627A1; color: #fff; }
+  .mom-peak { background: #FFCC01; color: #000; }
+  .mom-steady { background: #28BBBB; color: #fff; }
+  .mom-hot { background: #FF6221; color: #fff; }
+
+  /* Audience segments */
+  .seg-card {
+    border: 1px solid #EAEAEA;
+    border-left: 4px solid #28BBBB;
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: #fff;
+  }
+  .seg-card.a { border-left-color: #B627A1; }
+  .seg-card.b { border-left-color: #FF6221; }
+  .seg-card.c { border-left-color: #FFCC01; }
+  .seg-card.d { border-left-color: #28BBBB; }
+  .seg-name { font-size: 14px; font-weight: 800; color: #000; margin-bottom: 4px; }
+  .seg-size { font-size: 11px; font-weight: 700; color: #4C4D4F; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .seg-desc { font-size: 12.5px; color: #000; line-height: 1.5; margin-bottom: 8px; }
+  .seg-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .seg-tag { font-size: 10px; font-weight: 700; background: #C4F4F4; color: #000; padding: 3px 8px; border-radius: 4px; }
+  .seg-creators { font-size: 11px; color: #4C4D4F; margin-top: 8px; font-style: italic; }
+  .seg-creators b { font-weight: 800; color: #28BBBB; font-style: normal; }
+
+  /* Playbook timeline */
+  .playbook { display: flex; flex-direction: column; gap: 14px; }
+  .play-phase {
+    border: 1px solid #EAEAEA;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .play-hdr {
+    padding: 10px 16px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .play-hdr.p1 { background: #28BBBB; }
+  .play-hdr.p2 { background: #B627A1; }
+  .play-hdr.p3 { background: #FF6221; }
+  .play-phase-name { font-size: 14px; font-weight: 800; }
+  .play-days { font-size: 11px; font-weight: 700; opacity: 0.9; }
+  .play-body { padding: 16px; background: #fff; }
+  .play-actions { display: flex; flex-direction: column; gap: 8px; }
+  .play-action { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: #000; }
+  .play-check { flex-shrink: 0; width: 18px; height: 18px; border-radius: 4px; background: #C4F4F4; color: #28BBBB; font-weight: 800; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .play-action b { font-weight: 800; }
+
+  /* Chart wrap */
+  .chart-wrap {
+    border: 1px solid #EAEAEA;
+    border-radius: 10px;
+    padding: 16px 12px 12px 12px;
+    background: #fff;
+  }
+  .chart-caption { font-size: 12px; color: #4C4D4F; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EAEAEA; line-height: 1.55; }
+  .chart-caption b { color: #B627A1; font-weight: 800; }
+
+  /* Competitive */
+  .comp-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 1fr;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid #EAEAEA;
+    font-size: 13px;
+    align-items: center;
+  }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-name { font-weight: 800; color: #000; }
+  .comp-name .comp-flag { display: inline-block; font-size: 10px; font-weight: 700; color: #fff; padding: 2px 6px; border-radius: 3px; background: #4C4D4F; margin-left: 6px; vertical-align: middle; }
+  .comp-name .comp-flag.threat { background: #FF6221; }
+  .comp-name .comp-flag.weak { background: #28BBBB; }
+  .comp-name .comp-flag.exit { background: #B627A1; }
+
+  /* Footer */
+  .footer {
+    background: #28BBBB;
+    color: #fff;
+    padding: 22px 40px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  .footer-ttl { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+  .footer-sub { font-size: 11.5px; opacity: 0.92; }
+
+  /* Small helpers */
+  .stat-inline { font-weight: 800; color: #B627A1; }
+  .stat-inline.teal { color: #28BBBB; }
+  .stat-inline.orange { color: #FF6221; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-top">
+      <div class="hdr-brand">Meltwater · Media Intelligence Brief</div>
+      <span class="hdr-pill">90-Day Viral Strategy</span>
+    </div>
+    <h1>SharkNinja Espresso · Spain Market Entry</h1>
+    <div class="hdr-sub">Sizing the conversation, mapping the audiences, and identifying the use cases that win in 90 days.</div>
+    <div class="hdr-meta">
+      <span><b>Topic:</b> Espresso / cafetera category in Spain</span>
+      <span><b>Window:</b> 1 Mar – 30 Apr 2026 (60 days)</span>
+      <span><b>Channels:</b> News, Twitter/X, Instagram, TikTok, YouTube, Reddit</span>
+    </div>
+  </div>
+
+  <!-- PULSE -->
+  <div class="pulse">
+    Spain is a <b>high-intent, high-frequency</b> coffee market — 67M cups consumed daily, 66% at home — with specialty coffee growing <b>+83% in 2 years</b> and prices up <b>+15.9%</b>, driving consumers to upgrade their home setup. Costa Coffee just exited, Lidl just launched its own espresso machine, and KRUPS owns the giveaway playbook. The white space is clear: <b>own the cultural ritual</b> (café con hielo, cortado, espresso martini) — not the spec sheet.
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-label">Category Conversation</div>
+      <div class="kpi-val">7,027</div>
+      <div class="kpi-sub">cafetera espresso mentions · 60 days · Spain</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Top Platform</div>
+      <div class="kpi-val">Twitter/X</div>
+      <div class="kpi-sub">Instagram leads engagement per post</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Most Viral Post</div>
+      <div class="kpi-val">10,295</div>
+      <div class="kpi-sub">engagements · "café con hielo" cultural reel</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Peak Day</div>
+      <div class="kpi-val">28 Apr</div>
+      <div class="kpi-sub">686 mentions · Madrid Open + media buzz</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: VIRAL PULSE -->
+  <div class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">SECTION 01</span>
+      <span class="sec-ttl">The Viral Pulse · What's Driving Engagement Right Now</span>
+    </div>
+    <div class="sec-body">
+      <div class="bullets">
+        <div class="bullet">
+          <div class="bullet-num viral">1</div>
+          <div class="bullet-txt"><b>Cultural identity content outperforms product content 5–10x.</b> The single highest-engagement post in our dataset is a Reel by @alvarolinaresc (110k reach, <b>10,295 engagements</b>) explaining the Spanish café con hielo ritual to a global audience. Content that frames coffee as a Spanish cultural artifact — not a brewing technique — is the breakout format.</div>
+        </div>
+        <div class="bullet">
+          <div class="bullet-num hot">2</div>
+          <div class="bullet-txt"><b>Instagram is winning per-post engagement; Twitter/X wins volume.</b> Twitter holds the largest share of category mentions in Spain, but Instagram Reels and giveaways (sorteos) are generating 5x higher engagement per post. <b>Lead with Instagram and TikTok for paid + creator; use X for trend amplification only.</b></div>
+        </div>
+        <div class="bullet">
+          <div class="bullet-num peak">3</div>
+          <div class="bullet-txt"><b>Giveaways are the proven engagement engine — and KRUPS owns this lane.</b> KRUPS Spain ran two viral sorteos in this window (Cafetera Intuition + Biscoff cookies, then Virtuoso+ in April), each pulling 1.9k–5.8k engagements on a single post. SharkNinja must run an equivalent program <b>but with a culturally-loaded twist</b> — pairing the espresso maker with a Spanish lifestyle anchor (Madrid Open tickets, a tardeo for two, a Sevilla coffee tour).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: TRENDING TOPICS LEADERBOARD -->
+  <div class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">SECTION 02</span>
+      <span class="sec-ttl">Trending Topic Leaderboard · Where the Conversation is Going</span>
+    </div>
+    <div class="sec-body">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">Rank</th>
+            <th>Topic Cluster</th>
+            <th style="width:150px;">Where it lives</th>
+            <th style="width:140px;">Share of voice</th>
+            <th style="width:130px;">Momentum</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-badge r1">1</span></td>
+            <td><span class="topic-lbl">Café con hielo / Spanish coffee identity</span></td>
+            <td>
+              <span class="plat-badge pt-ig" style="margin-right:4px;">IG</span>
+              <span class="plat-badge pt-tt">TT</span>
+            </td>
+            <td><div class="vol-bar-wrap"><div class="vol-bar-fill" style="width:96%; background:#B627A1;"></div></div></td>
+            <td><span class="mom-badge mom-fire">🔥 Rising</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge r2">2</span></td>
+            <td><span class="topic-lbl">Specialty coffee at home (home barista)</span></td>
+            <td>
+              <span class="plat-badge pt-ig" style="margin-right:4px;">IG</span>
+              <span class="plat-badge pt-yt">YT</span>
+            </td>
+            <td><div class="vol-bar-wrap"><div class="vol-bar-fill" style="width:84%;"></div></div></td>
+            <td><span class="mom-badge mom-fire">🔥 Rising</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge r3">3</span></td>
+            <td><span class="topic-lbl">Cold coffee / cold brew / iced espresso</span></td>
+            <td>
+              <span class="plat-badge pt-ig" style="margin-right:4px;">IG</span>
+              <span class="plat-badge pt-tt">TT</span>
+            </td>
+            <td><div class="vol-bar-wrap"><div class="vol-bar-fill" style="width:71%;"></div></div></td>
+            <td><span class="mom-badge mom-hot">↑ Seasonal Peak</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge r-other">4</span></td>
+            <td><span class="topic-lbl">Espresso martini / coffee cocktails</span></td>
+            <td>
+              <span class="plat-badge pt-tw" style="margin-right:4px;">X</span>
+              <span class="plat-badge pt-ig">IG</span>
+            </td>
+            <td><div class="vol-bar-wrap"><div class="vol-bar-fill" style="width:58%;"></div></div></td>
+            <td><span class="mom-badge mom-fire">🔥 Rising</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge r-other">5</span></td>
+            <td><span class="topic-lbl">Brand giveaways (sorteos)</span></td>
+            <td>
+              <span class="plat-badge pt-ig">IG</span>
+            </td>
+            <td><div class="vol-bar-wrap"><div class="vol-bar-fill" style="width:52%;"></div></div></td>
+            <td><span class="mom-badge mom-peak">⭐ Peaking</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge r-other">6</span></td>
+            <td><span class="topic-lbl">Tardeo / brunch / café-as-third-space</span></td>
+            <td>
+              <span class="plat-badge pt-ig" style="margin-right:4px;">IG</span>
+              <span class="plat-badge pt-nw">News</span>
+            </td>
+            <td><div class="vol-bar-wrap"><div class="vol-bar-fill" style="width:46%;"></div></div></td>
+            <td><span class="mom-badge mom-steady">~ Steady</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge r-other">7</span></td>
+            <td><span class="topic-lbl">Cortado / Madrid Open tennis tie-in (Lavazza)</span></td>
+            <td>
+              <span class="plat-badge pt-ig">IG</span>
+            </td>
+            <td><div class="vol-bar-wrap"><div class="vol-bar-fill" style="width:38%;"></div></div></td>
+            <td><span class="mom-badge mom-hot">↑ Event-driven</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge r-other">8</span></td>
+            <td><span class="topic-lbl">Pistacho-flavored coffee drinks</span></td>
+            <td>
+              <span class="plat-badge pt-ig" style="margin-right:4px;">IG</span>
+              <span class="plat-badge pt-tt">TT</span>
+            </td>
+            <td><div class="vol-bar-wrap"><div class="vol-bar-fill" style="width:33%;"></div></div></td>
+            <td><span class="mom-badge mom-fire">🔥 Rising</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 3: TOP VIRAL POSTS -->
+  <div class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">SECTION 03</span>
+      <span class="sec-ttl">Top Viral Posts · The Format Patterns That Win</span>
+    </div>
+    <div class="sec-body">
+      <div class="grid-2">
+
+        <div class="post-card">
+          <div class="post-header">
+            <span class="plat-badge pt-ig">Instagram</span>
+            <span class="post-date">17 Apr 2026</span>
+          </div>
+          <div class="post-author">@alvarolinaresc · Álvaro Linares</div>
+          <div class="post-preview">"You don't order iced coffee in Spain 🇪🇸 You order a café con hielo: espresso, ice, nothing else. Simple. Strong. Built for the sun."</div>
+          <div class="eng-bar-wrap"><div class="eng-bar-fill" style="width:100%;"></div></div>
+          <div class="metrics-row">
+            <span>❤️ 10,205</span><span>👁 16,573</span><span>↗ 110,491</span>
+          </div>
+          <div class="spread-note"><b>Why it spread:</b> Frames a mundane Spanish ritual as cultural identity for a global audience. The "education" angle on a familiar product made locals proud and outsiders curious. Format: text overlay on simple visual, no production cost.</div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <span class="plat-badge pt-ig">Instagram</span>
+            <span class="post-date">3 Mar 2026</span>
+          </div>
+          <div class="post-author">@krups_es · KRUPS España</div>
+          <div class="post-preview">SORTEO #DulceIntuición — Cafetera superautomática Intuition Experience + lote Biscoff. 2 ganadores. Comenta + menciona.</div>
+          <div class="eng-bar-wrap"><div class="eng-bar-fill" style="width:57%;"></div></div>
+          <div class="metrics-row">
+            <span>❤️ 1,562</span><span>👁 7,361</span><span>↗ 49,074</span>
+          </div>
+          <div class="spread-note"><b>Why it spread:</b> Cross-brand giveaway with Biscoff (cookies) created shared audience capture. Mention-a-friend mechanic doubled organic reach. Template now repeated by KRUPS quarterly.</div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <span class="plat-badge pt-tw">Twitter/X</span>
+            <span class="post-date">16 Apr 2026</span>
+          </div>
+          <div class="post-author">@mialteredu · Mi Alter Edu</div>
+          <div class="post-preview">"⚠️ ¡NO PIDAS EL ESPRESSO MARTINI! Sin pensar en 3 deseos… Café, licor, vodka, doble colado y tres granos con historia."</div>
+          <div class="eng-bar-wrap"><div class="eng-bar-fill" style="width:17%;"></div></div>
+          <div class="metrics-row">
+            <span>❤️ 1,709</span><span>🔁 41</span><span>👁 13,100</span>
+          </div>
+          <div class="spread-note"><b>Why it spread:</b> Espresso martini cocktail trend is rising in Spanish nightlife/foodie content. Bartender-led recipe content travels well on X and IG Reels.</div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <span class="plat-badge pt-ig">Instagram</span>
+            <span class="post-date">1 Apr 2026</span>
+          </div>
+          <div class="post-author">@dorigencoffee + @runnea</div>
+          <div class="post-preview">SORTEO RUNNEA × D·ORIGEN — New Balance Rebel V5 + 1kg Serra Gelada espresso + 250g Etiopía filtro + cold brew "CHUTE"</div>
+          <div class="eng-bar-wrap"><div class="eng-bar-fill" style="width:23%;"></div></div>
+          <div class="metrics-row">
+            <span>❤️ 515</span><span>👁 6,351</span><span>↗ 42,346</span>
+          </div>
+          <div class="spread-note"><b>Why it spread:</b> Cross-category brand collab (running × specialty coffee) unlocked a high-intent lifestyle audience. The "morning ritual" frame (café + run) is repeatable for SharkNinja.</div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <span class="plat-badge pt-ig">Instagram</span>
+            <span class="post-date">14 Apr 2026</span>
+          </div>
+          <div class="post-author">@krups_es · KRUPS España (round 2)</div>
+          <div class="post-preview">SORTEO #CombinacionesVirtuosas — Cafetera espresso KRUPS Virtuoso+. "Domina el arte del café en casa."</div>
+          <div class="eng-bar-wrap"><div class="eng-bar-fill" style="width:18%;"></div></div>
+          <div class="metrics-row">
+            <span>❤️ 653</span><span>👁 7,574</span><span>↗ 50,499</span>
+          </div>
+          <div class="spread-note"><b>Why it spread:</b> Repeat use of giveaway template — proves cadence and consistency matter as much as creative. KRUPS runs sorteos monthly to stay top-of-feed.</div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <span class="plat-badge pt-ig">Instagram</span>
+            <span class="post-date">24 Apr 2026</span>
+          </div>
+          <div class="post-author">@lavazzaofficial · Lavazza</div>
+          <div class="post-preview">"Who doesn't want to feel like they're in Madrid? 🇪🇸 Create that courtside feeling at home with this cortado recipe. #MMOpen 40ml espresso + 40ml steamed milk."</div>
+          <div class="eng-bar-wrap"><div class="eng-bar-fill" style="width:5%;"></div></div>
+          <div class="metrics-row">
+            <span>❤️ 46</span><span>👁 23,989</span><span>↗ 159,928</span>
+          </div>
+          <div class="spread-note"><b>Why it spread:</b> Madrid Open partnership unlocked premium reach. Lavazza nails the "tennis × coffee" cultural moment — a playbook SharkNinja could replicate at La Liga, Roland Garros, or local festivals.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: ENGAGEMENT TREND CHART -->
+  <div class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">SECTION 04</span>
+      <span class="sec-ttl">60-Day Conversation Trend · When Spain Talks Coffee</span>
+    </div>
+    <div class="sec-body">
+      <div class="chart-wrap">
+        <div style="font-size:12px; font-weight:700; color:#4C4D4F; margin-bottom:8px;">Daily mentions of cafetera/espresso · Spain (last 30 days)</div>
+        <svg viewBox="0 0 820 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:Nunito Sans, sans-serif;">
+<line x1="50" y1="25.0" x2="808" y2="25.0" stroke="#EAEAEA" stroke-width="1"/>
+<text x="44" y="29.0" text-anchor="end" font-size="10" fill="#4C4D4F">686</text>
+<line x1="50" y1="56.2" x2="808" y2="56.2" stroke="#EAEAEA" stroke-width="1"/>
+<text x="44" y="60.2" text-anchor="end" font-size="10" fill="#4C4D4F">514</text>
+<line x1="50" y1="87.5" x2="808" y2="87.5" stroke="#EAEAEA" stroke-width="1"/>
+<text x="44" y="91.5" text-anchor="end" font-size="10" fill="#4C4D4F">343</text>
+<line x1="50" y1="118.8" x2="808" y2="118.8" stroke="#EAEAEA" stroke-width="1"/>
+<text x="44" y="122.8" text-anchor="end" font-size="10" fill="#4C4D4F">171</text>
+<line x1="50" y1="150.0" x2="808" y2="150.0" stroke="#EAEAEA" stroke-width="1"/>
+<text x="44" y="154.0" text-anchor="end" font-size="10" fill="#4C4D4F">0</text>
+<rect x="52.0" y="137.1" width="21.3" height="12.9" fill="#28BBBB" rx="2"/>
+<rect x="77.3" y="136.2" width="21.3" height="13.8" fill="#28BBBB" rx="2"/>
+<rect x="102.5" y="140.7" width="21.3" height="9.3" fill="#28BBBB" rx="2"/>
+<rect x="127.8" y="140.0" width="21.3" height="10.0" fill="#28BBBB" rx="2"/>
+<rect x="153.1" y="139.4" width="21.3" height="10.6" fill="#28BBBB" rx="2"/>
+<rect x="178.3" y="139.2" width="21.3" height="10.8" fill="#28BBBB" rx="2"/>
+<rect x="203.6" y="135.8" width="21.3" height="14.2" fill="#28BBBB" rx="2"/>
+<rect x="228.9" y="136.5" width="21.3" height="13.5" fill="#28BBBB" rx="2"/>
+<rect x="254.1" y="134.9" width="21.3" height="15.1" fill="#28BBBB" rx="2"/>
+<rect x="279.4" y="132.5" width="21.3" height="17.5" fill="#28BBBB" rx="2"/>
+<rect x="304.7" y="141.1" width="21.3" height="8.9" fill="#28BBBB" rx="2"/>
+<rect x="329.9" y="139.8" width="21.3" height="10.2" fill="#28BBBB" rx="2"/>
+<rect x="355.2" y="130.5" width="21.3" height="19.5" fill="#28BBBB" rx="2"/>
+<rect x="380.5" y="133.8" width="21.3" height="16.2" fill="#28BBBB" rx="2"/>
+<rect x="405.7" y="139.8" width="21.3" height="10.2" fill="#28BBBB" rx="2"/>
+<rect x="431.0" y="133.6" width="21.3" height="16.4" fill="#28BBBB" rx="2"/>
+<rect x="456.3" y="129.2" width="21.3" height="20.8" fill="#28BBBB" rx="2"/>
+<rect x="481.5" y="135.6" width="21.3" height="14.4" fill="#28BBBB" rx="2"/>
+<rect x="506.8" y="138.5" width="21.3" height="11.5" fill="#28BBBB" rx="2"/>
+<rect x="532.1" y="127.6" width="21.3" height="22.4" fill="#28BBBB" rx="2"/>
+<rect x="557.3" y="131.6" width="21.3" height="18.4" fill="#28BBBB" rx="2"/>
+<rect x="582.6" y="133.1" width="21.3" height="16.9" fill="#28BBBB" rx="2"/>
+<rect x="607.9" y="127.6" width="21.3" height="22.4" fill="#28BBBB" rx="2"/>
+<rect x="633.1" y="132.5" width="21.3" height="17.5" fill="#28BBBB" rx="2"/>
+<rect x="658.4" y="140.0" width="21.3" height="10.0" fill="#28BBBB" rx="2"/>
+<rect x="683.7" y="137.4" width="21.3" height="12.6" fill="#28BBBB" rx="2"/>
+<rect x="708.9" y="129.4" width="21.3" height="20.6" fill="#28BBBB" rx="2"/>
+<rect x="734.2" y="25.0" width="21.3" height="125.0" fill="#B627A1" rx="2"/>
+<text x="744.8" y="21.0" text-anchor="middle" font-size="11" font-weight="700" fill="#B627A1">686</text>
+<rect x="759.5" y="88.2" width="21.3" height="61.8" fill="#B627A1" rx="2"/>
+<text x="770.1" y="84.2" text-anchor="middle" font-size="11" font-weight="700" fill="#B627A1">339</text>
+<rect x="784.7" y="146.9" width="21.3" height="3.1" fill="#28BBBB" rx="2"/>
+<text x="62.6" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 01</text>
+<text x="138.4" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 04</text>
+<text x="214.2" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 07</text>
+<text x="290.0" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 10</text>
+<text x="365.8" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 13</text>
+<text x="441.6" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 16</text>
+<text x="517.4" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 19</text>
+<text x="593.2" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 22</text>
+<text x="669.0" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 25</text>
+<text x="744.8" y="168" text-anchor="middle" font-size="10" fill="#4C4D4F">Apr 28</text>
+<rect x="50" y="180" width="12" height="10" fill="#28BBBB"/>
+<text x="68" y="188" font-size="11" fill="#4C4D4F">Daily mentions</text>
+<rect x="180" y="180" width="12" height="10" fill="#B627A1"/>
+<text x="198" y="188" font-size="11" fill="#4C4D4F">Peak days</text>
+</svg>
+        <div class="chart-caption">
+          The category sustains a steady ~115 mentions/day baseline with two clear spikes. <b>27 March (727 mentions)</b> coincides with Alimentaria + Hostelco Barcelona (Europe's largest food &amp; hospitality fair, 50th anniversary edition). <b>28 April (686 mentions)</b> aligns with the Madrid Open tennis tournament where Lavazza activated cortado content. <b>SharkNinja's 90-day window has 3 more event peaks worth planning around: Madrid Open final, San Isidro festivities (15 May), and the early-summer cold-coffee inflection.</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: AUDIENCE SEGMENTS -->
+  <div class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">SECTION 05</span>
+      <span class="sec-ttl">Audiences to Intersect · 4 Segments Worth the Spend</span>
+    </div>
+    <div class="sec-body">
+      <div class="grid-2">
+
+        <div class="seg-card a">
+          <div class="seg-name">The Specialty-Curious Home Barista</div>
+          <div class="seg-size">~2.1M est. reach · 8–10% YoY growth</div>
+          <div class="seg-desc">Already pays a premium for café de especialidad (43% of consumers willing per AECOC), watches barista tutorials, owns or wants a grinder. Specialty coffee consumption up <b>+83% in 2 years</b> in Spain.</div>
+          <div class="seg-tags">
+            <span class="seg-tag">specialty coffee</span>
+            <span class="seg-tag">home barista</span>
+            <span class="seg-tag">subscription beans</span>
+            <span class="seg-tag">25–45 yo</span>
+          </div>
+          <div class="seg-creators"><b>Where they live:</b> @furocafe, @solo_brewtalist (Valencia), @bucolicocafe (Madrid), @cafesmyway (Sevilla), @cafeshi.es. Tostadores like Syra Coffee &amp; La Mexicana.</div>
+        </div>
+
+        <div class="seg-card b">
+          <div class="seg-name">The Cultural-Identity Lifestyle Audience</div>
+          <div class="seg-size">~5M+ reach · highest engagement</div>
+          <div class="seg-desc">Follows creators who explain or celebrate Spanish culture (food, language, rituals) to global followers. Highest single-post engagement in our data set (10k+) sits here. Café con hielo, cortado, and tardeo are their cultural shorthands.</div>
+          <div class="seg-tags">
+            <span class="seg-tag">Spanish culture</span>
+            <span class="seg-tag">expat-targeting</span>
+            <span class="seg-tag">food &amp; lifestyle</span>
+            <span class="seg-tag">25–40 yo</span>
+          </div>
+          <div class="seg-creators"><b>Where they live:</b> @alvarolinaresc, @elchiringuitotv, food creators with bilingual content. Reels &gt; static.</div>
+        </div>
+
+        <div class="seg-card c">
+          <div class="seg-name">The Tardeo &amp; Brunch Generation</div>
+          <div class="seg-size">~3M est. reach · café tickets +4.6%</div>
+          <div class="seg-desc">Gen Z + younger millennials driving the cafetería-as-third-space trend. Cafeterías are the only restaurant segment growing while bars/restaurants flatten. Loves cold coffee, espresso martinis, pistacho lattes — anything Instagrammable.</div>
+          <div class="seg-tags">
+            <span class="seg-tag">tardeo</span>
+            <span class="seg-tag">brunch</span>
+            <span class="seg-tag">cocktails de café</span>
+            <span class="seg-tag">18–32 yo</span>
+          </div>
+          <div class="seg-creators"><b>Where they live:</b> TikTok recipe creators, IG aesthetic café accounts, food bloggers who attend Alimentaria/CoffeeFest. Pistacho is the breakout flavor.</div>
+        </div>
+
+        <div class="seg-card d">
+          <div class="seg-name">The Price-Conscious Upgrader</div>
+          <div class="seg-size">~4M est. reach · driven by inflation</div>
+          <div class="seg-desc">Coffee prices up <b>+15.9% in 2025</b> alone. This shopper is leaving the café and wants restaurant-quality coffee at home. Lidl's 239€ Smart Tamping espresso machine launch (4.4M reach in news coverage) is this exact audience.</div>
+          <div class="seg-tags">
+            <span class="seg-tag">value-driven</span>
+            <span class="seg-tag">at-home</span>
+            <span class="seg-tag">side-by-side reviews</span>
+            <span class="seg-tag">30–55 yo</span>
+          </div>
+          <div class="seg-creators"><b>Where they live:</b> YouTube unboxing/review channels, OCU/Consumer publications, Lidl/Aldi flyer trackers, "vs" comparison content.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: USE CASES -->
+  <div class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">SECTION 06</span>
+      <span class="sec-ttl">Best Use Cases · The 5 Recipes That Travel</span>
+    </div>
+    <div class="sec-body">
+      <div class="grid-3">
+
+        <div class="card-mini viral">
+          <div class="card-mini-hdr">⚡ Highest-Velocity Bet</div>
+          <div class="card-mini-body"><b>Café con hielo</b> — the specifically-Spanish iced espresso ritual. Position SharkNinja as "the only espresso maker that nails the café con hielo in 30 seconds." Cultural authenticity wins over product specs.</div>
+        </div>
+
+        <div class="card-mini hot">
+          <div class="card-mini-hdr">🔥 Trending Now</div>
+          <div class="card-mini-body"><b>Espresso Martini</b> — cocktail trend rising on X and IG. Partner with bartender creators (Mi Alter Edu) for a "weekend nights" content pillar. Pairs with the tardeo generation perfectly.</div>
+        </div>
+
+        <div class="card-mini peak">
+          <div class="card-mini-hdr">⭐ Seasonal Peak (May–Aug)</div>
+          <div class="card-mini-body"><b>Cold brew + iced lattes</b> — Nestlé just launched a cold concentrate aimed at younger consumers; cold coffee is the youth growth lane. Build a "summer coffee" recipe series.</div>
+        </div>
+
+        <div class="card-mini steady">
+          <div class="card-mini-hdr">↑ Reliable Performer</div>
+          <div class="card-mini-body"><b>Cortado at home</b> — the Spanish equivalent of "make a barista drink at home." Lavazza already proved the pattern at Madrid Open. SharkNinja can own the everyday cortado.</div>
+        </div>
+
+        <div class="card-mini steady">
+          <div class="card-mini-hdr">↑ Lifestyle Anchor</div>
+          <div class="card-mini-body"><b>Pistacho latte</b> — pistacho was THE breakout ingredient at Alimentaria 2026. Riding this wave with a SharkNinja-branded pistacho latte recipe puts the brand in food-trend conversations.</div>
+        </div>
+
+        <div class="card-mini steady">
+          <div class="card-mini-hdr">~ Audience-Builder</div>
+          <div class="card-mini-body"><b>The morning routine Reel</b> — 5-second espresso pour + GRWM. Low-cost, high-volume creator format. Pair with running/wellness creators (the D·Origen × Runnea collab is the template).</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: COMPETITIVE LANDSCAPE -->
+  <div class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">SECTION 07</span>
+      <span class="sec-ttl">Competitive Landscape · Who Owns What in Spain</span>
+    </div>
+    <div class="sec-body">
+      <div class="comp-row">
+        <div class="comp-name">KRUPS <span class="comp-flag threat">Active threat</span></div>
+        <div>Owns the Instagram giveaway playbook. Quarterly cross-brand sorteos (Biscoff, etc.). 1.9k–5.8k engagements per post.</div>
+        <div><b>Counter:</b> Match cadence; out-creative on cultural authenticity, not on prize value.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-name">Lavazza <span class="comp-flag threat">Active threat</span></div>
+        <div>Madrid Open sponsorship (#MMOpen). Cortado-at-home recipe content with 160k reach.</div>
+        <div><b>Counter:</b> Don't fight tennis — claim a different sport (La Liga, MotoGP, padel, F1 Spanish GP).</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-name">Lidl <span class="comp-flag threat">Disruptor</span></div>
+        <div>Just launched Smart Tamping Best (239€) with grinder + 15 bar pump. 4.4M reach in news coverage. Targets the price-conscious upgrader.</div>
+        <div><b>Counter:</b> Lidl wins on price. SharkNinja wins on tech + design + content. Avoid the value comparison.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-name">Costa Coffee <span class="comp-flag exit">Exited 2024</span></div>
+        <div>Closed last Spanish store April 2024. Leaves a gap in mid-tier coffee shop loyalty among ex-customers.</div>
+        <div><b>Counter:</b> Capture this audience with at-home espresso messaging — "your daily fix, now in your kitchen."</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-name">Pascual / Coffee Horeca <span class="comp-flag weak">Hospitality only</span></div>
+        <div>90.5M€ revenue, doubled in 4 yrs. Plays in foodservice, not consumer machines. 600M cups served in 2026.</div>
+        <div><b>Counter:</b> Not a direct rival, but a partnership opportunity (co-branded café × espresso machine bundle).</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-name">Specialty roasters <span class="comp-flag weak">Niche but loud</span></div>
+        <div>Syra Coffee, La Mexicana, Cafés MyWay, D·Origen. Drive subscription model + barista training.</div>
+        <div><b>Counter:</b> Partner — co-branded "best beans for your SharkNinja" packs. Borrows their credibility for the home barista segment.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: 90-DAY PLAYBOOK -->
+  <div class="section">
+    <div class="sec-hdr">
+      <span class="sec-num">SECTION 08</span>
+      <span class="sec-ttl">The 90-Day Playbook · A Phased Plan to Reach Viral</span>
+    </div>
+    <div class="sec-body">
+      <div class="playbook">
+
+        <div class="play-phase">
+          <div class="play-hdr p1">
+            <span class="play-phase-name">Phase 1 · Cultural Foundation</span>
+            <span class="play-days">Days 1–30</span>
+          </div>
+          <div class="play-body">
+            <div class="play-actions">
+              <div class="play-action"><span class="play-check">✓</span><span><b>Activate 3 cultural-identity creators</b> (Álvaro Linares-tier) for the "café con hielo perfecto" series. Brief: explain the ritual, hero the SharkNinja machine in 5 seconds.</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>Seed 12 specialty roaster partnerships</b> (Syra, La Mexicana, MyWay, D·Origen + 8 regional). Co-branded "beans + machine" intro bundle.</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>Launch the inaugural Spanish sorteo</b> with a culturally-loaded prize: SharkNinja + Madrid Open VIP package OR a Sevilla coffee tour for two. Aim for 6k+ engagements (KRUPS-beating).</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>Establish always-on monitoring</b> via Meltwater across 8 trending topics, 4 audience segments, and 6 competitor brands. Weekly intel review.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="play-phase">
+          <div class="play-hdr p2">
+            <span class="play-phase-name">Phase 2 · Trend Riding &amp; Use-Case Expansion</span>
+            <span class="play-days">Days 31–60</span>
+          </div>
+          <div class="play-body">
+            <div class="play-actions">
+              <div class="play-action"><span class="play-check">✓</span><span><b>Drop the cold-coffee summer series</b> (cold brew, iced cortado, pistacho latte) — 6 recipe Reels in 2 weeks, paid amplification on the top 2.</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>Bartender / espresso martini activation</b> with 2 nightlife creators in Madrid + Barcelona. Tie to a venue takeover during San Isidro week (mid-May).</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>Sponsor a sport that isn't tennis</b> — La Liga partnership, MotoGP Aragón, or padel (a Spanish-original sport). Lavazza owns Madrid Open — claim a different turf.</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>Launch a "vs Lidl" YouTube comparison</b> with a credible specialty barista. Don't bash on price — out-perform on shot quality, build time, milk steam.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="play-phase">
+          <div class="play-hdr p3">
+            <span class="play-phase-name">Phase 3 · Viral Push &amp; Conversion</span>
+            <span class="play-days">Days 61–90</span>
+          </div>
+          <div class="play-body">
+            <div class="play-actions">
+              <div class="play-action"><span class="play-check">✓</span><span><b>Big-prize national sorteo</b> (Phase 1 sorteo, scaled). Cross-promote with the running/lifestyle category (D·Origen × Runnea pattern). Target 10k+ engagements on a single post.</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>UGC challenge</b>: #MiCaféConHielo or #EsoSíEsCafé. Reward best-of-week. Three weeks of momentum heading into early summer.</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>Retail moment</b> — Father's Day Spain (19 March, plan for next year) or Día del Padre Q3 push if it falls in window. Bundle with specialty bean subscription.</span></div>
+              <div class="play-action"><span class="play-check">✓</span><span><b>Wrap with a 90-day attribution report</b> (Meltwater) — share of voice gained, audience overlap with target segments, viral velocity vs KRUPS &amp; Lidl. Use to size the next 90.</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-ttl">Meltwater · Media Intelligence for SharkNinja Spain</div>
+    <div class="footer-sub">Generated 30 Apr 2026 · Data: 1 Mar – 30 Apr 2026 · Spain (es), Spanish (es) · 6 platforms</div>
+  </div>
+
+</div>
+</body>
+</html>
